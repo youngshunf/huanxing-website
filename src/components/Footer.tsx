@@ -16,7 +16,7 @@ export default function Footer() {
             <span className="text-xs text-white">✦</span>
           </div>
           <span className="text-lg font-bold text-text-primary">唤星</span>
-          <span className="text-sm text-text-tertiary">HuanXing</span>
+          <span className="text-sm text-text-tertiary">Stellara</span>
         </div>
 
         {/* Nav */}
@@ -47,7 +47,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto mt-8 max-w-6xl text-center text-xs text-text-tertiary">
-        © {new Date().getFullYear()} 唤星 HuanXing. All rights reserved.
+        © {new Date().getFullYear()} 唤星 Stellara. All rights reserved.
       </div>
     </footer>
   )
