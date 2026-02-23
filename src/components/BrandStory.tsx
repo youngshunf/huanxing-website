@@ -46,7 +46,7 @@ export default function BrandStory() {
               在这个信息爆炸的时代，每个人都在被海量的消息、任务、决策淹没。
               我们需要的不是又一个 App，而是一个真正理解我们、替我们分担的存在。
             </p>
-            <p className="text-text-primary font-medium">
+            <p className="font-medium text-text-primary">
               唤星诞生于一个简单的信念——
               <br />
               如果 AI 足够懂你，它就能成为另一个你。

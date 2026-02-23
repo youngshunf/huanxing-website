@@ -11,12 +11,12 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-divider px-4 py-12 sm:px-6 md:px-8 lg:px-12">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 md:flex-row md:justify-between">
         {/* Brand */}
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-star-purple to-star-blue">
-            <span className="text-xs text-white">✦</span>
-          </div>
-          <span className="text-lg font-bold text-text-primary">唤星</span>
-          <span className="text-sm text-text-tertiary">Stellara</span>
+        <div className="flex items-center gap-3">
+          <img
+            src="/logos/logo-horizontal-dark.svg"
+            alt="唤星 Stellara"
+            className="h-8"
+          />
         </div>
 
         {/* Nav */}

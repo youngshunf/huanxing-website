@@ -1,23 +1,44 @@
-import StarParticles from './components/StarParticles'
-import Hero from './components/Hero'
-import Features from './components/Features'
-import GrowthSystem from './components/GrowthSystem'
-import ChatPreview from './components/ChatPreview'
-import Pricing from './components/Pricing'
-import BrandStory from './components/BrandStory'
-import Footer from './components/Footer'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import Home from './pages/Home'
+import DashboardLayout from './pages/dashboard/DashboardLayout'
+import Overview from './pages/dashboard/Overview'
+import Subscription from './pages/dashboard/Subscription'
+import Credits from './pages/dashboard/Credits'
+import ProtectedRoute from './components/ProtectedRoute'
+import LoginModal from './components/LoginModal'
+import { useAuthStore } from './stores/useAuthStore'
+
+// 初始化主题 store（触发 side effect）
+import './stores/useThemeStore'
 
 export default function App() {
+  const restoreSession = useAuthStore((s) => s.restoreSession)
+
+  useEffect(() => {
+    restoreSession()
+  }, [restoreSession])
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-space-black">
-      <StarParticles />
-      <Hero />
-      <Features />
-      <GrowthSystem />
-      <ChatPreview />
-      <Pricing />
-      <BrandStory />
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className="relative min-h-screen overflow-x-hidden bg-space-black">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Overview />} />
+            <Route path="subscription" element={<Subscription />} />
+            <Route path="credits" element={<Credits />} />
+          </Route>
+        </Routes>
+        <LoginModal />
+      </div>
+    </BrowserRouter>
   )
 }

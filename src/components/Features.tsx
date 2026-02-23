@@ -37,7 +37,7 @@ export default function Features() {
         <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
           {features.map((feature, i) => (
             <ScrollReveal key={feature.title} delay={i * 0.15}>
-              <div className="group min-w-0 rounded-xl border border-divider bg-space-panel px-6 py-8 transition-all duration-300 hover:border-border-hover hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+              <div className="group min-w-0 rounded-xl border border-divider bg-space-panel px-6 py-8 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-lg bg-space-float">
                   {feature.icon}
                 </div>

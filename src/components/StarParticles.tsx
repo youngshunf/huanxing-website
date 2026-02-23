@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useThemeStore } from '../stores/useThemeStore'
 
 interface Particle {
   x: number
@@ -13,6 +14,7 @@ interface Particle {
 
 export default function StarParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -24,6 +26,7 @@ export default function StarParticles() {
     let animationId: number
     const particles: Particle[] = []
     const count = 40
+    const isDark = resolvedTheme === 'dark'
 
     const resize = () => {
       canvas.width = window.innerWidth
@@ -45,6 +48,13 @@ export default function StarParticles() {
       })
     }
 
+    // Light 模式：使用星紫色粒子，降低透明度
+    // Dark 模式：使用星光金粒子
+    const particleColor = isDark
+      ? { r: 255, g: 217, b: 61 }
+      : { r: 108, g: 92, b: 231 }
+    const opacityScale = isDark ? 1 : 0.5
+
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -53,24 +63,26 @@ export default function StarParticles() {
         p.y += Math.sin(p.direction) * p.speed
         p.pulse += p.pulseSpeed
 
-        const currentOpacity = p.opacity + Math.sin(p.pulse) * 0.2
+        const currentOpacity = (p.opacity + Math.sin(p.pulse) * 0.2) * opacityScale
 
         if (p.x < 0) p.x = canvas.width
         if (p.x > canvas.width) p.x = 0
         if (p.y < 0) p.y = canvas.height
         if (p.y > canvas.height) p.y = 0
 
+        const { r, g, b } = particleColor
+
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 217, 61, ${Math.max(0.1, Math.min(0.8, currentOpacity))})`
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${Math.max(0.05, Math.min(0.6, currentOpacity))})`
         ctx.fill()
 
         // glow
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3)
-        gradient.addColorStop(0, `rgba(255, 217, 61, ${currentOpacity * 0.3})`)
-        gradient.addColorStop(1, 'rgba(255, 217, 61, 0)')
+        gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${currentOpacity * 0.3})`)
+        gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`)
         ctx.fillStyle = gradient
         ctx.fill()
       }
@@ -84,7 +96,7 @@ export default function StarParticles() {
       cancelAnimationFrame(animationId)
       window.removeEventListener('resize', resize)
     }
-  }, [])
+  }, [resolvedTheme])
 
   return (
     <canvas
