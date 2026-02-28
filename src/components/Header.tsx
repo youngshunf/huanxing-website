@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react'
+import { Menu, X, User, LogOut, LayoutDashboard, FileText, ChevronDown } from 'lucide-react'
 import { useAuthStore } from '../stores/useAuthStore'
 import { useThemeStore } from '../stores/useThemeStore'
 import ThemeToggle from './ThemeToggle'
@@ -82,6 +82,14 @@ export default function Header() {
               {isUserMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-44 overflow-hidden rounded-lg border border-border-default bg-white shadow-lg dark:bg-space-panel">
                   <Link
+                    to="/dashboard/docs"
+                    className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-space-float"
+                    onClick={() => setIsUserMenuOpen(false)}
+                  >
+                    <FileText className="h-4 w-4" />
+                    我的文档
+                  </Link>
+                  <Link
                     to="/dashboard"
                     className="flex items-center gap-2.5 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-space-float"
                     onClick={() => setIsUserMenuOpen(false)}
@@ -142,6 +150,13 @@ export default function Header() {
 
             {isLoggedIn ? (
               <>
+                <Link
+                  to="/dashboard/docs"
+                  className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  我的文档
+                </Link>
                 <Link
                   to="/dashboard"
                   className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"

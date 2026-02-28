@@ -1,10 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, CreditCard, Coins, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, CreditCard, Coins, ArrowLeft, FileText } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useAuthStore } from '../../stores/useAuthStore'
 
 const sidebarLinks = [
   { to: '/dashboard', icon: LayoutDashboard, label: '概览', end: true },
+  { to: '/dashboard/docs', icon: FileText, label: '我的文档' },
   { to: '/dashboard/subscription', icon: CreditCard, label: '订阅管理' },
   { to: '/dashboard/credits', icon: Coins, label: '积分详情' },
 ]

@@ -87,3 +87,105 @@
     --color-divider: #e2e6ea;
   }
 }
+
+/* ===== Vditor 编辑器全屏宽度 ===== */
+/* 核心：覆盖 Vditor 动态计算的 padding 和 max-width */
+.vditor .vditor-wysiwyg .vditor-reset,
+.vditor .vditor-ir .vditor-reset,
+.vditor .vditor-sv .vditor-reset,
+.vditor .vditor-preview .vditor-reset,
+.vditor .vditor-wysiwyg > pre.vditor-reset,
+.vditor .vditor-ir > pre.vditor-reset,
+pre.vditor-reset[contenteditable] {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.vditor .vditor-wysiwyg,
+.vditor .vditor-ir,
+.vditor .vditor-sv,
+.vditor .vditor-preview,
+.vditor .vditor-content,
+.vditor-content {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* 工具栏全宽 */
+.vditor .vditor-toolbar {
+  width: 100% !important;
+}
+
+/* Vditor 暗色主题融合 */
+.vditor {
+  border-color: var(--color-border-default) !important;
+}
+
+.vditor--dark {
+  background-color: var(--color-space-panel) !important;
+}
+
+.vditor--dark .vditor-toolbar {
+  background-color: var(--color-space-float) !important;
+  border-bottom-color: var(--color-border-default) !important;
+}
+
+/*
+ * 修复：Vditor dark 模式文字颜色
+ * Vditor 的 content-theme/dark.css 通过 CDN 异步加载，
+ * 在 SPA 导航时可能加载不及时，导致 .vditor-reset 的 color
+ * 回退到默认的 #24292e（深色文字在深色背景上不可见）。
+ * 这里直接在本地 CSS 中强制设置，确保不依赖 CDN 加载时序。
+ */
+.vditor--dark .vditor-reset,
+.vditor--dark .vditor-ir .vditor-reset,
+.vditor--dark .vditor-wysiwyg .vditor-reset,
+.vditor--dark .vditor-sv .vditor-reset,
+.vditor--dark .vditor-preview .vditor-reset {
+  color: #d1d5da !important;
+}
+
+.vditor--dark .vditor-reset a,
+.vditor--dark .vditor-ir__link {
+  color: #4285f4 !important;
+}
+
+.vditor--dark .vditor-reset blockquote {
+  color: #b9b9b9 !important;
+  border-left-color: #d1d5da !important;
+}
+
+.vditor--dark .vditor-reset h1,
+.vditor--dark .vditor-reset h2 {
+  border-bottom-color: #d1d5da !important;
+}
+
+.vditor--dark .vditor-reset hr {
+  background-color: #d1d5da !important;
+}
+
+/* 预览组件 dark 模式文字颜色（同样的 CDN 加载时序问题） */
+.dark .vditor-reset {
+  color: #d1d5da;
+}
+
+.dark .vditor-reset a {
+  color: #4285f4;
+}
+
+.dark .vditor-reset blockquote {
+  color: #b9b9b9;
+  border-left-color: #d1d5da;
+}
+
+.dark .vditor-reset h1,
+.dark .vditor-reset h2 {
+  border-bottom-color: #d1d5da;
+}
+
+.dark .vditor-reset hr {
+  background-color: #d1d5da;
+}

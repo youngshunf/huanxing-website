@@ -76,11 +76,8 @@ export default function LoginModal() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* 遮罩 */}
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setShowLoginModal(false)}
-          />
+          {/* 遮罩（不可点击关闭，只能通过关闭按钮） */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
           {/* 弹窗 */}
           <motion.div
