@@ -1,5 +1,28 @@
 // 文档相关类型定义
 
+export interface FolderTreeNode {
+  id: number
+  uuid: string
+  name: string
+  icon?: string
+  parent_id: number | null
+  sort_order: number
+  doc_count: number
+  children: FolderTreeNode[]
+}
+
+export interface FolderContents {
+  folder_id: number | null
+  sub_folders: {
+    id: number
+    uuid: string
+    name: string
+    icon?: string
+    sort_order: number
+  }[]
+  documents: DocItem[]
+}
+
 export interface DocItem {
   id: number
   uuid: string
@@ -13,6 +36,7 @@ export interface DocItem {
   is_public: boolean
   created_by: string
   agent_id?: string
+  folder_id?: number | null
   share_token?: string
   share_password?: string
   share_permission?: string
@@ -39,6 +63,7 @@ export interface DocCreateParams {
   word_count?: number
   status?: string
   is_public?: boolean
+  folder_id?: number | null
 }
 
 export interface DocUpdateParams {

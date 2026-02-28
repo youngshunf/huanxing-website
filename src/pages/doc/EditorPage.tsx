@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ArrowLeft, Save, Share2, Download, Eye, Loader2,
 } from 'lucide-react'
@@ -14,6 +14,7 @@ import * as docApi from '../../api/doc'
 export default function EditorPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { currentDoc, fetchDoc, updateCurrentDoc } = useDocStore()
 
   const isNew = id === 'new'
@@ -86,11 +87,13 @@ export default function EditorPage() {
         // 创建新文档
         const uuid = crypto.randomUUID()
         const content = contentRef.current
+        const folderId = searchParams.get('folder')
         const result = await docApi.createDoc({
           uuid,
           title: title || '无标题文档',
           content,
           status: 'draft',
+          folder_id: folderId ? Number(folderId) : undefined,
         })
         // 跳转到编辑页
         navigate(`/doc/${result.id}/edit`, { replace: true })
