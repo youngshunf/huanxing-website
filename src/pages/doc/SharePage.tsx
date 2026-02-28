@@ -174,12 +174,14 @@ export default function SharePage() {
           {doc?.word_count ? <span>{doc.word_count} 字</span> : null}
           {doc?.tags && (
             <div className="flex flex-wrap gap-1.5">
-              {doc.tags.split(',').map((tag) => (
+              {(Array.isArray(doc.tags) ? doc.tags : typeof doc.tags === 'string' ? doc.tags.split(',') : [])
+                .filter(Boolean)
+                .map((tag) => (
                 <span
                   key={tag}
                   className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
                 >
-                  {tag.trim()}
+                  {typeof tag === 'string' ? tag.trim() : tag}
                 </span>
               ))}
             </div>

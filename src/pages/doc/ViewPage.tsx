@@ -4,12 +4,14 @@ import { ArrowLeft, Pencil, Share2, Download, Loader2 } from 'lucide-react'
 import { useDocStore } from '../../stores/useDocStore'
 import MarkdownRenderer from '../../components/doc/MarkdownRenderer'
 import DocExportMenu from '../../components/doc/DocExportMenu'
+import ShareModal from '../../components/doc/ShareModal'
 
 export default function ViewPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { currentDoc, currentLoading, fetchDoc } = useDocStore()
+  const { currentDoc, currentLoading, fetchDoc, updateCurrentDoc } = useDocStore()
   const [showExport, setShowExport] = useState(false)
+  const [showShare, setShowShare] = useState(false)
 
   useEffect(() => {
     if (id) fetchDoc(Number(id)).catch(() => navigate('/docs'))
@@ -45,7 +47,7 @@ export default function ViewPage() {
               <span className="max-sm:hidden">编辑</span>
             </button>
             <button
-              onClick={() => {/* TODO: share modal */}}
+              onClick={() => setShowShare(true)}
               className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
             >
               <Share2 className="h-4 w-4" />
@@ -85,12 +87,14 @@ export default function ViewPage() {
           )}
           {currentDoc.tags && (
             <div className="flex flex-wrap gap-1.5">
-              {currentDoc.tags.split(',').map((tag) => (
+              {(Array.isArray(currentDoc.tags) ? currentDoc.tags : typeof currentDoc.tags === 'string' ? currentDoc.tags.split(',') : [])
+                .filter(Boolean)
+                .map((tag) => (
                 <span
                   key={tag}
                   className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
                 >
-                  {tag.trim()}
+                  {typeof tag === 'string' ? tag.trim() : tag}
                 </span>
               ))}
             </div>
@@ -99,6 +103,18 @@ export default function ViewPage() {
 
         <MarkdownRenderer content={currentDoc.content || ''} />
       </main>
+
+      {/* 分享弹窗 */}
+      {showShare && (
+        <ShareModal
+          docId={currentDoc.id}
+          currentToken={currentDoc.share_token}
+          onClose={() => setShowShare(false)}
+          onShareUpdated={(token) => {
+            updateCurrentDoc({ share_token: token || undefined })
+          }}
+        />
+      )}
     </div>
   )
 }

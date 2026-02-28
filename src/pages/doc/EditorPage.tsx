@@ -85,11 +85,9 @@ export default function EditorPage() {
     try {
       if (isNew || !docId) {
         // 创建新文档
-        const uuid = crypto.randomUUID()
         const content = contentRef.current
         const folderId = searchParams.get('folder')
         const result = await docApi.createDoc({
-          uuid,
           title: title || '无标题文档',
           content,
           status: 'draft',

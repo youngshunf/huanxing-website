@@ -62,10 +62,32 @@ export default function ShareModal({ docId, currentToken, onClose, onShareUpdate
   }
 
   function handleCopy() {
-    navigator.clipboard.writeText(shareUrl).then(() => {
+    // clipboard API 在 HTTP 环境下不可用，使用 fallback
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      }).catch(() => fallbackCopy(shareUrl))
+    } else {
+      fallbackCopy(shareUrl)
+    }
+  }
+
+  function fallbackCopy(text: string) {
+    const textarea = document.createElement('textarea')
+    textarea.value = text
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+    document.body.appendChild(textarea)
+    textarea.select()
+    try {
+      document.execCommand('copy')
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    })
+    } catch {
+      alert('复制失败，请手动复制链接')
+    }
+    document.body.removeChild(textarea)
   }
 
   return (
@@ -87,9 +109,15 @@ export default function ShareModal({ docId, currentToken, onClose, onShareUpdate
               <span className="flex-1 truncate text-sm text-text-primary">{shareUrl}</span>
               <button
                 onClick={handleCopy}
-                className="shrink-0 rounded-md bg-star-purple px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-star-purple-hover"
+                className={`shrink-0 rounded-md px-3 py-1.5 text-xs font-medium text-white transition-all ${
+                  copied ? 'bg-green-600' : 'bg-star-purple hover:bg-star-purple-hover'
+                }`}
               >
-                {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? (
+                  <span className="flex items-center gap-1"><Check className="h-3.5 w-3.5" /> 已复制</span>
+                ) : (
+                  <span className="flex items-center gap-1"><Copy className="h-3.5 w-3.5" /> 复制</span>
+                )}
               </button>
             </div>
             <button

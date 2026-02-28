@@ -55,7 +55,6 @@ export interface DocListParams {
 }
 
 export interface DocCreateParams {
-  uuid: string
   title: string
   content?: string
   summary?: string

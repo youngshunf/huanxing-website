@@ -85,21 +85,21 @@ export default function DocsListPage() {
       {/* 顶部栏 */}
       <header className="sticky top-0 z-10 border-b border-divider bg-space-panel/80 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-4 py-4">
-          <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-xl font-bold text-text-primary">📄 我的文档</h1>
-            <div className="flex items-center gap-2">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <h1 className="min-w-0 truncate text-lg font-bold text-text-primary sm:text-xl">📄 我的文档</h1>
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 onClick={() => setCreateFolderParentId(currentFolderId)}
-                className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-2 text-sm text-text-secondary transition-colors hover:border-star-purple/30 hover:text-text-primary"
+                className="flex items-center gap-1 whitespace-nowrap rounded-lg border border-border-default px-2 py-1.5 text-xs text-text-secondary transition-colors hover:border-star-purple/30 hover:text-text-primary sm:gap-1.5 sm:px-3 sm:py-2 sm:text-sm"
               >
-                <FolderPlus className="h-4 w-4" />
+                <FolderPlus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 新建目录
               </button>
               <button
                 onClick={() => navigate(newDocUrl)}
-                className="flex items-center gap-2 rounded-lg bg-star-purple px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-star-purple-hover"
+                className="flex items-center gap-1 whitespace-nowrap rounded-lg bg-star-purple px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-star-purple-hover sm:gap-1.5 sm:px-4 sm:py-2 sm:text-sm"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 新建文档
               </button>
             </div>
