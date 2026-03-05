@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
-import { QRCodeSVG } from 'qrcode.react'
+import QRCode from 'qrcode'
 import {
   ArrowLeft, CreditCard, Loader2, CheckCircle2,
   XCircle, Smartphone, Monitor, RefreshCw,
@@ -50,6 +50,7 @@ export default function PayPage() {
   const [orderData, setOrderData] = useState<CreateOrderResponse | null>(null)
   const [errorMsg, setErrorMsg] = useState('')
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const qrCanvasRef = useRef<HTMLCanvasElement>(null)
   const { fetchInfo } = useSubscriptionStore()
 
   // 获取可用渠道
@@ -89,6 +90,17 @@ export default function PayPage() {
       if (pollingRef.current) clearInterval(pollingRef.current)
     }
   }, [])
+
+  // 渲染二维码到 canvas
+  useEffect(() => {
+    if (step === 'paying' && orderData?.qr_code_url && qrCanvasRef.current) {
+      QRCode.toCanvas(qrCanvasRef.current, orderData.qr_code_url, {
+        width: 220,
+        margin: 2,
+        color: { dark: '#000000', light: '#FFFFFF' },
+      })
+    }
+  }, [step, orderData])
 
   // 提交订单
   const handlePay = async () => {
@@ -237,7 +249,7 @@ export default function PayPage() {
               <div className="mb-6">
                 <p className="mb-4 text-text-secondary">请使用微信扫描二维码完成支付</p>
                 <div className="mx-auto inline-block rounded-xl border border-divider bg-white p-4">
-                  <QRCodeSVG value={orderData.qr_code_url} size={220} />
+                  <canvas ref={qrCanvasRef} />
                 </div>
               </div>
             )}
