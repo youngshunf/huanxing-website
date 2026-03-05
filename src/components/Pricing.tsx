@@ -76,7 +76,8 @@ export default function Pricing() {
     if (planName === 'free' || plans.find(p => p.name === planName)?.monthly_price === 0) {
       navigate('/dashboard')
     } else {
-      navigate('/dashboard/subscription')
+      // 跳转到支付页，带上套餐和计费周期
+      navigate(`/pay?tier=${encodeURIComponent(planName)}&cycle=monthly`)
     }
   }
 

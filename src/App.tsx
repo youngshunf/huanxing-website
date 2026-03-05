@@ -5,6 +5,7 @@ import DashboardLayout from './pages/dashboard/DashboardLayout'
 import Overview from './pages/dashboard/Overview'
 import Subscription from './pages/dashboard/Subscription'
 import Credits from './pages/dashboard/Credits'
+import PayPage from './pages/pay/PayPage'
 import SharePage from './pages/doc/SharePage'
 import DocsListPage from './pages/doc/DocsListPage'
 import ViewPage from './pages/doc/ViewPage'
@@ -28,6 +29,16 @@ export default function App() {
       <div className="relative min-h-screen overflow-x-hidden bg-space-black">
         <Routes>
           <Route path="/" element={<Home />} />
+
+          {/* 支付页（需登录） */}
+          <Route
+            path="/pay"
+            element={
+              <ProtectedRoute>
+                <PayPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* 分享页（公开，无需登录） */}
           <Route path="/s/:token" element={<SharePage />} />

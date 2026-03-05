@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ArrowUp, Loader2 } from 'lucide-react'
 import { useSubscriptionStore } from '../../stores/useSubscriptionStore'
 import * as subApi from '../../api/subscription'
 import type { UpgradeCalculation } from '../../types'
 
 export default function Subscription() {
-  const { subscription, tiers, loading, fetchInfo, fetchTiers, upgrade } = useSubscriptionStore()
+  const navigate = useNavigate()
+  const { subscription, tiers, loading, fetchInfo, fetchTiers } = useSubscriptionStore()
   const [calculating, setCalculating] = useState(false)
-  const [upgrading, setUpgrading] = useState(false)
   const [calcResult, setCalcResult] = useState<UpgradeCalculation | null>(null)
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [message, setMessage] = useState('')
@@ -43,23 +44,8 @@ export default function Subscription() {
 
   const handleUpgrade = async () => {
     if (!selectedTier) return
-    setUpgrading(true)
-    setMessage('')
-    try {
-      const result = await upgrade(selectedTier, 'monthly')
-      if (result.success) {
-        setMessage('升级成功！')
-        setCalcResult(null)
-        setSelectedTier(null)
-        fetchInfo()
-      } else {
-        setMessage(result.message || '升级失败')
-      }
-    } catch (e) {
-      setMessage(e instanceof Error ? e.message : '升级失败')
-    } finally {
-      setUpgrading(false)
-    }
+    // 跳转到支付页，走真实支付流程
+    navigate(`/pay?tier=${encodeURIComponent(selectedTier)}&cycle=monthly`)
   }
 
   return (
@@ -176,11 +162,9 @@ export default function Subscription() {
               <div className="flex gap-3">
                 <button
                   onClick={handleUpgrade}
-                  disabled={upgrading}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-6 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:opacity-60"
+                  className="flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-6 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
                 >
-                  {upgrading && <Loader2 className="h-4 w-4 animate-spin" />}
-                  确认升级
+                  去支付
                 </button>
                 <button
                   onClick={() => {
