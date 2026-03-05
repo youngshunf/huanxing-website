@@ -18,13 +18,13 @@ export default function Subscription() {
     fetchTiers()
   }, [fetchInfo, fetchTiers])
 
-  const currentTierName = subscription?.tier_display_name || '星尘'
+  const currentTierName = subscription?.tier_display_name || '微星'
 
   const tierColorMap: Record<string, string> = {
-    '星尘': '#6E7681',
-    '星芒': '#6C5CE7',
-    '星辰': '#00D2FF',
-    '星耀': '#FFD93D',
+    '微星': '#6E7681',
+    '明星': '#6C5CE7',
+    '恒星': '#00D2FF',
+    '超新星': '#FFD93D',
   }
 
   const handleCalculate = async (tierName: string) => {

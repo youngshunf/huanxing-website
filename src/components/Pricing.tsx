@@ -7,23 +7,23 @@ import { useSubscriptionStore } from '../stores/useSubscriptionStore'
 import { useThemeStore } from '../stores/useThemeStore'
 import type { SubscriptionTier } from '../types'
 
-// 未登录且接口失败时的兜底数据（name 必须与后端 tier_name 一致）
+// 未登录且接口失败时的兜底数据（name 必须与数据库 tier_name 一致）
 const fallbackPlans = [
-  { name: 'star_dust', display_name: '星尘', monthly_price: 0, color: '#6E7681', features: ['每月积分：100', '可用模型：基础模型', '记忆保存：7天', '客服支持：社区支持'] },
-  { name: 'star_glow', display_name: '星芒', monthly_price: 49, color: '#6C5CE7', features: ['每月积分：1000', '可用模型：基础+进阶模型', '记忆存储', '版本管理', '客服支持：邮件支持'] },
-  { name: 'star_shine', display_name: '星辰', monthly_price: 99, color: '#00D2FF', features: ['每月积分：5000', '可用模型：全部模型', '记忆存储', '版本管理', '文件备份', '云存储', '客服支持：优先支持'], recommended: true },
-  { name: 'star_glory', display_name: '星耀', monthly_price: 299, color: '#FFD93D', features: ['每月积分：50000', '可用模型：全部模型+专属部署', '记忆存储', '版本管理', '文件备份', '云存储', '专属模型通道', 'SLA 保障', '客服支持：专属客服'] },
+  { name: 'free', display_name: '微星', monthly_price: 0, color: '#6E7681', features: ['每月积分：100', '可用模型：基础模型', '记忆保存：7天', '客服支持：社区支持'] },
+  { name: 'pro', display_name: '明星', monthly_price: 128, color: '#6C5CE7', features: ['每月积分：1000', '可用模型：基础+进阶模型', '记忆存储', '版本管理', '客服支持：邮件支持'] },
+  { name: 'advanced', display_name: '恒星', monthly_price: 238, color: '#00D2FF', features: ['每月积分：5000', '可用模型：全部模型', '记忆存储', '版本管理', '文件备份', '云存储', '客服支持：优先支持'], recommended: true },
+  { name: 'flagship', display_name: '超新星', monthly_price: 598, color: '#FFD93D', features: ['每月积分：50000', '可用模型：全部模型+专属部署', '记忆存储', '版本管理', '文件备份', '云存储', '专属模型通道', 'SLA 保障', '客服支持：专属客服'] },
 ]
 
 const tierColorMap: Record<string, string> = {
-  '星尘': '#6E7681',
-  '星芒': '#6C5CE7',
-  '星辰': '#00D2FF',
-  '星耀': '#FFD93D',
+  '微星': '#6E7681',
+  '明星': '#6C5CE7',
+  '恒星': '#00D2FF',
+  '超新星': '#FFD93D',
 }
 
 // 推荐等级
-const recommendedTier = '星辰'
+const recommendedTier = '恒星'
 
 /**
  * 将 features JSON 直接转为展示列表

@@ -11,10 +11,10 @@ import { useSubscriptionStore } from '../../stores/useSubscriptionStore'
 
 /** 套餐中文名映射 */
 const TIER_NAMES: Record<string, string> = {
-  star_dust: '星尘',
-  star_glow: '星芒',
-  star_shine: '星辰',
-  star_glory: '星耀',
+  free: '微星',
+  pro: '明星',
+  advanced: '恒星',
+  flagship: '超新星',
 }
 
 /** 计费周期中文 */
