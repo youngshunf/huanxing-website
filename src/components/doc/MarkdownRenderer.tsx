@@ -31,6 +31,35 @@ function getTextContent(children: React.ReactNode): string {
   return ''
 }
 
+/** 
+ * 自定义 <p> 组件：如果段落只包含一个 <strong>，
+ * 视为伪标题，生成带 id 的 <p> 以支持大纲锚点跳转
+ */
+function SmartParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
+  // 判断是否是"粗体独占行"（段落内只有一个 strong 子元素）
+  const childArray = Array.isArray(children) ? children : [children]
+  const meaningful = childArray.filter(
+    (c) => c !== null && c !== undefined && c !== '' && c !== '\n'
+  )
+  
+  if (meaningful.length === 1) {
+    const child = meaningful[0]
+    if (
+      child &&
+      typeof child === 'object' &&
+      'type' in child &&
+      (child as React.ReactElement).type === 'strong'
+    ) {
+      const text = getTextContent((child as React.ReactElement).props.children)
+      if (text && text.length >= 2 && text.length <= 80) {
+        const id = slugify(text)
+        return <p id={id} {...props}>{children}</p>
+      }
+    }
+  }
+  return <p {...props}>{children}</p>
+}
+
 export default function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
   return (
     <article className={`hx-markdown ${className}`}>
@@ -44,6 +73,8 @@ export default function MarkdownRenderer({ content, className = '' }: MarkdownRe
           h4: makeHeading('h4'),
           h5: makeHeading('h5'),
           h6: makeHeading('h6'),
+          // 段落：识别粗体独占行作为伪标题
+          p: SmartParagraph,
           // 链接新标签打开
           a: ({ children, ...props }) => (
             <a {...props} target="_blank" rel="noopener noreferrer">{children}</a>

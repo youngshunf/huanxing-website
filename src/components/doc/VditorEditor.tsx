@@ -75,6 +75,7 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
       if (skipUpdate.current) return
       const md = getMarkdown(ed)
       if (md) {
+        console.log('[Editor] onUpdate → onChange, length:', md.length)
         onChangeRef.current(md)
       }
     },
@@ -91,10 +92,12 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
       initialSet.current = true
       skipUpdate.current = true
       editor.commands.setContent(initialContent)
-      // 下一个 tick 恢复 onUpdate
-      requestAnimationFrame(() => {
+      console.log('[Editor] setContent done, skipUpdate will restore in 100ms')
+      // 等待足够时间让 setContent 触发的 onUpdate 完成
+      setTimeout(() => {
         skipUpdate.current = false
-      })
+        console.log('[Editor] skipUpdate restored to false')
+      }, 100)
     }
   }, [editor, initialContent])
 

@@ -82,41 +82,43 @@ export default function ViewPage() {
         </div>
       </header>
 
-      {/* 主体：文档内容 + 右侧大纲 */}
+      {/* 标题区域 — 全宽独占 */}
+      <div className="mx-auto max-w-6xl px-4 pt-6 sm:pt-10">
+        <h1 className="mb-4 text-2xl font-bold text-text-primary sm:mb-6 sm:text-3xl">
+          {currentDoc.title}
+        </h1>
+        <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-text-tertiary sm:gap-4 sm:text-sm">
+          {currentDoc.word_count ? <span>{currentDoc.word_count} 字</span> : null}
+          <span>v{currentDoc.current_version}</span>
+          {currentDoc.updated_at && (
+            <span>更新于 {new Date(currentDoc.updated_at).toLocaleString('zh-CN')}</span>
+          )}
+          {currentDoc.tags && (
+            <div className="flex flex-wrap gap-1.5">
+              {(Array.isArray(currentDoc.tags) ? currentDoc.tags : typeof currentDoc.tags === 'string' ? currentDoc.tags.split(',') : [])
+                .filter(Boolean)
+                .map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
+                >
+                  {typeof tag === 'string' ? tag.trim() : tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 大纲 + 内容 并排 */}
       <div className="mx-auto flex max-w-6xl gap-6 px-4">
-        {/* 文档内容 */}
-        <main className="min-w-0 flex-1 py-6 sm:py-10">
-          <h1 className="mb-6 text-2xl font-bold text-text-primary sm:mb-8 sm:text-3xl">
-            {currentDoc.title}
-          </h1>
+        {/* 左侧大纲 */}
+        <DocOutline headings={headings} className="w-64 shrink-0" />
 
-          <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-text-tertiary sm:mb-8 sm:gap-4 sm:text-sm">
-            {currentDoc.word_count ? <span>{currentDoc.word_count} 字</span> : null}
-            <span>v{currentDoc.current_version}</span>
-            {currentDoc.updated_at && (
-              <span>更新于 {new Date(currentDoc.updated_at).toLocaleString('zh-CN')}</span>
-            )}
-            {currentDoc.tags && (
-              <div className="flex flex-wrap gap-1.5">
-                {(Array.isArray(currentDoc.tags) ? currentDoc.tags : typeof currentDoc.tags === 'string' ? currentDoc.tags.split(',') : [])
-                  .filter(Boolean)
-                  .map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
-                  >
-                    {typeof tag === 'string' ? tag.trim() : tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
+        {/* 文档正文 */}
+        <main className="min-w-0 flex-1 pb-10">
           <MarkdownRenderer content={currentDoc.content || ''} />
         </main>
-
-        {/* 右侧大纲（桌面端） */}
-        <DocOutline headings={headings} className="w-56 shrink-0 pt-6" />
       </div>
 
       {/* 移动端大纲浮动按钮（DocOutline 内部处理） */}
