@@ -9,6 +9,7 @@ const creditTypeMap: Record<string, string> = {
   yearly: '年度订阅',
   trial: '试用积分',
   subscription_upgrade: '升级赠送',
+  official_grant: '官方赠送',
 }
 
 export default function Credits() {
@@ -200,7 +201,7 @@ export default function Credits() {
                         <td className="px-4 py-3 text-text-secondary">
                           {new Date(h.granted_at).toLocaleDateString('zh-CN')}
                         </td>
-                        <td className="px-4 py-3 text-text-primary">{h.credit_type}</td>
+                        <td className="px-4 py-3 text-text-primary">{creditTypeMap[h.credit_type] || h.credit_type}</td>
                         <td className="px-4 py-3 text-text-secondary max-sm:hidden">{h.description || '-'}</td>
                         <td className="px-4 py-3 text-right font-medium text-text-primary">
                           {Number(h.original_amount)}

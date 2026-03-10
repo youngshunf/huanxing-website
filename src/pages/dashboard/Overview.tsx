@@ -16,6 +16,7 @@ export default function Overview() {
     yearly: '年度订阅',
     trial: '试用积分',
     subscription_upgrade: '升级赠送',
+    official_grant: '官方赠送',
   }
 
   useEffect(() => {

@@ -38,7 +38,7 @@ export default function Header() {
 
   const logoSrc = resolvedTheme === 'dark'
     ? '/logos/logo-horizontal-dark.svg'
-    : '/logos/logo-horizontal-dark.svg'
+    : '/logos/logo-horizontal-light.svg'
 
   return (
     <header

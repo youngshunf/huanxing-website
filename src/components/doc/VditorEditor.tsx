@@ -1,267 +1,247 @@
-import { useEffect, useRef, useCallback } from 'react'
-import { useThemeStore } from '../../stores/useThemeStore'
+import { useEffect, useCallback, useRef } from 'react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import Link from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
+import Highlight from '@tiptap/extension-highlight'
+import Underline from '@tiptap/extension-underline'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { Markdown } from 'tiptap-markdown'
+import { common, createLowlight } from 'lowlight'
+import {
+  Bold, Italic, Underline as UnderlineIcon, Strikethrough,
+  Heading1, Heading2, Heading3,
+  List, ListOrdered, CheckSquare, Quote, Code, FileCode,
+  Link2, Image as ImageIcon, Minus,
+  Undo, Redo,
+} from 'lucide-react'
 
-interface VditorEditorProps {
+const lowlight = createLowlight(common)
+
+interface EditorProps {
   initialContent: string
   onChange: (content: string) => void
 }
 
-const VDITOR_CDN = 'https://cdn.jsdelivr.net/npm/vditor@3.10.8'
-
-let cssLoaded = false
-let jsLoaded = false
-let jsLoadPromise: Promise<void> | null = null
-
-function ensureCSS() {
-  if (cssLoaded) return
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.href = `${VDITOR_CDN}/dist/index.css`
-  document.head.appendChild(link)
-  cssLoaded = true
+/** 安全获取 Markdown 内容 */
+function getMarkdown(editor: any): string {
+  try {
+    if (editor?.storage?.markdown?.getMarkdown) {
+      return editor.storage.markdown.getMarkdown()
+    }
+  } catch { /* ignore */ }
+  // 回退：从 HTML 获取文本
+  return editor?.getText?.() || ''
 }
 
-function ensureJS(): Promise<void> {
-  if (jsLoaded) return Promise.resolve()
-  if (jsLoadPromise) return jsLoadPromise
-  jsLoadPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script')
-    script.src = `${VDITOR_CDN}/dist/index.min.js`
-    script.onload = () => { jsLoaded = true; resolve() }
-    script.onerror = reject
-    document.head.appendChild(script)
-  })
-  return jsLoadPromise
-}
-
-function forceFullWidth(root: HTMLElement) {
-  root.querySelectorAll('.vditor-reset').forEach((el) => {
-    const e = el as HTMLElement
-    e.style.setProperty('padding-left', '24px', 'important')
-    e.style.setProperty('padding-right', '24px', 'important')
-    e.style.setProperty('max-width', '100%', 'important')
-  })
-  root.querySelectorAll('.vditor-wysiwyg, .vditor-ir, .vditor-sv, .vditor-preview, .vditor-content').forEach((el) => {
-    const e = el as HTMLElement
-    e.style.setProperty('max-width', '100%', 'important')
-    e.style.setProperty('width', '100%', 'important')
-  })
-}
-
-/**
- * 检测纯文本是否像 Markdown（不是代码）
- */
-function looksLikeMarkdown(text: string): boolean {
-  const lines = text.split('\n').slice(0, 30)
-  let mdSignals = 0
-  for (const line of lines) {
-    const trimmed = line.trimStart()
-    if (/^#{1,6}\s/.test(trimmed)) mdSignals += 2
-    if (/^[-*+]\s/.test(trimmed)) mdSignals++
-    if (/^\d+\.\s/.test(trimmed)) mdSignals++
-    if (/^>\s/.test(trimmed)) mdSignals++
-    if (/^\|.*\|/.test(trimmed)) mdSignals++
-    if (/^---+$/.test(trimmed)) mdSignals++
-    if (/\[.*\]\(.*\)/.test(trimmed)) mdSignals++
-    if (/\*\*.*\*\*/.test(trimmed)) mdSignals++
-  }
-  return mdSignals >= 2
-}
-
-export default function VditorEditor({ initialContent, onChange }: VditorEditorProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const editorRef = useRef<HTMLDivElement>(null)
-  const vditorRef = useRef<any>(null)
-  const contentSetRef = useRef(false)
+export default function RichMarkdownEditor({ initialContent, onChange }: EditorProps) {
+  const initialSet = useRef(false)
+  const skipUpdate = useRef(false)
   const onChangeRef = useRef(onChange)
-  const pasteHandlerRef = useRef<((e: ClipboardEvent) => void) | null>(null)
-  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
   onChangeRef.current = onChange
 
-  const calcHeight = useCallback(() => {
-    if (!containerRef.current) return 500
-    const rect = containerRef.current.getBoundingClientRect()
-    return Math.max(400, window.innerHeight - rect.top - 16)
-  }, [])
-
-  useEffect(() => {
-    ensureCSS()
-    let destroyed = false
-
-    ensureJS().then(() => {
-      if (destroyed || !editorRef.current) return
-      if (vditorRef.current) {
-        vditorRef.current.destroy()
-        vditorRef.current = null
-      }
-      editorRef.current.innerHTML = ''
-
-      const Vditor = (window as any).Vditor
-      const isDark = document.documentElement.classList.contains('dark')
-      vditorRef.current = new Vditor(editorRef.current, {
-        cdn: VDITOR_CDN,
-        value: '',
-        mode: 'ir',
-        height: calcHeight(),
-        width: '100%',
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        codeBlock: false,
+      }),
+      Placeholder.configure({
         placeholder: '开始编写文档...',
-        theme: isDark ? 'dark' : 'classic',
-        preview: {
-          theme: {
-            current: isDark ? 'dark' : 'light',
-            path: `${VDITOR_CDN}/dist/css/content-theme`,
-          },
-          hljs: {
-            style: isDark ? 'native' : 'github',
-          },
-        },
-        toolbar: [
-          'headings', 'bold', 'italic', 'strike', '|',
-          'list', 'ordered-list', 'check', 'quote', '|',
-          'code', 'inline-code', 'link', 'table', '|',
-          'line', 'undo', 'redo', '|',
-          'edit-mode', 'fullscreen', 'outline',
-        ],
-        toolbarConfig: { pin: false },
-        cache: { enable: false },
-        input: (value: string) => {
-          onChangeRef.current(value)
-        },
-        after: () => {
-          if (destroyed) return
-          if (initialContent && !contentSetRef.current) {
-            vditorRef.current?.setValue(initialContent)
-            contentSetRef.current = true
-          }
-          if (editorRef.current) {
-            forceFullWidth(editorRef.current)
-          }
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: { class: 'hx-editor-link' },
+      }),
+      Image.configure({
+        HTMLAttributes: { class: 'hx-editor-img' },
+      }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      Highlight.configure({ multicolor: false }),
+      Underline,
+      CodeBlockLowlight.configure({ lowlight }),
+      Markdown.configure({
+        html: true,
+        transformPastedText: true,
+        transformCopiedText: true,
+      }),
+    ],
+    content: '',
+    onUpdate: ({ editor: ed }) => {
+      // 跳过 setContent 触发的 onUpdate（初始加载）
+      if (skipUpdate.current) return
+      const md = getMarkdown(ed)
+      if (md) {
+        onChangeRef.current(md)
+      }
+    },
+    editorProps: {
+      attributes: {
+        class: 'hx-tiptap-editor',
+      },
+    },
+  })
 
-          // 绑定粘贴拦截到 editorRef 容器上（capture 阶段）
-          // 不再依赖 pre.vditor-reset，因为 IR 模式可能用 div 而不是 pre
-          if (editorRef.current) {
-            const handler = (event: Event) => {
-              const e = event as ClipboardEvent
-              const textPlain = e.clipboardData?.getData('text/plain') || ''
-              const textHTML = e.clipboardData?.getData('text/html') || ''
-
-              console.log('[VditorPaste] triggered! textPlain length:', textPlain.length,
-                'textHTML length:', textHTML.length,
-                'looksLikeMd:', looksLikeMarkdown(textPlain))
-
-              if (!textPlain || !looksLikeMarkdown(textPlain)) {
-                console.log('[VditorPaste] Not intercepting — not markdown')
-                return
-              }
-
-              console.log('[VditorPaste] Intercepting! Using insertValue')
-              e.preventDefault()
-              e.stopPropagation()
-              e.stopImmediatePropagation()
-
-              if (vditorRef.current) {
-                vditorRef.current.insertValue(textPlain)
-              }
-            }
-
-            editorRef.current.addEventListener('paste', handler, true)
-            pasteHandlerRef.current = handler as (e: ClipboardEvent) => void
-          }
-        },
+  // 初始内容加载
+  useEffect(() => {
+    if (editor && initialContent && !initialSet.current) {
+      initialSet.current = true
+      skipUpdate.current = true
+      editor.commands.setContent(initialContent)
+      // 下一个 tick 恢复 onUpdate
+      requestAnimationFrame(() => {
+        skipUpdate.current = false
       })
-    })
-
-    return () => {
-      destroyed = true
-      // 清理 paste handler
-      if (editorRef.current && pasteHandlerRef.current) {
-        editorRef.current.removeEventListener('paste', pasteHandlerRef.current as EventListener, true)
-      }
-      if (vditorRef.current) {
-        vditorRef.current.destroy()
-        vditorRef.current = null
-      }
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [editor, initialContent])
 
-  useEffect(() => {
-    if (!initialContent || contentSetRef.current) return
-    const trySet = () => {
-      if (vditorRef.current) {
-        try {
-          vditorRef.current.setValue(initialContent)
-          contentSetRef.current = true
-          if (editorRef.current) {
-            setTimeout(() => {
-              if (editorRef.current) forceFullWidth(editorRef.current)
-            }, 100)
-          }
-        } catch {
-          setTimeout(trySet, 200)
-        }
-      } else {
-        setTimeout(trySet, 200)
-      }
+  const addLink = useCallback(() => {
+    if (!editor) return
+    const url = window.prompt('输入链接地址:', 'https://')
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run()
     }
-    trySet()
-  }, [initialContent])
+  }, [editor])
 
-  useEffect(() => {
-    const onResize = () => {
-      if (!editorRef.current) return
-      const vEl = editorRef.current.querySelector('.vditor') as HTMLElement
-      if (vEl) vEl.style.height = `${calcHeight()}px`
-      forceFullWidth(editorRef.current)
+  const addImage = useCallback(() => {
+    if (!editor) return
+    const url = window.prompt('输入图片地址:', 'https://')
+    if (url) {
+      editor.chain().focus().setImage({ src: url }).run()
     }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [calcHeight])
+  }, [editor])
 
-  useEffect(() => {
-    if (!editorRef.current) return
-    const observer = new MutationObserver((mutations) => {
-      if (!editorRef.current) return
-      let needsFix = false
-      for (const m of mutations) {
-        if (m.type === 'childList') { needsFix = true; break }
-        if (m.type === 'attributes' && m.attributeName === 'style') {
-          const target = m.target as HTMLElement
-          if (target.classList.contains('vditor-reset')) {
-            const pl = target.style.paddingLeft
-            if (pl && pl !== '24px') { needsFix = true; break }
-          }
-        }
-      }
-      if (needsFix) forceFullWidth(editorRef.current)
-    })
-    observer.observe(editorRef.current, {
-      childList: true, subtree: true,
-      attributes: true, attributeFilter: ['style'],
-    })
-    return () => observer.disconnect()
-  }, [])
-
-  // 响应主题切换
-  useEffect(() => {
-    if (!vditorRef.current) return
-    const isDark = resolvedTheme === 'dark'
-    vditorRef.current.setTheme(
-      isDark ? 'dark' : 'classic',           // 编辑器整体主题
-      isDark ? 'dark' : 'light',             // 内容区主题
-      isDark ? 'native' : 'github',          // 代码高亮主题
-    )
-  }, [resolvedTheme])
+  if (!editor) return null
 
   return (
-    <div ref={containerRef} className="vditor-wrapper">
-      <div ref={editorRef} />
+    <div className="flex h-full flex-col">
+      {/* 工具栏 */}
+      <div className="flex flex-wrap items-center gap-0.5 border-b border-divider bg-space-panel px-2 py-1.5">
+        <ToolBtn
+          icon={Undo} label="撤销"
+          active={false}
+          onClick={() => editor.chain().focus().undo().run()}
+        />
+        <ToolBtn
+          icon={Redo} label="重做"
+          active={false}
+          onClick={() => editor.chain().focus().redo().run()}
+        />
+        <Divider />
+        <ToolBtn
+          icon={Bold} label="加粗"
+          active={editor.isActive('bold')}
+          onClick={() => editor.chain().focus().toggleBold().run()}
+        />
+        <ToolBtn
+          icon={Italic} label="斜体"
+          active={editor.isActive('italic')}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+        />
+        <ToolBtn
+          icon={UnderlineIcon} label="下划线"
+          active={editor.isActive('underline')}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+        />
+        <ToolBtn
+          icon={Strikethrough} label="删除线"
+          active={editor.isActive('strike')}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+        />
+        <Divider />
+        <ToolBtn
+          icon={Heading1} label="标题1"
+          active={editor.isActive('heading', { level: 1 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        />
+        <ToolBtn
+          icon={Heading2} label="标题2"
+          active={editor.isActive('heading', { level: 2 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        />
+        <ToolBtn
+          icon={Heading3} label="标题3"
+          active={editor.isActive('heading', { level: 3 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        />
+        <Divider />
+        <ToolBtn
+          icon={List} label="无序列表"
+          active={editor.isActive('bulletList')}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+        />
+        <ToolBtn
+          icon={ListOrdered} label="有序列表"
+          active={editor.isActive('orderedList')}
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        />
+        <ToolBtn
+          icon={CheckSquare} label="任务列表"
+          active={editor.isActive('taskList')}
+          onClick={() => editor.chain().focus().toggleTaskList().run()}
+        />
+        <Divider />
+        <ToolBtn
+          icon={Quote} label="引用"
+          active={editor.isActive('blockquote')}
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        />
+        <ToolBtn
+          icon={Code} label="行内代码"
+          active={editor.isActive('code')}
+          onClick={() => editor.chain().focus().toggleCode().run()}
+        />
+        <ToolBtn
+          icon={FileCode} label="代码块"
+          active={editor.isActive('codeBlock')}
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        />
+        <Divider />
+        <ToolBtn icon={Link2} label="链接" active={editor.isActive('link')} onClick={addLink} />
+        <ToolBtn icon={ImageIcon} label="图片" active={false} onClick={addImage} />
+        <ToolBtn
+          icon={Minus} label="分隔线"
+          active={false}
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        />
+      </div>
+
+      {/* 编辑内容区 */}
+      <div className="min-h-0 flex-1 overflow-y-auto bg-space-black">
+        <EditorContent editor={editor} className="mx-auto max-w-4xl px-6 py-6 sm:px-10 sm:py-10" />
+      </div>
     </div>
   )
 }
 
-export function useVditorInstance(ref: React.MutableRefObject<any>) {
-  return {
-    getValue: () => ref.current?.getValue() || '',
-    setValue: (content: string) => ref.current?.setValue(content),
-  }
+// === 工具栏按钮组件 ===
+
+function ToolBtn({
+  icon: Icon, label, active, onClick,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      title={label}
+      className={`rounded-md p-1.5 transition-colors ${
+        active
+          ? 'bg-star-purple/15 text-star-purple'
+          : 'text-text-secondary hover:bg-space-float hover:text-text-primary'
+      }`}
+    >
+      <Icon className="h-4 w-4" />
+    </button>
+  )
+}
+
+function Divider() {
+  return <div className="mx-1 h-5 w-px bg-divider" />
 }

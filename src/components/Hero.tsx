@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion'
+import { useThemeStore } from '../stores/useThemeStore'
 
 export default function Hero() {
+  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
+  const isDark = resolvedTheme === 'dark'
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 md:px-8">
       {/* Star + Content 垂直排列 */}
@@ -10,7 +14,9 @@ export default function Hero() {
           <motion.div
             className="absolute h-full w-full rounded-full"
             style={{
-              background: 'radial-gradient(circle, rgba(108,92,231,0.3) 0%, rgba(0,210,255,0.1) 40%, transparent 70%)',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(108,92,231,0.3) 0%, rgba(0,210,255,0.1) 40%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(108,92,231,0.45) 0%, rgba(79,70,229,0.18) 40%, transparent 70%)',
             }}
             animate={{
               scale: [1, 1.15, 1],
@@ -25,7 +31,9 @@ export default function Hero() {
           <motion.div
             className="absolute h-20 w-20 rounded-full md:h-28 md:w-28"
             style={{
-              background: 'radial-gradient(circle, rgba(255,217,61,0.6) 0%, rgba(108,92,231,0.3) 50%, transparent 70%)',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(255,217,61,0.6) 0%, rgba(108,92,231,0.3) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(124,58,237,0.55) 0%, rgba(79,70,229,0.25) 50%, transparent 70%)',
             }}
             animate={{
               scale: [1, 1.2, 1],
@@ -38,9 +46,12 @@ export default function Hero() {
             }}
           />
           <motion.div
-            className="absolute h-4 w-4 rounded-full bg-white md:h-5 md:w-5"
+            className="absolute h-4 w-4 rounded-full md:h-5 md:w-5"
             style={{
-              boxShadow: '0 0 20px rgba(255,217,61,0.8), 0 0 60px rgba(108,92,231,0.5)',
+              background: isDark ? 'white' : 'white',
+              boxShadow: isDark
+                ? '0 0 20px rgba(255,217,61,0.8), 0 0 60px rgba(108,92,231,0.5)'
+                : '0 0 20px rgba(124,58,237,0.7), 0 0 60px rgba(79,70,229,0.4)',
             }}
             animate={{
               scale: [1, 1.3, 1],

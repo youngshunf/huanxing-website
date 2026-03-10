@@ -48,12 +48,12 @@ export default function StarParticles() {
       })
     }
 
-    // Light 模式：使用星紫色粒子，降低透明度
+    // Light 模式：使用星紫色粒子，适当可见
     // Dark 模式：使用星光金粒子
     const particleColor = isDark
       ? { r: 255, g: 217, b: 61 }
       : { r: 108, g: 92, b: 231 }
-    const opacityScale = isDark ? 1 : 0.5
+    const opacityScale = isDark ? 1 : 0.85
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)

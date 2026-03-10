@@ -14,7 +14,7 @@ interface DocState {
   currentLoading: boolean
 
   // 操作
-  fetchDocs: (params?: { page?: number; size?: number; title?: string; status?: string }) => Promise<void>
+  fetchDocs: (params?: { page?: number; size?: number; title?: string; status?: string; folder_id?: number | null }) => Promise<void>
   fetchDoc: (pk: number) => Promise<DocItem>
   deleteDoc: (pk: number) => Promise<void>
   setCurrentDoc: (doc: DocItem | null) => void

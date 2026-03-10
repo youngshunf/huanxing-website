@@ -1,4 +1,5 @@
 import { Github, Twitter, MessageCircle } from 'lucide-react'
+import { useThemeStore } from '../stores/useThemeStore'
 
 const navLinks = [
   { label: '特性', href: '#features' },
@@ -7,14 +8,19 @@ const navLinks = [
 ]
 
 export default function Footer() {
+  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
+  const logoSrc = resolvedTheme === 'dark'
+    ? '/logos/logo-horizontal-dark.svg'
+    : '/logos/logo-horizontal-light.svg'
+
   return (
     <footer className="relative z-10 border-t border-divider px-4 py-12 sm:px-6 md:px-8 lg:px-12">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 md:flex-row md:justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <img
-            src="/logos/logo-horizontal-dark.svg"
-            alt="唤星 Stellara"
+            src={logoSrc}
+            alt="唤星"
             className="h-8"
           />
         </div>

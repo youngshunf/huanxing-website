@@ -15,7 +15,7 @@ export default function FolderTree({ onCreateFolder, onMoveItem }: FolderTreePro
   const { tree, currentFolderId, selectFolder } = useFolderStore()
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-hidden">
       {/* 根目录 */}
       <button
         onClick={() => selectFolder(null)}

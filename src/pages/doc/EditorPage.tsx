@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ArrowLeft, Save, Share2, Download, Eye, Loader2,
@@ -8,6 +8,7 @@ import VditorEditor from '../../components/doc/VditorEditor'
 import SaveIndicator from '../../components/doc/SaveIndicator'
 import ShareModal from '../../components/doc/ShareModal'
 import DocExportMenu from '../../components/doc/DocExportMenu'
+import ThemeToggle from '../../components/ThemeToggle'
 import useAutosave from '../../hooks/useAutosave'
 import * as docApi from '../../api/doc'
 
@@ -47,6 +48,7 @@ export default function EditorPage() {
       fetchDoc(docId)
         .then(async (doc) => {
           setTitle(doc.title || '')
+          contentRef.current = doc.content || ''  // 同步到 EditorPage 的 ref
           initSavedContent(doc.content || '')
 
           // 检查是否有更新的草稿
@@ -142,6 +144,7 @@ export default function EditorPage() {
 
           {/* 右侧操作 */}
           <div className="flex items-center gap-1">
+            <ThemeToggle />
             {!isNew && docId && (
               <button
                 onClick={() => navigate(`/doc/${docId}/view`)}
@@ -201,14 +204,14 @@ export default function EditorPage() {
       </div>
 
       {/* 编辑器 — 全屏宽度，撑满剩余高度 */}
-      <div className="px-4 pb-0 lg:px-8">
-        <VditorEditor
-          initialContent={currentDoc?.content || ''}
-          onChange={(value) => {
-            contentRef.current = value
-            onContentChange(value)
-          }}
-        />
+      <div className="flex-1">
+          <VditorEditor
+            initialContent={currentDoc?.content || ''}
+            onChange={(value) => {
+              contentRef.current = value
+              onContentChange(value)
+            }}
+          />
       </div>
 
       {/* 草稿恢复提示 */}

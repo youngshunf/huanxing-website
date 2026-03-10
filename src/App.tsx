@@ -14,6 +14,13 @@ import ProtectedRoute from './components/ProtectedRoute'
 import LoginModal from './components/LoginModal'
 import { useAuthStore } from './stores/useAuthStore'
 
+// 创作中心页面
+import CreatorProjects from './pages/dashboard/creator/CreatorProjects'
+import CreatorContents from './pages/dashboard/creator/CreatorContents'
+import CreatorPublishes from './pages/dashboard/creator/CreatorPublishes'
+import CreatorAnalytics from './pages/dashboard/creator/CreatorAnalytics'
+import CreatorTopics from './pages/dashboard/creator/CreatorTopics'
+
 // 初始化主题 store（触发 side effect）
 import './stores/useThemeStore'
 
@@ -79,6 +86,12 @@ export default function App() {
             <Route path="docs" element={<DocsListPage />} />
             <Route path="subscription" element={<Subscription />} />
             <Route path="credits" element={<Credits />} />
+            {/* 创作中心 */}
+            <Route path="creator" element={<CreatorProjects />} />
+            <Route path="creator/contents" element={<CreatorContents />} />
+            <Route path="creator/publishes" element={<CreatorPublishes />} />
+            <Route path="creator/analytics" element={<CreatorAnalytics />} />
+            <Route path="creator/topics" element={<CreatorTopics />} />
           </Route>
         </Routes>
         <LoginModal />

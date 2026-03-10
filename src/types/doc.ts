@@ -52,6 +52,7 @@ export interface DocListParams {
   size?: number
   title?: string
   status?: string
+  folder_id?: number | null
 }
 
 export interface DocCreateParams {

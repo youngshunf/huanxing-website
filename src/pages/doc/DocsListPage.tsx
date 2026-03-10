@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Search, Plus, Eye, Pencil, Download, Trash2, Move,
-  MoreHorizontal, Loader2, Sparkles, FolderPlus,
+  MoreHorizontal, Loader2, Sparkles, FolderPlus, ChevronDown, Folder,
 } from 'lucide-react'
 import { useDocStore } from '../../stores/useDocStore'
 import { useFolderStore } from '../../stores/useFolderStore'
@@ -22,7 +22,7 @@ const STATUS_TABS = [
 export default function DocsListPage() {
   const navigate = useNavigate()
   const { docs, loading, fetchDocs, deleteDoc } = useDocStore()
-  const { currentFolderId, fetchTree, moveDocument } = useFolderStore()
+  const { currentFolderId, tree, fetchTree, moveDocument } = useFolderStore()
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
   const [menuDocId, setMenuDocId] = useState<number | null>(null)
@@ -31,6 +31,7 @@ export default function DocsListPage() {
   // 目录相关弹窗
   const [createFolderParentId, setCreateFolderParentId] = useState<number | null | undefined>(undefined)
   const [moveDocId, setMoveDocId] = useState<number | null>(null)
+  const [mobileFolderOpen, setMobileFolderOpen] = useState(false)
 
   // 加载目录树
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function DocsListPage() {
       size: 50,
       title: searchText || undefined,
       status: statusFilter || undefined,
+      folder_id: currentFolderId ?? undefined,
     })
   }, [currentFolderId, statusFilter])
 
@@ -53,6 +55,7 @@ export default function DocsListPage() {
       size: 50,
       title: searchText || undefined,
       status: statusFilter || undefined,
+      folder_id: currentFolderId ?? undefined,
     })
   }
 
@@ -73,7 +76,7 @@ export default function DocsListPage() {
     if (moveDocId === null) return
     await moveDocument(moveDocId, targetFolderId)
     // 刷新文档列表
-    fetchDocs({ page: 1, size: 50, title: searchText || undefined, status: statusFilter || undefined })
+    fetchDocs({ page: 1, size: 50, title: searchText || undefined, status: statusFilter || undefined, folder_id: currentFolderId ?? undefined })
   }
 
   const newDocUrl = currentFolderId
@@ -81,10 +84,10 @@ export default function DocsListPage() {
     : '/doc/new/edit'
 
   return (
-    <div className="min-h-screen bg-space-black">
+    <div className="min-h-screen min-w-0 bg-space-black">
       {/* 顶部栏 */}
       <header className="sticky top-0 z-10 border-b border-divider bg-space-panel/80 backdrop-blur-md">
-        <div className="mx-auto max-w-6xl px-4 py-4">
+        <div className="px-4 py-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <h1 className="min-w-0 truncate text-lg font-bold text-text-primary sm:text-xl">📄 我的文档</h1>
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -135,11 +138,42 @@ export default function DocsListPage() {
               </button>
             ))}
           </div>
+
+          {/* 移动端目录选择 */}
+          <div className="mt-3 md:hidden">
+            <button
+              onClick={() => setMobileFolderOpen(!mobileFolderOpen)}
+              className="flex w-full items-center justify-between rounded-lg border border-border-default bg-space-input px-3 py-2 text-sm transition-colors"
+            >
+              <span className="flex items-center gap-2 text-text-secondary">
+                <Folder className="h-4 w-4 text-star-gold" />
+                {currentFolderId === null ? '全部文档' : (() => {
+                  const findName = (nodes: typeof tree): string => {
+                    for (const n of nodes) {
+                      if (n.id === currentFolderId) return n.icon ? `${n.icon} ${n.name}` : n.name
+                      const found = findName(n.children)
+                      if (found) return found
+                    }
+                    return ''
+                  }
+                  return findName(tree) || '全部文档'
+                })()}
+              </span>
+              <ChevronDown className={`h-4 w-4 text-text-tertiary transition-transform ${mobileFolderOpen ? 'rotate-180' : ''}`} />
+            </button>
+            {mobileFolderOpen && (
+              <div className="mt-2 rounded-xl border border-border-default bg-space-panel p-3">
+                <FolderTree
+                  onCreateFolder={(parentId) => { setCreateFolderParentId(parentId); setMobileFolderOpen(false) }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
       {/* 主体：左侧目录树 + 右侧文档列表 */}
-      <main className="mx-auto flex max-w-6xl gap-4 px-4 py-4">
+      <main className="flex gap-4 py-4">
         {/* 左侧目录树 */}
         <aside className="hidden w-48 shrink-0 md:block">
           <div className="sticky top-24 rounded-xl border border-border-default bg-space-panel p-3">
@@ -172,15 +206,15 @@ export default function DocsListPage() {
               </button>
             </div>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
               {docs.map((doc) => (
                 <div
                   key={doc.id}
-                  className="group relative rounded-xl border border-border-default bg-space-panel p-4 transition-all hover:border-star-purple/30 hover:shadow-lg hover:shadow-star-purple/5"
+                  className="group relative overflow-hidden rounded-xl border border-border-default bg-space-panel p-4 transition-all hover:border-star-purple/30 hover:shadow-lg hover:shadow-star-purple/5"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <h3
-                      className="cursor-pointer truncate text-base font-semibold text-text-primary transition-colors hover:text-star-purple"
+                      className="min-w-0 cursor-pointer truncate text-base font-semibold text-text-primary transition-colors hover:text-star-purple"
                       onClick={() => navigate(`/doc/${doc.id}/view`)}
                     >
                       {doc.title || '无标题文档'}
