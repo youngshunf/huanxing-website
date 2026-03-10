@@ -92,10 +92,9 @@ export function slugify(text: string): string {
 
 interface DocOutlineProps {
   headings: TocItem[]
-  className?: string
 }
 
-export default function DocOutline({ headings, className = '' }: DocOutlineProps) {
+export default function DocOutline({ headings }: DocOutlineProps) {
   const [activeId, setActiveId] = useState('')
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -205,11 +204,9 @@ export default function DocOutline({ headings, className = '' }: DocOutlineProps
 
   return (
     <>
-      {/* 桌面端：左侧 sticky 大纲 */}
-      <aside className={`hidden xl:block ${className}`}>
-        <div className="sticky top-14 max-h-[calc(100vh-3.5rem)] overflow-y-auto py-2 pr-2">
-          {tocContent}
-        </div>
+      {/* 桌面端：fixed 定位，始终可见 */}
+      <aside className="hidden xl:block fixed left-0 top-14 bottom-0 w-64 overflow-y-auto border-r border-border-default bg-space-black/50 backdrop-blur-sm px-4 py-4">
+        {tocContent}
       </aside>
 
       {/* 移动端浮动按钮 */}

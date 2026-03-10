@@ -26,7 +26,7 @@ function getTextContent(children: React.ReactNode): string {
   if (typeof children === 'number') return String(children)
   if (Array.isArray(children)) return children.map(getTextContent).join('')
   if (children && typeof children === 'object' && 'props' in children) {
-    return getTextContent((children as React.ReactElement).props.children)
+    return getTextContent((children as any).props.children)
   }
   return ''
 }
@@ -50,7 +50,7 @@ function SmartParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagra
       'type' in child &&
       (child as React.ReactElement).type === 'strong'
     ) {
-      const text = getTextContent((child as React.ReactElement).props.children)
+      const text = getTextContent((child as any).props.children)
       if (text && text.length >= 2 && text.length <= 80) {
         const id = slugify(text)
         return <p id={id} {...props}>{children}</p>

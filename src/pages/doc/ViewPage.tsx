@@ -83,7 +83,7 @@ export default function ViewPage() {
       </header>
 
       {/* 标题区域 — 全宽独占 */}
-      <div className="mx-auto max-w-6xl px-4 pt-6 sm:pt-10">
+      <div className="mx-auto max-w-5xl px-4 pt-6 xl:ml-72 xl:mr-auto sm:pt-10">
         <h1 className="mb-4 text-2xl font-bold text-text-primary sm:mb-6 sm:text-3xl">
           {currentDoc.title}
         </h1>
@@ -110,16 +110,13 @@ export default function ViewPage() {
         </div>
       </div>
 
-      {/* 大纲 + 内容 并排 */}
-      <div className="mx-auto flex max-w-6xl gap-6 px-4">
-        {/* 左侧大纲 */}
-        <DocOutline headings={headings} className="w-64 shrink-0" />
+      {/* 左侧大纲（fixed 定位，始终可见） */}
+      <DocOutline headings={headings} />
 
-        {/* 文档正文 */}
-        <main className="min-w-0 flex-1 pb-10">
-          <MarkdownRenderer content={currentDoc.content || ''} />
-        </main>
-      </div>
+      {/* 文档正文 — 给左侧大纲留出空间 */}
+      <main className="mx-auto max-w-5xl px-4 pb-16 xl:ml-72 xl:mr-auto">
+        <MarkdownRenderer content={currentDoc.content || ''} />
+      </main>
 
       {/* 移动端大纲浮动按钮（DocOutline 内部处理） */}
 
