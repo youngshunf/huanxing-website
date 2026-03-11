@@ -122,7 +122,8 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
   return (
     <div className="flex h-full flex-col">
       {/* 工具栏 */}
-      <div className="flex flex-wrap items-center gap-0.5 border-b border-divider bg-space-panel px-2 py-1.5">
+      <div className="border-b border-divider bg-space-panel px-4 py-1.5 sm:px-8 md:px-12 lg:px-20 xl:px-32">
+        <div className="flex flex-wrap items-center gap-0.5">
         <ToolBtn
           icon={Undo} label="撤销"
           active={false}
@@ -210,11 +211,12 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
           active={false}
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         />
+        </div>
       </div>
 
       {/* 编辑内容区 */}
       <div className="min-h-0 flex-1 overflow-y-auto bg-space-black">
-        <EditorContent editor={editor} className="mx-auto max-w-4xl px-6 py-6 sm:px-10 sm:py-10" />
+        <EditorContent editor={editor} className="px-4 py-6 sm:px-8 sm:py-10 md:px-12 lg:px-20 xl:px-32" />
       </div>
     </div>
   )

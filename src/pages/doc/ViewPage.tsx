@@ -35,9 +35,9 @@ export default function ViewPage() {
 
   return (
     <div className="min-h-screen bg-space-black">
-      {/* 顶部工具栏 */}
-      <header className="sticky top-0 z-10 border-b border-divider bg-space-panel/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      {/* 顶部工具栏 — fixed */}
+      <header className="fixed left-0 right-0 top-0 z-20 border-b border-divider bg-space-panel/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <button
             onClick={() => navigate('/dashboard/docs')}
             className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
@@ -82,8 +82,8 @@ export default function ViewPage() {
         </div>
       </header>
 
-      {/* 标题区域 — 全宽独占 */}
-      <div className="mx-auto max-w-5xl px-4 pt-6 xl:ml-72 xl:mr-auto sm:pt-10">
+      {/* 标题区域 — 全宽独占，pt-16 补偿 fixed header */}
+      <div className="mx-auto max-w-7xl px-4 pt-20 xl:ml-72 xl:mr-auto">
         <h1 className="mb-4 text-2xl font-bold text-text-primary sm:mb-6 sm:text-3xl">
           {currentDoc.title}
         </h1>
@@ -114,7 +114,7 @@ export default function ViewPage() {
       <DocOutline headings={headings} />
 
       {/* 文档正文 — 给左侧大纲留出空间 */}
-      <main className="mx-auto max-w-5xl px-4 pb-16 xl:ml-72 xl:mr-auto">
+      <main className="mx-auto max-w-7xl px-4 pb-16 xl:ml-72 xl:mr-auto">
         <MarkdownRenderer content={currentDoc.content || ''} />
       </main>
 

@@ -210,7 +210,7 @@ export default function DocsListPage() {
               {docs.map((doc) => (
                 <div
                   key={doc.id}
-                  className="group relative overflow-hidden rounded-xl border border-border-default bg-space-panel p-4 transition-all hover:border-star-purple/30 hover:shadow-lg hover:shadow-star-purple/5"
+                  className="group relative rounded-xl border border-border-default bg-space-panel p-4 transition-all hover:border-star-purple/30 hover:shadow-lg hover:shadow-star-purple/5"
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <h3
@@ -306,13 +306,22 @@ function DocContextMenu({ doc, onClose, onDelete, onExport, onMove }: {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handler = () => onClose()
-    setTimeout(() => document.addEventListener('click', handler), 0)
-    return () => document.removeEventListener('click', handler)
+    const handler = (e: MouseEvent) => {
+      // 不关闭自身菜单内部的点击
+      const target = e.target as HTMLElement
+      if (target.closest('[data-doc-menu]')) return
+      onClose()
+    }
+    // 延迟绑定，避免本次点击就触发关闭
+    const timer = setTimeout(() => document.addEventListener('click', handler), 10)
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('click', handler)
+    }
   }, [onClose])
 
   return (
-    <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-lg border border-border-default bg-space-panel shadow-lg">
+    <div data-doc-menu className="absolute right-0 bottom-full z-30 mb-1 w-36 overflow-hidden rounded-lg border border-border-default bg-space-panel shadow-lg">
       <button onClick={() => navigate(`/doc/${doc.id}/view`)} className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-text-secondary hover:bg-space-float hover:text-text-primary"><Eye className="h-3.5 w-3.5" /> 查看</button>
       <button onClick={() => navigate(`/doc/${doc.id}/edit`)} className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-text-secondary hover:bg-space-float hover:text-text-primary"><Pencil className="h-3.5 w-3.5" /> 编辑</button>
       <button onClick={onMove} className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-text-secondary hover:bg-space-float hover:text-text-primary"><Move className="h-3.5 w-3.5" /> 移动</button>

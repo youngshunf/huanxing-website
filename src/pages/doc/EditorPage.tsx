@@ -29,10 +29,20 @@ export default function EditorPage() {
   const [showDraftRecover, setShowDraftRecover] = useState(false)
   const [draftContent, setDraftContent] = useState<string | null>(null)
   const contentRef = useRef('')  // 实时跟踪编辑器内容
+  const titleRef = useRef<HTMLTextAreaElement>(null)
 
   const { status, onContentChange, initSavedContent } = useAutosave({
     docId,
   })
+
+  // 标题高度自动调整
+  useEffect(() => {
+    const el = titleRef.current
+    if (el) {
+      el.style.height = '0'
+      el.style.height = el.scrollHeight + 'px'
+    }
+  }, [title])
 
   // 加载文档
   useEffect(() => {
@@ -128,7 +138,7 @@ export default function EditorPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-space-black">
-      {/* 顶部工具栏 — 全屏宽度 */}
+      {/* 顶部工具栏 */}
       <header className="sticky top-0 z-10 border-b border-divider bg-space-panel/80 backdrop-blur-md">
         <div className="flex items-center justify-between px-4 py-2">
           {/* 左侧 */}
@@ -193,17 +203,19 @@ export default function EditorPage() {
         </div>
       </header>
 
-      {/* 标题输入 — 全屏宽度 */}
-      <div className="px-6 pt-6 lg:px-12">
-        <input
+      {/* 标题输入 — 全宽左对齐，自动换行 */}
+      <div className="w-full px-4 pb-4 pt-6 sm:px-8 md:px-12 lg:px-20 xl:px-32">
+        <textarea
+          ref={titleRef}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          rows={1}
           placeholder="输入文档标题..."
-          className="w-full border-none bg-transparent text-2xl font-bold text-text-primary placeholder-text-tertiary outline-none sm:text-3xl"
+          className="block w-full resize-none overflow-hidden border-none bg-transparent text-left text-2xl font-bold leading-normal text-text-primary placeholder-text-tertiary outline-none sm:text-3xl"
         />
       </div>
 
-      {/* 编辑器 — 全屏宽度，撑满剩余高度 */}
+      {/* 编辑器 — 撑满剩余高度 */}
       <div className="flex-1">
           <VditorEditor
             initialContent={currentDoc?.content || ''}
