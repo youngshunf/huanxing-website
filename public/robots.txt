@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /pay/
+Disallow: /api/
+
+Sitemap: https://huanxing.dcfuture.cn/sitemap.xml

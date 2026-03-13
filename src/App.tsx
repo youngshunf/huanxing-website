@@ -1,6 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import SiteLayout from './layouts/SiteLayout'
 import Home from './pages/Home'
+import Product from './pages/Product'
+import Scenes from './pages/Scenes'
+import PricingPage from './pages/PricingPage'
+import About from './pages/About'
 import DashboardLayout from './pages/dashboard/DashboardLayout'
 import Overview from './pages/dashboard/Overview'
 import Subscription from './pages/dashboard/Subscription'
@@ -35,7 +40,16 @@ export default function App() {
     <BrowserRouter>
       <div className="relative min-h-screen overflow-x-hidden bg-space-black">
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* ===== 营销页面 — 共享 SiteLayout（Header + StarParticles + Footer）===== */}
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/scenes" element={<Scenes />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/about" element={<About />} />
+          </Route>
+
+          {/* ===== 原有功能页面（保持不动）===== */}
 
           {/* 支付页（需登录） */}
           <Route
