@@ -1,4 +1,5 @@
 import Hero from '../components/home/Hero'
+import BetaContact from '../components/home/BetaContact'
 import PainPoints from '../components/home/PainPoints'
 import SuperBrainBrief from '../components/home/SuperBrainBrief'
 import Features from '../components/Features'
@@ -15,7 +16,10 @@ export default function Home() {
       {/* 1. 情感冲击 — 10秒定生死 */}
       <Hero />
 
-      {/* 2. 痛点共鸣 — 你有这些问题 */}
+      {/* 2. 内测联系方式 — 第二屏 */}
+      <BetaContact />
+
+      {/* 3. 痛点共鸣 — 你有这些问题 */}
       <PainPoints />
 
       {/* 3. 超级大脑六大能力精简版 */}

@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { useThemeStore } from '../../stores/useThemeStore'
 
 export default function Hero() {
@@ -97,12 +96,12 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <Link
-              to="/pricing"
+            <a
+              href="#beta-contact"
               className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(108,92,231,0.4)]"
             >
-              免费体验
-            </Link>
+              立即体验
+            </a>
             <a
               href="#pain-points"
               className="inline-block rounded-lg border border-border-default px-8 py-3 text-lg font-semibold text-text-secondary transition-all duration-300 hover:border-border-hover hover:text-text-primary"

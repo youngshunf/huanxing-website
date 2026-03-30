@@ -1,11 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { Lock, AlertCircle, Clock, FileText, ExternalLink } from 'lucide-react'
+import { Lock, AlertCircle, Clock, FileText, ExternalLink, Sun, Moon, Download, FileDown } from 'lucide-react'
 import { getSharedDoc } from '../../api/doc'
 import MarkdownRenderer from '../../components/doc/MarkdownRenderer'
+import DocOutline, { extractHeadings } from '../../components/doc/DocOutline'
 import type { DocItem } from '../../types/doc'
 
 type PageState = 'loading' | 'password' | 'content' | 'expired' | 'error'
+type ShareTheme = 'light' | 'dark'
+
+function applyShareTheme(theme: ShareTheme) {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
 
 export default function SharePage() {
   const { token } = useParams<{ token: string }>()
@@ -15,7 +25,53 @@ export default function SharePage() {
   const [errorMsg, setErrorMsg] = useState('')
   const [passwordError, setPasswordError] = useState('')
 
-  // 首次加载（不带密码）
+  // 分享页独立主题，默认 light，不影响全局 theme store
+  const [shareTheme, setShareTheme] = useState<ShareTheme>(() => {
+    const theme = (localStorage.getItem('share_theme') as ShareTheme) || 'light'
+    applyShareTheme(theme) // 立即同步应用，避免闪烁
+    return theme
+  })
+  const prevThemeRef = useRef<string | null>(null)
+
+  // 导出下拉菜单
+  const [showExport, setShowExport] = useState(false)
+  const exportMenuRef = useRef<HTMLDivElement>(null)
+
+  // 从文档内容提取大纲
+  const headings = useMemo(() => extractHeadings(doc?.content || ''), [doc?.content])
+
+  // 进入分享页：应用分享页主题，离开时恢复原有主题和 title
+  const prevTitleRef = useRef(document.title)
+  useEffect(() => {
+    prevThemeRef.current = localStorage.getItem('theme')
+    applyShareTheme(shareTheme)
+    return () => {
+      document.title = prevTitleRef.current
+      const prev = prevThemeRef.current
+      if (prev === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  }, [])
+
+  // 主题变更时同步到 DOM
+  useEffect(() => {
+    applyShareTheme(shareTheme)
+  }, [shareTheme])
+
+  // 点击导出菜单外部时关闭
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(e.target as Node)) {
+        setShowExport(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
   useEffect(() => {
     if (!token) return
     loadDocument()
@@ -28,6 +84,7 @@ export default function SharePage() {
       const data = await getSharedDoc(token!, pwd)
       setDoc(data)
       setState('content')
+      document.title = `${data.title || '无标题文档'} - 唤星AI`
     } catch (e: any) {
       const msg = e?.message || ''
       if (msg.includes('密码') || msg.includes('password')) {
@@ -46,6 +103,31 @@ export default function SharePage() {
     e.preventDefault()
     if (!password.trim()) return
     loadDocument(password)
+  }
+
+  function toggleTheme() {
+    const next: ShareTheme = shareTheme === 'dark' ? 'light' : 'dark'
+    setShareTheme(next)
+    localStorage.setItem('share_theme', next)
+  }
+
+  function downloadMarkdown() {
+    if (!doc) return
+    const blob = new Blob([doc.content || ''], { type: 'text/markdown;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${doc.title || '文档'}.md`
+    document.body.appendChild(a)
+    a.click()
+    URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+    setShowExport(false)
+  }
+
+  function printToPdf() {
+    setShowExport(false)
+    setTimeout(() => window.print(), 150)
   }
 
   // ========== 加载中 ==========
@@ -143,57 +225,109 @@ export default function SharePage() {
   // ========== 文档内容 ==========
   return (
     <div className="min-h-screen bg-space-black">
-      {/* 顶部栏 */}
-      <header className="sticky top-0 z-10 border-b border-divider bg-space-panel/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <FileText className="h-5 w-5 text-star-purple" />
+      {/* 顶部工具栏 — fixed */}
+      <header className="fixed left-0 right-0 top-0 z-20 border-b border-divider bg-space-panel/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <FileText className="h-5 w-5 shrink-0 text-star-purple" />
             <h1 className="truncate text-sm font-medium text-text-primary sm:text-base">
               {doc?.title || '无标题文档'}
             </h1>
           </div>
-          <a
-            href="/"
-            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            唤星AI
-          </a>
+
+          <div className="flex items-center gap-1.5">
+            {/* 主题切换 */}
+            <button
+              onClick={toggleTheme}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+              aria-label="切换主题"
+            >
+              {shareTheme === 'dark'
+                ? <Moon className="h-[18px] w-[18px]" />
+                : <Sun className="h-[18px] w-[18px]" />
+              }
+            </button>
+
+            {/* 导出 */}
+            <div className="relative" ref={exportMenuRef}>
+              <button
+                onClick={() => setShowExport(!showExport)}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+              >
+                <Download className="h-4 w-4" />
+                <span className="max-sm:hidden">导出</span>
+              </button>
+              {showExport && (
+                <div className="absolute right-0 top-full mt-1 w-48 overflow-hidden rounded-lg border border-border-default bg-space-panel shadow-lg">
+                  <button
+                    onClick={downloadMarkdown}
+                    className="flex w-full items-center gap-3 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Markdown (.md)
+                  </button>
+                  <button
+                    onClick={printToPdf}
+                    className="flex w-full items-center gap-3 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    打印 / 导出 PDF
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* 品牌链接 */}
+            <a
+              href="/"
+              className="hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary sm:flex"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+              唤星AI
+            </a>
+          </div>
         </div>
       </header>
 
-      {/* 文档内容 */}
-      <main className="mx-auto max-w-4xl px-4 py-6 sm:py-10">
-        {/* 标题 */}
-        <h1 className="mb-6 text-2xl font-bold text-text-primary sm:mb-8 sm:text-3xl">
+      {/* 标题区域 — pt-20 补偿 fixed header，xl 下为大纲留出空间 */}
+      <div className="mx-auto max-w-7xl px-4 pt-20 xl:ml-72 xl:mr-auto">
+        <h1 className="mb-4 text-2xl font-bold text-text-primary sm:mb-6 sm:text-3xl">
           {doc?.title}
         </h1>
-
-        {/* 元信息 */}
-        <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-text-tertiary sm:mb-8 sm:gap-4 sm:text-sm">
+        <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-text-tertiary sm:gap-4 sm:text-sm">
           {doc?.word_count ? <span>{doc.word_count} 字</span> : null}
           {doc?.tags && (
             <div className="flex flex-wrap gap-1.5">
-              {(Array.isArray(doc.tags) ? doc.tags : typeof doc.tags === 'string' ? doc.tags.split(',') : [])
+              {(Array.isArray(doc.tags)
+                ? doc.tags
+                : typeof doc.tags === 'string'
+                  ? doc.tags.split(',')
+                  : []
+              )
                 .filter(Boolean)
                 .map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
-                >
-                  {typeof tag === 'string' ? tag.trim() : tag}
-                </span>
-              ))}
+                  <span
+                    key={tag}
+                    className="rounded-full bg-star-purple/10 px-2 py-0.5 text-xs text-star-purple"
+                  >
+                    {typeof tag === 'string' ? tag.trim() : tag}
+                  </span>
+                ))}
             </div>
           )}
         </div>
+      </div>
 
-        {/* Markdown 正文 */}
+      {/* 左侧大纲 */}
+      <DocOutline headings={headings} />
+
+      {/* 文档正文 — xl 下为大纲留出空间 */}
+      <main className="mx-auto max-w-7xl px-4 pb-16 xl:ml-72 xl:mr-auto">
         <MarkdownRenderer content={doc?.content || ''} />
       </main>
 
       {/* 底部品牌 */}
-      <footer className="border-t border-divider py-6 text-center">
+      <footer className="border-t border-divider py-6 text-center xl:ml-72">
         <a
           href="/"
           className="inline-flex items-center gap-2 text-xs text-text-tertiary transition-colors hover:text-star-purple"

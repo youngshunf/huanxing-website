@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
+import { TableKit } from '@tiptap/extension-table'
 import TaskList from '@tiptap/extension-task-list'
 import TaskItem from '@tiptap/extension-task-item'
 import Highlight from '@tiptap/extension-highlight'
@@ -58,6 +59,7 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
       Image.configure({
         HTMLAttributes: { class: 'hx-editor-img' },
       }),
+      TableKit,
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: false }),
@@ -82,6 +84,42 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
     editorProps: {
       attributes: {
         class: 'hx-tiptap-editor',
+      },
+      handlePaste: (view, event) => {
+        const clipboardData = event.clipboardData
+        if (!clipboardData) return false
+
+        const html = clipboardData.getData('text/html')
+        const text = clipboardData.getData('text/plain')
+        if (!text || !html) return false
+
+        // VSCode / IDE 复制的 HTML 是语法高亮的 <div>+<span> 结构，不含语义化标签。
+        // 如果 HTML 中没有任何语义化元素，说明来自代码编辑器，
+        // 此时忽略 HTML，直接用 tiptap-markdown 的 clipboardTextParser 解析 Markdown 文本。
+        const parsed = new DOMParser().parseFromString(html, 'text/html')
+        const hasSemanticHtml = !!(
+          parsed.querySelector('h1, h2, h3, h4, h5, h6') ||
+          parsed.querySelector('strong, b, em, i') ||
+          parsed.querySelector('table, ul, ol, li') ||
+          parsed.querySelector('blockquote') ||
+          parsed.querySelector('a[href]')
+        )
+
+        if (!hasSemanticHtml) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const mdParser = view.someProp('clipboardTextParser') as any
+          if (mdParser) {
+            try {
+              const slice = mdParser(text, view.state.$from, false, view)
+              if (slice) {
+                view.dispatch(view.state.tr.replaceSelection(slice))
+                return true
+              }
+            } catch { /* 降级为默认行为 */ }
+          }
+        }
+
+        return false
       },
     },
   })
