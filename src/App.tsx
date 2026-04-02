@@ -10,6 +10,7 @@ import DashboardLayout from './pages/dashboard/DashboardLayout'
 import Overview from './pages/dashboard/Overview'
 import Subscription from './pages/dashboard/Subscription'
 import Credits from './pages/dashboard/Credits'
+import ApiKeys from './pages/dashboard/ApiKeys'
 import PayPage from './pages/pay/PayPage'
 import SharePage from './pages/doc/SharePage'
 import DocsListPage from './pages/doc/DocsListPage'
@@ -100,6 +101,7 @@ export default function App() {
             <Route path="docs" element={<DocsListPage />} />
             <Route path="subscription" element={<Subscription />} />
             <Route path="credits" element={<Credits />} />
+            <Route path="apikeys" element={<ApiKeys />} />
             {/* 创作中心 */}
             <Route path="creator" element={<CreatorProjects />} />
             <Route path="creator/contents" element={<CreatorContents />} />
