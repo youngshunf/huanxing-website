@@ -6,6 +6,7 @@ import Product from './pages/Product'
 import Scenes from './pages/Scenes'
 import PricingPage from './pages/PricingPage'
 import About from './pages/About'
+import Privacy from './pages/Privacy'
 import DashboardLayout from './pages/dashboard/DashboardLayout'
 import Overview from './pages/dashboard/Overview'
 import Subscription from './pages/dashboard/Subscription'
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/scenes" element={<Scenes />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
           </Route>
 
           {/* ===== 原有功能页面（保持不动）===== */}
