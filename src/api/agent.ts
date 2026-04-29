@@ -290,7 +290,20 @@ export function startChannelQr(agentId: string, channel: SupportedChannelType, t
 export function getChannelQrStatus(agentId: string, channel: SupportedChannelType, sessionId: string) {
   return withMockFallback(
     () => request<QrStatusResponse>({ method: 'GET', url: `${AGENTS_URL}/${agentId}/channels/${channel}/qr/${sessionId}/status` }),
-    () => ({ session_id: sessionId, channel, status: Date.now() % 3 === 0 ? 'bound' as const : 'waiting_scan' as const, message: '等待扫码确认', updated_at: nowIso() }),
+    () => {
+      const status = Date.now() % 3 === 0 ? 'bound' as const : 'waiting_scan' as const
+      if (status === 'bound') {
+        updateMockAgent(agentId, (agent) => ({
+          ...agent,
+          channel_summary: [
+            ...agent.channel_summary.filter((item) => item.channel !== channel),
+            { channel, status, display_name: channelLabel(channel), updated_at: nowIso() },
+          ],
+          updated_at: nowIso(),
+        }))
+      }
+      return { session_id: sessionId, channel, status, message: status === 'bound' ? '绑定成功' : '等待扫码确认', updated_at: nowIso() }
+    },
   )
 }
 
