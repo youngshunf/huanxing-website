@@ -19,7 +19,7 @@ export default function CreateFolderModal({ parentId, onClose }: CreateFolderMod
     try {
       await createFolder(name.trim(), parentId)
       onClose()
-    } catch (err) {
+    } catch {
       alert('创建失败')
     } finally {
       setLoading(false)

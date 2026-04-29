@@ -1,11 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { List, ChevronDown, ChevronRight, X } from 'lucide-react'
 
-export interface TocItem {
-  id: string
-  text: string
-  level: number
-}
+import type { TocItem } from './docOutlineUtils'
 
 /** 树节点 */
 interface TocTreeNode {
@@ -20,7 +16,6 @@ function buildTree(headings: TocItem[]): TocTreeNode[] {
 
   for (const item of headings) {
     const node: TocTreeNode = { item, children: [] }
-    // 回退到合适的父级
     while (stack.length > 0 && stack[stack.length - 1].item.level >= item.level) {
       stack.pop()
     }
@@ -32,62 +27,6 @@ function buildTree(headings: TocItem[]): TocTreeNode[] {
     stack.push(node)
   }
   return root
-}
-
-/** 从 markdown 文本提取标题列表 */
-export function extractHeadings(markdown: string): TocItem[] {
-  const headings: TocItem[] = []
-  const lines = markdown.split('\n')
-  let inCodeBlock = false
-
-  for (const line of lines) {
-    const trimmed = line.trimStart()
-
-    if (trimmed.startsWith('```')) {
-      inCodeBlock = !inCodeBlock
-      continue
-    }
-    if (inCodeBlock) continue
-
-    // 标准 Markdown 标题
-    const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/)
-    if (headingMatch) {
-      const level = headingMatch[1].length
-      const text = cleanMarkdown(headingMatch[2])
-      if (text) {
-        headings.push({ id: slugify(text), text, level })
-      }
-      continue
-    }
-
-    // 粗体独占行 → 伪 h2
-    const boldMatch = trimmed.match(/^\*\*(.+?)\*\*$|^__(.+?)__$/)
-    if (boldMatch) {
-      const text = cleanMarkdown(boldMatch[1] || boldMatch[2])
-      if (text && text.length >= 2 && text.length <= 80) {
-        headings.push({ id: slugify(text), text, level: 2 })
-      }
-    }
-  }
-  return headings
-}
-
-function cleanMarkdown(text: string): string {
-  return text
-    .replace(/\*\*/g, '')
-    .replace(/\*/g, '')
-    .replace(/_/g, '')
-    .replace(/`/g, '')
-    .replace(/~~/g, '')
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .trim()
-}
-
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w\u4e00-\u9fff-]/g, '')
 }
 
 interface DocOutlineProps {
@@ -107,8 +46,8 @@ export default function DocOutline({ headings }: DocOutlineProps) {
     tree.forEach((n) => {
       if (n.children.length > 0) ids.add(n.item.id)
     })
-    setExpanded(ids)
-  }, [headings])
+    window.setTimeout(() => setExpanded(ids), 0)
+  }, [headings, tree])
 
   // 滚动监听
   useEffect(() => {

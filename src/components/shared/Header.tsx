@@ -41,7 +41,7 @@ export default function Header() {
 
   // 路由变化时关闭移动菜单
   useEffect(() => {
-    setIsMobileMenuOpen(false)
+    window.setTimeout(() => setIsMobileMenuOpen(false), 0)
   }, [location.pathname])
 
   const logoSrc = resolvedTheme === 'dark'

@@ -28,6 +28,7 @@ interface EditorProps {
 }
 
 /** 安全获取 Markdown 内容 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getMarkdown(editor: any): string {
   try {
     if (editor?.storage?.markdown?.getMarkdown) {
@@ -42,7 +43,10 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
   const initialSet = useRef(false)
   const skipUpdate = useRef(false)
   const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+
+  useEffect(() => {
+    onChangeRef.current = onChange
+  }, [onChange])
 
   const editor = useEditor({
     extensions: [
@@ -110,7 +114,7 @@ export default function RichMarkdownEditor({ initialContent, onChange }: EditorP
           const mdParser = view.someProp('clipboardTextParser') as any
           if (mdParser) {
             try {
-              const slice = mdParser(text, view.state.$from, false, view)
+              const slice = mdParser(text, view.state.selection.$from, false, view)
               if (slice) {
                 view.dispatch(view.state.tr.replaceSelection(slice))
                 return true

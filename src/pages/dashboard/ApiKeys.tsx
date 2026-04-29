@@ -14,8 +14,8 @@ export default function ApiKeys() {
       setLoading(true)
       const data = await listApiKeys()
       setKeys(data || [])
-    } catch (err: any) {
-      alert('无法加载 API Keys: ' + err.message)
+    } catch (err) {
+      alert('无法加载 API Keys: ' + (err instanceof Error ? err.message : '未知错误'))
     } finally {
       setLoading(false)
     }
@@ -35,8 +35,8 @@ export default function ApiKeys() {
       setCreatedKey(resp.api_key)
       alert('API Key 创建成功')
       fetchKeys()
-    } catch (err: any) {
-      alert('创建失败: ' + err.message)
+    } catch (err) {
+      alert('创建失败: ' + (err instanceof Error ? err.message : '未知错误'))
     }
   }
 
@@ -46,8 +46,8 @@ export default function ApiKeys() {
       await deleteApiKey(clientId)
       alert('已吊销 API Key')
       fetchKeys()
-    } catch (err: any) {
-      alert('吊销失败: ' + err.message)
+    } catch (err) {
+      alert('吊销失败: ' + (err instanceof Error ? err.message : '未知错误'))
     }
   }
 
@@ -59,7 +59,7 @@ export default function ApiKeys() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-text-primary">HASN API Keys</h1>
+        <h1 className="text-2xl font-bold text-text-primary">API Keys</h1>
         <button
           onClick={() => {
             setShowCreate(true)
@@ -74,7 +74,7 @@ export default function ApiKeys() {
       </div>
 
       <p className="text-text-secondary">
-        API Key 用于授权本地桌面端或您部署的云端大模型节点接入 唤星 (HASN) 统一网络。请妥善保管。
+        API Key 用于授权本地桌面端或您部署的云端大模型节点接入唤星服务。请妥善保管。
       </p>
 
       {/* 创建模态框 */}
@@ -198,7 +198,7 @@ export default function ApiKeys() {
                     </td>
                     <td className="px-6 py-4 font-mono text-xs">
                       <span className="rounded bg-space-float px-2 py-1">
-                        hasn_ak_...{k.client_id.slice(-4)}
+                        ak_...{k.client_id.slice(-4)}
                       </span>
                     </td>
                     <td className="px-6 py-4">

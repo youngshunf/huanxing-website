@@ -1,9 +1,10 @@
-import { useEffect, useState, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Lock, AlertCircle, Clock, FileText, ExternalLink, Sun, Moon, Download, FileDown } from 'lucide-react'
 import { getSharedDoc } from '../../api/doc'
 import MarkdownRenderer from '../../components/doc/MarkdownRenderer'
-import DocOutline, { extractHeadings } from '../../components/doc/DocOutline'
+import DocOutline from '../../components/doc/DocOutline'
+import { extractHeadings } from '../../components/doc/docOutlineUtils'
 import type { DocItem } from '../../types/doc'
 
 type PageState = 'loading' | 'password' | 'content' | 'expired' | 'error'
@@ -72,21 +73,17 @@ export default function SharePage() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  useEffect(() => {
+  const loadDocument = useCallback(async (pwd?: string) => {
     if (!token) return
-    loadDocument()
-  }, [token])
-
-  async function loadDocument(pwd?: string) {
     setState('loading')
     setPasswordError('')
     try {
-      const data = await getSharedDoc(token!, pwd)
+      const data = await getSharedDoc(token, pwd)
       setDoc(data)
       setState('content')
       document.title = `${data.title || '无标题文档'} - 唤星AI`
-    } catch (e: any) {
-      const msg = e?.message || ''
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : ''
       if (msg.includes('密码') || msg.includes('password')) {
         setState('password')
         if (pwd) setPasswordError('密码不正确，请重新输入')
@@ -97,7 +94,13 @@ export default function SharePage() {
         setState('error')
       }
     }
-  }
+  }, [token])
+
+  useEffect(() => {
+    window.setTimeout(() => {
+      loadDocument()
+    }, 0)
+  }, [loadDocument])
 
   function handlePasswordSubmit(e: React.FormEvent) {
     e.preventDefault()

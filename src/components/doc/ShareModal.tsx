@@ -31,19 +31,19 @@ export default function ShareModal({ docId, currentToken, onClose, onShareUpdate
   async function handleGenerate() {
     setLoading(true)
     try {
-      const params: Record<string, unknown> = {
+      const params: { permission: string; expires_hours: number; password?: string } = {
         permission,
         expires_hours: expiresHours || 87600, // 0 = 10年 ≈ 永久
       }
       if (usePassword && password) params.password = password
 
-      const result = await createShare(docId, params as any)
+      const result = await createShare(docId, params)
       const url = result.share_url?.startsWith('http')
         ? result.share_url
         : `${window.location.origin}/s/${result.share_url}`
       setShareUrl(url)
       onShareUpdated?.(result.share_url)
-    } catch (e) {
+    } catch {
       alert('生成分享链接失败')
     } finally {
       setLoading(false)

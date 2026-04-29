@@ -121,7 +121,7 @@ export default function EditorPage() {
           current_version: (currentDoc?.current_version || 0) + 1,
         })
       }
-    } catch (e) {
+    } catch {
       alert('保存失败，请重试')
     } finally {
       setSaving(false)

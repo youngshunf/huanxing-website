@@ -1,10 +1,8 @@
+import * as React from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
-import { slugify } from './DocOutline'
-
-// highlight.js 主题 CSS（GitHub Dark 风格，颜值高且轻量）
-import 'highlight.js/styles/github-dark.min.css'
+import { slugify } from './docOutlineUtils'
 
 interface MarkdownRendererProps {
   content: string
@@ -25,8 +23,8 @@ function getTextContent(children: React.ReactNode): string {
   if (typeof children === 'string') return children
   if (typeof children === 'number') return String(children)
   if (Array.isArray(children)) return children.map(getTextContent).join('')
-  if (children && typeof children === 'object' && 'props' in children) {
-    return getTextContent((children as any).props.children)
+  if (React.isValidElement<{ children?: React.ReactNode }>(children)) {
+    return getTextContent(children.props.children)
   }
   return ''
 }
@@ -50,7 +48,7 @@ function SmartParagraph({ children, ...props }: React.HTMLAttributes<HTMLParagra
       'type' in child &&
       (child as React.ReactElement).type === 'strong'
     ) {
-      const text = getTextContent((child as any).props.children)
+      const text = React.isValidElement<{ children?: React.ReactNode }>(child) ? getTextContent(child.props.children) : ''
       if (text && text.length >= 2 && text.length <= 80) {
         const id = slugify(text)
         return <p id={id} {...props}>{children}</p>
