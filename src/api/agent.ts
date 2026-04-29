@@ -32,7 +32,12 @@ function shouldUseMock(error: unknown) {
   return true
 }
 
+function shouldForceMock() {
+  return import.meta.env.VITE_HERMES_AGENT_MOCK === '1' || localStorage.getItem('huanxing_agent_mock') === '1'
+}
+
 async function withMockFallback<T>(call: () => Promise<T>, fallback: () => T): Promise<T> {
+  if (shouldForceMock()) return fallback()
   try {
     return await call()
   } catch (error) {
