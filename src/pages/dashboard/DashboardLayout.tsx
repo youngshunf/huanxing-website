@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, CreditCard, Coins, ArrowLeft, FileText, Target, PenTool, Share2, BarChart3, Lightbulb, Key } from 'lucide-react'
+import { LayoutDashboard, CreditCard, Coins, ArrowLeft, FileText, Target, PenTool, Share2, BarChart3, Lightbulb, Key, Bot } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useAuthStore } from '../../stores/useAuthStore'
 import { useThemeStore } from '../../stores/useThemeStore'
@@ -10,6 +10,7 @@ const sidebarLinks = [
   { to: '/dashboard/subscription', icon: CreditCard, label: '订阅管理' },
   { to: '/dashboard/credits', icon: Coins, label: '积分详情' },
   { to: '/dashboard/apikeys', icon: Key, label: 'API Keys' },
+  { to: '/dashboard/agents', icon: Bot, label: 'AI Agent' },
 ]
 
 const creatorLinks = [
