@@ -72,7 +72,7 @@ function readMockAgents(): AgentItem[] {
       container_workspace: '/workspace',
       workspace_status: 'ready',
       llm_mode: 'platform',
-      llm_model: 'anthropic/claude-sonnet-4.5',
+      llm_model: 'openai/gpt-5.5',
       channel_summary: [
         { channel: 'feishu', status: 'bound', display_name: '飞书', updated_at: nowIso() },
         { channel: 'weixin', status: 'unbound', display_name: '微信', updated_at: nowIso() },
@@ -192,7 +192,7 @@ export function createAgent(payload: CreateAgentPayload) {
         container_workspace: '/workspace',
         workspace_status: 'ready',
         llm_mode: 'platform',
-        llm_model: 'anthropic/claude-sonnet-4.5',
+        llm_model: 'openai/gpt-5.5',
         channel_summary: [],
         last_active_at: null,
         created_at: timestamp,
