@@ -46,6 +46,11 @@ async function withMockFallback<T>(call: () => Promise<T>, fallback: () => T): P
   }
 }
 
+async function withExplicitMockOnly<T>(call: () => Promise<T>, fallback: () => T): Promise<T> {
+  if (shouldForceMock()) return fallback()
+  return call()
+}
+
 function nowIso() {
   return new Date().toISOString()
 }
@@ -286,14 +291,14 @@ export function listChannels(agentId: string) {
 }
 
 export function startChannelQr(agentId: string, channel: SupportedChannelType, ttlSeconds = 300) {
-  return withMockFallback(
+  return withExplicitMockOnly(
     () => request<StartQrResponse>({ method: 'POST', url: `${AGENTS_URL}/${agentId}/channels/${channel}/qr/start`, data: { ttl_seconds: ttlSeconds } }),
     () => ({ session_id: `${channel}_${Date.now().toString(36)}`, channel, status: 'waiting_scan' as const, expires_at: new Date(Date.now() + ttlSeconds * 1000).toISOString(), qr_url: `https://huanxing.ai/bind/${channel}`, qrcode_img_content: null, message: '请扫码确认绑定' }),
   )
 }
 
 export function getChannelQrStatus(agentId: string, channel: SupportedChannelType, sessionId: string) {
-  return withMockFallback(
+  return withExplicitMockOnly(
     () => request<QrStatusResponse>({ method: 'GET', url: `${AGENTS_URL}/${agentId}/channels/${channel}/qr/${sessionId}/status` }),
     () => {
       const status = Date.now() % 3 === 0 ? 'bound' as const : 'waiting_scan' as const
@@ -313,7 +318,7 @@ export function getChannelQrStatus(agentId: string, channel: SupportedChannelTyp
 }
 
 export function manualBindChannel(agentId: string, channel: SupportedChannelType, payload: ManualChannelPayload) {
-  return withMockFallback(
+  return withExplicitMockOnly(
     () => request<ChannelActionResponse>({ method: 'POST', url: `${AGENTS_URL}/${agentId}/channels/${channel}/manual`, data: payload }),
     () => {
       updateMockAgent(agentId, (agent) => ({
@@ -327,14 +332,14 @@ export function manualBindChannel(agentId: string, channel: SupportedChannelType
 }
 
 export function testChannel(agentId: string, channel: SupportedChannelType) {
-  return withMockFallback(
+  return withExplicitMockOnly(
     () => request<ChannelActionResponse>({ method: 'POST', url: `${AGENTS_URL}/${agentId}/channels/${channel}/test` }),
     () => ({ channel, status: 'bound' as const, metadata: { test_result: 'ok' } }),
   )
 }
 
 export function unbindChannel(agentId: string, channel: SupportedChannelType) {
-  return withMockFallback(
+  return withExplicitMockOnly(
     () => request<ChannelActionResponse>({ method: 'POST', url: `${AGENTS_URL}/${agentId}/channels/${channel}/unbind` }),
     () => {
       updateMockAgent(agentId, (agent) => ({ ...agent, channel_summary: agent.channel_summary.filter((item) => item.channel !== channel), updated_at: nowIso() }))
