@@ -4,6 +4,7 @@ import type {
   AgentItem,
   AgentListParams,
   AgentListResponse,
+  AgentTemplate,
   ChannelActionResponse,
   ChannelBinding,
   ChatCompletionResponse,
@@ -17,23 +18,32 @@ import type {
   StartQrResponse,
   SupportedChannelType,
   UpdateAgentPayload,
+  UsageSummary,
+  UsageSummaryParams,
   WorkspaceInfo,
 } from '../types/agent'
 
 const AGENTS_URL = '/hermes/app/agents'
+const TEMPLATES_URL = '/hermes/app/templates'
+const USAGE_SUMMARY_URL = '/llm/app/usage/summary'
 const MOCK_STORAGE_KEY = 'huanxing_agent_mock_items'
 const MOCK_PERSONA_KEY = 'huanxing_agent_mock_persona'
 
+function shouldForceMock() {
+  return (
+    import.meta.env.VITE_HERMES_AGENT_MOCK === 'true' ||
+    import.meta.env.VITE_HERMES_AGENT_MOCK === '1' ||
+    (typeof localStorage !== 'undefined' && localStorage.getItem('huanxing_agent_mock') === '1')
+  )
+}
+
 function shouldUseMock(error: unknown) {
-  if (import.meta.env.VITE_HERMES_AGENT_MOCK === '0') return false
+  // Mock fallback is opt-in: only kicks in when explicitly enabled via env or localStorage flag.
+  if (!shouldForceMock()) return false
   if (error instanceof Error) {
     return /network|404|not found|failed|timeout/i.test(error.message)
   }
   return true
-}
-
-function shouldForceMock() {
-  return import.meta.env.VITE_HERMES_AGENT_MOCK === '1' || localStorage.getItem('huanxing_agent_mock') === '1'
 }
 
 async function withMockFallback<T>(call: () => Promise<T>, fallback: () => T): Promise<T> {
@@ -49,6 +59,21 @@ async function withMockFallback<T>(call: () => Promise<T>, fallback: () => T): P
 async function withExplicitMockOnly<T>(call: () => Promise<T>, fallback: () => T): Promise<T> {
   if (shouldForceMock()) return fallback()
   return call()
+}
+
+const TEMPLATE_FALLBACK: AgentTemplate[] = [
+  { app_id: 'assistant', name: '个人助理', description: '日常聊天、答疑、信息整理的全能伙伴。', emoji: '🤖', version: '1.0.0' },
+  { app_id: 'finance', name: '理财管家', description: '梳理收支与投资偏好，帮你看懂自己的钱。', emoji: '💰', version: '1.0.0' },
+  { app_id: 'health', name: '健康伙伴', description: '记录运动饮食与睡眠，温和提醒生活节奏。', emoji: '🌿', version: '1.0.0' },
+  { app_id: 'media-creator', name: '内容创作', description: '帮你打磨灵感、生成稿件与社交贴文。', emoji: '✍️', version: '1.0.0' },
+  { app_id: 'office', name: '办公助理', description: '会议纪要、待办整理、邮件起草一把抓。', emoji: '🗂️', version: '1.0.0' },
+  { app_id: 'side-hustle', name: '副业搭档', description: '陪你跑通副业增长策略、客户跟进、产出节奏。', emoji: '🚀', version: '1.0.0' },
+  { app_id: 'custom', name: '自定义', description: '从零开始定义角色与能力，最大灵活度。', emoji: '✨', version: '1.0.0' },
+]
+
+function chatStreamUrl(agentId: string) {
+  const base = import.meta.env.VITE_API_BASE_URL || '/api/v1'
+  return `${base}${AGENTS_URL}/${agentId}/chat/completions`
 }
 
 function nowIso() {
@@ -395,4 +420,151 @@ function channelLabel(channel: SupportedChannelType) {
     webhook: 'Webhook',
   }
   return labels[channel]
+}
+
+export function listTemplates() {
+  return withMockFallback<AgentTemplate[]>(
+    () => request<AgentTemplate[]>({ method: 'GET', url: TEMPLATES_URL }),
+    () => TEMPLATE_FALLBACK,
+  )
+}
+
+export function getUsageSummary(agentId: string, params: UsageSummaryParams = {}) {
+  const query: Record<string, string> = { agent_id: agentId }
+  if (params.startTime) query.start_time = params.startTime
+  if (params.endTime) query.end_time = params.endTime
+  return withMockFallback<UsageSummary>(
+    () => request<UsageSummary>({ method: 'GET', url: USAGE_SUMMARY_URL, params: query }),
+    () => mockUsageSummary(agentId),
+  )
+}
+
+function mockUsageSummary(agentId: string): UsageSummary {
+  return {
+    agent_id: agentId,
+    total_tokens: 12480,
+    total_cost: 1.86,
+    start_time: null,
+    end_time: nowIso(),
+    by_model: [
+      { model_name: 'openai/gpt-5.5', request_count: 32, total_tokens: 9120, total_cost: 1.42 },
+      { model_name: 'anthropic/claude-sonnet-4-6', request_count: 11, total_tokens: 3360, total_cost: 0.44 },
+    ],
+  }
+}
+
+interface SseFrame {
+  delta?: string
+  finishReason?: string | null
+  done: boolean
+}
+
+function parseSseFrame(raw: string): SseFrame | null {
+  // Each frame is one or more lines separated by newlines; concatenate `data:` lines per the spec.
+  const lines = raw.split(/\r?\n/)
+  const dataParts: string[] = []
+  for (const line of lines) {
+    if (line.startsWith('data:')) {
+      dataParts.push(line.slice(5).trimStart())
+    }
+  }
+  if (dataParts.length === 0) return null
+  const payload = dataParts.join('\n').trim()
+  if (!payload) return null
+  if (payload === '[DONE]') return { done: true }
+  try {
+    const parsed = JSON.parse(payload) as {
+      choices?: Array<{ delta?: { content?: string }; finish_reason?: string | null; message?: { content?: string } }>
+      error?: { message?: string }
+    }
+    if (parsed.error?.message) {
+      throw new Error(parsed.error.message)
+    }
+    const choice = parsed.choices?.[0]
+    const delta = choice?.delta?.content ?? choice?.message?.content ?? ''
+    return { delta, finishReason: choice?.finish_reason ?? null, done: false }
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      // Drop malformed frames silently rather than killing the stream.
+      return null
+    }
+    throw error
+  }
+}
+
+export async function sendChatCompletionStream(
+  agentId: string,
+  messages: ChatMessage[],
+  onChunk: (delta: string) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  if (shouldForceMock()) {
+    const reply = '这是 Web Chat 的本地预览回复。后端接通后会返回真实 Agent 响应。'
+    for (const chunk of reply.match(/.{1,8}/g) || [reply]) {
+      if (signal?.aborted) {
+        throw new DOMException('Aborted', 'AbortError')
+      }
+      onChunk(chunk)
+      await new Promise((resolve) => setTimeout(resolve, 30))
+    }
+    return
+  }
+
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'text/event-stream',
+    'X-App-Code': 'huanxing',
+  }
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  const response = await fetch(chatStreamUrl(agentId), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ messages, stream: true }),
+    signal,
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => '')
+    throw new Error(`Chat 请求失败 (HTTP ${response.status})${errorText ? `: ${errorText.slice(0, 200)}` : ''}`)
+  }
+
+  const body = response.body
+  if (!body) {
+    throw new Error('当前环境不支持流式响应')
+  }
+
+  const reader = body.getReader()
+  const decoder = new TextDecoder('utf-8')
+  let buffer = ''
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      let separatorIndex = buffer.indexOf('\n\n')
+      while (separatorIndex !== -1) {
+        const rawFrame = buffer.slice(0, separatorIndex)
+        buffer = buffer.slice(separatorIndex + 2)
+        const frame = parseSseFrame(rawFrame)
+        if (frame?.done) {
+          return
+        }
+        if (frame?.delta) {
+          onChunk(frame.delta)
+        }
+        separatorIndex = buffer.indexOf('\n\n')
+      }
+    }
+    // Drain any remaining frame in the buffer (in case stream closed without trailing blank line).
+    const remaining = buffer.trim()
+    if (remaining) {
+      const frame = parseSseFrame(remaining)
+      if (frame && !frame.done && frame.delta) onChunk(frame.delta)
+    }
+  } finally {
+    reader.releaseLock?.()
+  }
 }

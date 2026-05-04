@@ -36,8 +36,37 @@ export type ChannelStatus =
   | 'failed'
   | 'cancelled'
 
-export type AgentTemplate = 'assistant' | 'office' | 'creator' | 'custom'
 export type WorkspaceStatus = 'unknown' | 'creating' | 'ready' | 'active' | 'error'
+
+export interface AgentTemplate {
+  app_id: string
+  name: string
+  description: string
+  emoji?: string
+  icon_url?: string
+  version: string
+}
+
+export interface UsageByModel {
+  model_name: string
+  request_count: number
+  total_tokens: number
+  total_cost: number
+}
+
+export interface UsageSummary {
+  agent_id: string
+  total_tokens: number
+  total_cost: number
+  by_model: UsageByModel[]
+  start_time?: string | null
+  end_time?: string | null
+}
+
+export interface UsageSummaryParams {
+  startTime?: string
+  endTime?: string
+}
 
 export interface ChannelBindingSummary {
   channel: SupportedChannelType
@@ -79,7 +108,7 @@ export interface AgentListResponse {
 
 export interface CreateAgentPayload {
   agent_name: string
-  template?: AgentTemplate
+  template?: string
   timezone: string
   soul?: string
   user_profile?: string
@@ -132,7 +161,7 @@ export interface LlmInfo {
 export interface AgentDetail {
   agent_id: string
   agent_name: string
-  template: AgentTemplate | string
+  template: string
   timezone: string
   status: AgentStatus
   gateway: GatewayInfo
