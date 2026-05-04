@@ -113,7 +113,7 @@ function OverviewTab({ agent, boundCount }: { agent: AgentDetail; boundCount: nu
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => <div key={card.label} className="rounded-xl border border-divider bg-space-panel p-5"><div className="mb-3 flex items-center gap-2 text-sm text-text-secondary">{card.icon}{card.label}</div><div className="mb-3 text-lg font-semibold text-text-primary">{card.value}</div><AgentStatusBadge status={card.status} /></div>)}
       </div>
-      <UsageSummaryCard agentId={agent.agent_id} />
+      <UsageSummaryCard key={agent.agent_id} agentId={agent.agent_id} />
       <div className="rounded-xl border border-divider bg-space-panel p-5">
         <h2 className="mb-4 text-lg font-semibold text-text-primary">最近事件</h2>
         <div className="space-y-3 text-sm text-text-secondary">
@@ -137,27 +137,29 @@ function formatCost(value: number) {
   return `¥${value.toFixed(2)}`
 }
 
+type UsageState =
+  | { kind: 'loading' }
+  | { kind: 'success'; usage: UsageSummary }
+  | { kind: 'error'; error: string }
+
 export function UsageSummaryCard({ agentId }: { agentId: string }) {
-  const [usage, setUsage] = useState<UsageSummary | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [state, setState] = useState<UsageState>({ kind: 'loading' })
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError('')
     getUsageSummary(agentId)
       .then((data) => {
-        if (!cancelled) setUsage(data)
+        if (!cancelled) setState({ kind: 'success', usage: data })
       })
       .catch((loadError: unknown) => {
-        if (!cancelled) setError(loadError instanceof Error ? loadError.message : '用量数据加载失败')
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
+        if (!cancelled) setState({ kind: 'error', error: loadError instanceof Error ? loadError.message : '用量数据加载失败' })
       })
     return () => { cancelled = true }
   }, [agentId])
+
+  const loading = state.kind === 'loading'
+  const error = state.kind === 'error' ? state.error : ''
+  const usage = state.kind === 'success' ? state.usage : null
 
   return (
     <section className="rounded-xl border border-divider bg-space-panel p-5" data-testid="usage-summary">
