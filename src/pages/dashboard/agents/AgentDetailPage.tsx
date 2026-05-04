@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Activity, Bot, Folder, MessageCircle, Play, RefreshCw, Save, Square, Trash2 } from 'lucide-react'
-import { deleteAgent, getAgent, getSoul, getUserProfile, getWorkspaceStatus, operateGateway, saveSoul, saveUserProfile, updateAgent } from '../../../api/agent'
+import { Activity, Bot, Coins, Folder, MessageCircle, Play, RefreshCw, Save, Square, Trash2 } from 'lucide-react'
+import { deleteAgent, getAgent, getSoul, getUsageSummary, getUserProfile, getWorkspaceStatus, operateGateway, saveSoul, saveUserProfile, updateAgent } from '../../../api/agent'
 import AgentStatusBadge from '../../../components/agent/AgentStatusBadge'
 import ChannelBindingPanel from '../../../components/agent/ChannelBindingPanel'
-import type { AgentDetail } from '../../../types/agent'
+import type { AgentDetail, UsageSummary } from '../../../types/agent'
 
 type Tab = 'overview' | 'settings' | 'channels' | 'workspace' | 'runtime'
 
@@ -113,6 +113,7 @@ function OverviewTab({ agent, boundCount }: { agent: AgentDetail; boundCount: nu
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => <div key={card.label} className="rounded-xl border border-divider bg-space-panel p-5"><div className="mb-3 flex items-center gap-2 text-sm text-text-secondary">{card.icon}{card.label}</div><div className="mb-3 text-lg font-semibold text-text-primary">{card.value}</div><AgentStatusBadge status={card.status} /></div>)}
       </div>
+      <UsageSummaryCard agentId={agent.agent_id} />
       <div className="rounded-xl border border-divider bg-space-panel p-5">
         <h2 className="mb-4 text-lg font-semibold text-text-primary">最近事件</h2>
         <div className="space-y-3 text-sm text-text-secondary">
@@ -122,6 +123,92 @@ function OverviewTab({ agent, boundCount }: { agent: AgentDetail; boundCount: nu
         </div>
       </div>
     </div>
+  )
+}
+
+function formatTokenCount(value: number) {
+  if (!Number.isFinite(value) || value <= 0) return '0'
+  if (value >= 1000) return `${(value / 1000).toFixed(value >= 10000 ? 0 : 1)}k`
+  return `${value}`
+}
+
+function formatCost(value: number) {
+  if (!Number.isFinite(value) || value <= 0) return '¥0.00'
+  return `¥${value.toFixed(2)}`
+}
+
+export function UsageSummaryCard({ agentId }: { agentId: string }) {
+  const [usage, setUsage] = useState<UsageSummary | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError('')
+    getUsageSummary(agentId)
+      .then((data) => {
+        if (!cancelled) setUsage(data)
+      })
+      .catch((loadError: unknown) => {
+        if (!cancelled) setError(loadError instanceof Error ? loadError.message : '用量数据加载失败')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [agentId])
+
+  return (
+    <section className="rounded-xl border border-divider bg-space-panel p-5" data-testid="usage-summary">
+      <div className="mb-4 flex items-center gap-2">
+        <Coins className="h-5 w-5 text-star-gold" />
+        <h2 className="text-lg font-semibold text-text-primary">LLM 用量</h2>
+      </div>
+      {loading ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="h-20 animate-pulse rounded-lg border border-divider bg-space-black" />
+          <div className="h-20 animate-pulse rounded-lg border border-divider bg-space-black" />
+        </div>
+      ) : error ? (
+        <p className="text-sm text-red-400">{error}</p>
+      ) : usage ? (
+        <div className="space-y-4">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-lg border border-divider bg-space-black p-4">
+              <div className="text-xs text-text-secondary">总 Token</div>
+              <div className="mt-1 text-2xl font-semibold text-text-primary">{formatTokenCount(usage.total_tokens)}</div>
+            </div>
+            <div className="rounded-lg border border-divider bg-space-black p-4">
+              <div className="text-xs text-text-secondary">总费用</div>
+              <div className="mt-1 text-2xl font-semibold text-star-gold">{formatCost(usage.total_cost)}</div>
+            </div>
+          </div>
+          {usage.by_model.length > 0 ? (
+            <div>
+              <div className="mb-2 text-xs uppercase tracking-wide text-text-secondary">按模型分布</div>
+              <ul className="space-y-2 text-sm">
+                {usage.by_model.map((row) => (
+                  <li
+                    key={row.model_name}
+                    className="flex items-center justify-between gap-3 rounded-lg border border-divider bg-space-black px-3 py-2"
+                  >
+                    <span className="truncate text-text-primary">{row.model_name}</span>
+                    <span className="shrink-0 text-text-secondary">
+                      {row.request_count} 次 · {formatTokenCount(row.total_tokens)} tokens · {formatCost(row.total_cost)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-sm text-text-secondary">暂无调用记录。</p>
+          )}
+        </div>
+      ) : (
+        <p className="text-sm text-text-secondary">暂无用量数据。</p>
+      )}
+    </section>
   )
 }
 
