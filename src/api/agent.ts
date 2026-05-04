@@ -25,7 +25,7 @@ import type {
 
 const AGENTS_URL = '/hermes/app/agents'
 const TEMPLATES_URL = '/hermes/app/templates'
-const USAGE_SUMMARY_URL = '/llm/app/usage/summary'
+const USAGE_SUMMARY_URL = '/llm/usage/summary'
 const MOCK_STORAGE_KEY = 'huanxing_agent_mock_items'
 const MOCK_PERSONA_KEY = 'huanxing_agent_mock_persona'
 
@@ -429,10 +429,16 @@ export function listTemplates() {
   )
 }
 
+function isoToUnix(value: string): string {
+  const ms = new Date(value).getTime()
+  if (Number.isNaN(ms)) throw new Error(`非法时间格式: ${value}`)
+  return String(Math.floor(ms / 1000))
+}
+
 export function getUsageSummary(agentId: string, params: UsageSummaryParams = {}) {
   const query: Record<string, string> = { agent_id: agentId }
-  if (params.startTime) query.start_time = params.startTime
-  if (params.endTime) query.end_time = params.endTime
+  if (params.startTime) query.start_time = isoToUnix(params.startTime)
+  if (params.endTime) query.end_time = isoToUnix(params.endTime)
   return withMockFallback<UsageSummary>(
     () => request<UsageSummary>({ method: 'GET', url: USAGE_SUMMARY_URL, params: query }),
     () => mockUsageSummary(agentId),

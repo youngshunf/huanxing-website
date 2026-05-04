@@ -71,7 +71,7 @@ describe('agent api', () => {
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
         method: 'GET',
-        url: '/llm/app/usage/summary',
+        url: '/llm/usage/summary',
         params: { agent_id: 'agt_test' },
       }),
     )
