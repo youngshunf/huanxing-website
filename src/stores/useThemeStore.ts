@@ -27,8 +27,9 @@ function applyTheme(resolved: ResolvedTheme) {
   }
 }
 
-// 初始化：从 localStorage 读取，默认 light（2026-07-03 起对齐新视觉规范：Light 皇家蓝，官网全线遵守）
-const stored = (localStorage.getItem('theme') as ThemeMode) || 'light'
+// 初始化：从 localStorage 读取，默认 system（跟随系统切换；无系统深色偏好即 light）
+// 2026-07-03 新视觉规范：默认 light（多数系统无深色偏好即浅色）、支持 dark、跟随系统自动切换。
+const stored = (localStorage.getItem('theme') as ThemeMode) || 'system'
 const initialResolved = resolveTheme(stored)
 applyTheme(initialResolved)
 

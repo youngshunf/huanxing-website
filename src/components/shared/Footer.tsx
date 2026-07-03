@@ -15,12 +15,9 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 md:flex-row md:justify-between">
         {/* Brand */}
         <div className="flex items-center gap-3">
-          <Link to="/">
-            <img
-              src="/logos/logo-horizontal-dark.svg"
-              alt="唤星 Stellara"
-              className="h-8"
-            />
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src="/logos/icon-v6.png" alt="唤星 Astra" className="h-8 w-8 rounded-[10px]" />
+            <span className="text-lg font-bold tracking-tight text-text-primary">唤星</span>
           </Link>
         </div>
 
@@ -53,7 +50,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="mx-auto mt-8 max-w-6xl text-center text-xs text-text-tertiary">
-        © {new Date().getFullYear()} 唤星 Stellara. All rights reserved.
+        © {new Date().getFullYear()} 唤星 Astra. All rights reserved.
       </div>
 
       {/* OpenClaw 生态 */}

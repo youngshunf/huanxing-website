@@ -2,7 +2,6 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { LayoutDashboard, CreditCard, Coins, ArrowLeft, Key, Bot } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useAuthStore } from '../../stores/useAuthStore'
-import { useThemeStore } from '../../stores/useThemeStore'
 
 const sidebarLinks = [
   { to: '/dashboard', icon: LayoutDashboard, label: '概览', end: true },
@@ -14,10 +13,6 @@ const sidebarLinks = [
 
 export default function DashboardLayout() {
   const { user, logout } = useAuthStore()
-  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
-  const logoSrc = resolvedTheme === 'dark'
-    ? '/logos/logo-horizontal-dark.svg'
-    : '/logos/logo-horizontal-light.svg'
 
   return (
     <div className="flex min-h-screen overflow-x-hidden bg-space-black">
@@ -25,8 +20,9 @@ export default function DashboardLayout() {
       <aside className="fixed left-0 top-0 z-40 flex h-full w-60 flex-col border-r border-divider bg-space-panel max-md:hidden">
         {/* Logo */}
         <div className="flex items-center gap-3 border-b border-divider px-5 py-4">
-          <a href="/" className="flex items-center">
-            <img src={logoSrc} alt="唤星" className="h-7" />
+          <a href="/" className="flex items-center gap-2.5">
+            <img src="/logos/icon-v6.png" alt="唤星 Astra" className="h-7 w-7 rounded-[9px]" />
+            <span className="text-base font-bold tracking-tight text-text-primary">唤星</span>
           </a>
         </div>
 
@@ -73,8 +69,9 @@ export default function DashboardLayout() {
 
       {/* 移动端顶栏 */}
       <div className="fixed left-0 right-0 top-0 z-40 flex items-center justify-between border-b border-divider bg-space-panel px-4 py-3 md:hidden">
-        <a href="/" className="flex items-center">
-          <img src={logoSrc} alt="唤星" className="h-7" />
+        <a href="/" className="flex items-center gap-2.5">
+          <img src="/logos/icon-v6.png" alt="唤星 Astra" className="h-7 w-7 rounded-[9px]" />
+          <span className="text-base font-bold tracking-tight text-text-primary">唤星</span>
         </a>
         <div className="flex items-center gap-2">
           <ThemeToggle />

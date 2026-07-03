@@ -8,7 +8,7 @@ const options = [
   { value: 'system' as const, icon: Monitor, label: '跟随系统' },
 ]
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ onDark = false }: { onDark?: boolean }) {
   const { theme, resolvedTheme, setTheme } = useThemeStore()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -29,7 +29,11 @@ export default function ThemeToggle() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex h-9 w-9 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary dark:hover:bg-space-float"
+        className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+          onDark
+            ? 'text-white/80 hover:bg-white/10 hover:text-white'
+            : 'text-text-secondary hover:bg-space-float hover:text-text-primary dark:hover:bg-space-float'
+        }`}
         aria-label="切换主题"
       >
         <CurrentIcon className="h-[18px] w-[18px]" />

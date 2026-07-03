@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react'
 import { useAuthStore } from '../../stores/useAuthStore'
-import { useThemeStore } from '../../stores/useThemeStore'
 import ThemeToggle from './ThemeToggle'
 
 const navLinks = [
@@ -21,7 +20,6 @@ export default function Header() {
   const location = useLocation()
 
   const { isLoggedIn, user, setShowLoginModal, logout } = useAuthStore()
-  const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20)
@@ -44,14 +42,18 @@ export default function Header() {
     window.setTimeout(() => setIsMobileMenuOpen(false), 0)
   }, [location.pathname])
 
-  const logoSrc = resolvedTheme === 'dark'
-    ? '/logos/logo-horizontal-dark.svg'
-    : '/logos/logo-horizontal-light.svg'
-
   const isActive = (to: string) => {
     if (to === '/') return location.pathname === '/'
     return location.pathname.startsWith(to)
   }
+
+  // 首页顶部（未滚动）时顶栏透明悬浮在深色 Hero 上 → 用浅色墨；滚动后底色跟随主题 → 用主题墨。
+  const onDark = location.pathname === '/' && !isScrolled
+
+  const inkPrimary = onDark ? 'text-white' : 'text-text-primary'
+  const inkSecondary = onDark
+    ? 'text-white/75 hover:text-white'
+    : 'text-text-secondary hover:text-text-primary'
 
   return (
     <header
@@ -62,9 +64,16 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img src={logoSrc} alt="唤星 Stellara" className="h-8" />
+        {/* Logo — V6 星仔图标 + CSS 文字 */}
+        <Link to="/" className="flex items-center gap-2.5">
+          <img
+            src="/logos/icon-v6.png"
+            alt="唤星 Astra"
+            className="h-8 w-8 rounded-[10px]"
+          />
+          <span className={`text-lg font-bold tracking-tight transition-colors ${inkPrimary}`}>
+            唤星
+          </span>
         </Link>
 
         {/* Desktop Nav */}
@@ -74,9 +83,7 @@ export default function Header() {
               key={link.to}
               to={link.to}
               className={`rounded-lg px-3 py-2 text-sm transition-colors ${
-                isActive(link.to)
-                  ? 'text-text-primary font-medium'
-                  : 'text-text-secondary hover:text-text-primary'
+                isActive(link.to) ? `${inkPrimary} font-medium` : inkSecondary
               }`}
             >
               {link.label}
@@ -84,13 +91,17 @@ export default function Header() {
           ))}
 
           <div className="ml-3 flex items-center gap-2">
-            <ThemeToggle />
+            <ThemeToggle onDark={onDark} />
 
             {isLoggedIn ? (
               <div ref={userMenuRef} className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 rounded-lg border border-border-default px-3 py-2 text-sm text-text-primary transition-colors hover:border-border-hover"
+                  className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors ${
+                    onDark
+                      ? 'border-white/25 text-white hover:border-white/40'
+                      : 'border-border-default text-text-primary hover:border-border-hover'
+                  }`}
                 >
                   <User className="h-4 w-4" />
                   <span className="max-w-[80px] truncate">{user?.nickname || user?.phone}</span>
@@ -123,7 +134,7 @@ export default function Header() {
             ) : (
               <Link
                 to="/pricing"
-                className="mr-2 rounded-lg px-4 py-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
+                className={`mr-2 rounded-lg px-4 py-2 text-sm transition-colors ${inkSecondary}`}
               >
                 免费体验
               </Link>
@@ -142,9 +153,13 @@ export default function Header() {
 
         {/* Mobile: theme toggle + menu button */}
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
+          <ThemeToggle onDark={onDark} />
           <button
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-text-primary transition-colors hover:bg-space-float"
+            className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+              onDark
+                ? 'text-white hover:bg-white/10'
+                : 'text-text-primary hover:bg-space-float'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="菜单"
           >
