@@ -3,11 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* 品牌色（不随主题变化） */
-  --color-star-purple: #6c5ce7;
-  --color-star-purple-hover: #5a4bd5;
-  --color-star-blue: #00d2ff;
-  --color-star-gold: #ffd93d;
+  /* 品牌色·皇家蓝纯色（不随主题变化；2026-07-03 从蓝紫/青渐变切皇家蓝纯色，
+     禁止把蓝紫渐变当品牌门面——官网/PPT/桌面端/admin 全线遵守。token 名保留以兼容存量类名） */
+  --color-star-purple: #2563EB;        /* 皇家蓝主色 = 品牌主色（主按钮/强操作/链接） */
+  --color-star-purple-hover: #1D4ED8;  /* hover/按下 */
+  --color-star-blue: #1D4ED8;          /* 渐变副色收敛为深皇家蓝 → from-star-purple to-star-blue 变单色蓝，不再蓝紫 */
+  --color-star-gold: #ffd93d;          /* 暖色点缀（评分/高亮/进度末端），非品牌门面，保留 */
 
   /* Dark 模式色（默认） */
   --color-space-black: #0d1117;
@@ -43,7 +44,7 @@
   }
 
   ::selection {
-    background-color: rgba(108, 92, 231, 0.3);
+    background-color: rgba(37, 99, 235, 0.3);
     color: #e6edf3;
   }
 
@@ -248,7 +249,7 @@ pre.vditor-reset[contenteditable] {
 
 /* 链接 */
 .hx-markdown a {
-  color: #6c5ce7;
+  color: #2563eb;
   text-decoration: none;
   font-weight: 500;
   border-bottom: 1px solid transparent;
@@ -256,7 +257,7 @@ pre.vditor-reset[contenteditable] {
 }
 
 .hx-markdown a:hover {
-  border-bottom-color: #6c5ce7;
+  border-bottom-color: #2563eb;
 }
 
 /* 加粗 & 斜体 */
@@ -316,8 +317,8 @@ html:not(.dark) .hx-code-block pre code.hljs {
 .hx-markdown blockquote {
   margin: 1.2em 0;
   padding: 0.6em 1.2em;
-  border-left: 4px solid #6c5ce7;
-  background-color: rgba(108, 92, 231, 0.06);
+  border-left: 4px solid #2563eb;
+  background-color: rgba(37, 99, 235, 0.06);
   border-radius: 0 8px 8px 0;
   color: var(--color-text-secondary);
 }
@@ -352,7 +353,7 @@ html:not(.dark) .hx-code-block pre code.hljs {
 /* 任务列表 */
 .hx-markdown li input[type="checkbox"] {
   margin-right: 0.5em;
-  accent-color: #6c5ce7;
+  accent-color: #2563eb;
 }
 
 /* 分隔线 */
@@ -406,7 +407,7 @@ html:not(.dark) .hx-code-block pre code.hljs {
 }
 
 .hx-markdown tbody tr:hover {
-  background-color: rgba(108, 92, 231, 0.04);
+  background-color: rgba(37, 99, 235, 0.04);
 }
 
 /* 删除线 */
@@ -469,15 +470,15 @@ html:not(.dark) .hx-code-block pre code.hljs {
 
 /* 链接 */
 .hx-editor-link {
-  color: #6c5ce7;
+  color: #2563eb;
   text-decoration: underline;
-  text-decoration-color: rgba(108, 92, 231, 0.3);
+  text-decoration-color: rgba(37, 99, 235, 0.3);
   text-underline-offset: 2px;
   cursor: pointer;
 }
 
 .hx-editor-link:hover {
-  text-decoration-color: #6c5ce7;
+  text-decoration-color: #2563eb;
 }
 
 /* 行内代码 */
@@ -524,8 +525,8 @@ html:not(.dark) .hx-tiptap-editor pre {
 .hx-tiptap-editor blockquote {
   margin: 1em 0;
   padding: 0.5em 1em;
-  border-left: 4px solid #6c5ce7;
-  background: rgba(108, 92, 231, 0.06);
+  border-left: 4px solid #2563eb;
+  background: rgba(37, 99, 235, 0.06);
   border-radius: 0 8px 8px 0;
   color: var(--color-text-secondary);
 }
@@ -564,7 +565,7 @@ html:not(.dark) .hx-tiptap-editor pre {
 }
 
 .hx-tiptap-editor ul[data-type="taskList"] li > label input[type="checkbox"] {
-  accent-color: #6c5ce7;
+  accent-color: #2563eb;
 }
 
 .hx-tiptap-editor ul[data-type="taskList"] li > div {
@@ -627,7 +628,7 @@ html:not(.dark) .hx-tiptap-editor pre {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(108, 92, 231, 0.1);
+  background: rgba(37, 99, 235, 0.1);
   pointer-events: none;
 }
 

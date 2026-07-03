@@ -27,7 +27,7 @@ export default function TargetUsers() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {users.map((u, i) => (
             <ScrollReveal key={u.group} delay={i * 0.08}>
-              <div className="rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+              <div className="rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                 <div className="mb-3 flex items-center gap-2">
                   <span className="text-xl">{u.icon}</span>
                   <h3 className="font-semibold text-text-primary">{u.group}</h3>

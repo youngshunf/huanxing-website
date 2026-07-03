@@ -29,7 +29,7 @@ export default function SuperBrainBrief() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {abilities.map((item, i) => (
             <ScrollReveal key={item.title} delay={i * 0.08}>
-              <div className="flex items-start gap-4 rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+              <div className="flex items-start gap-4 rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                 <div className={`mt-0.5 ${item.color}`}>{item.icon}</div>
                 <div>
                   <h3 className="mb-1 font-semibold text-text-primary">{item.title}</h3>

@@ -56,7 +56,7 @@ export default function BetaContact() {
         {BETA_CONTACTS.map((contact, i) => (
           <ScrollReveal key={contact.account} delay={0.1 * (i + 1)}>
             <motion.div
-              className="flex flex-col items-center rounded-2xl border border-divider bg-space-panel p-8 transition-all duration-300 hover:border-star-purple/40 hover:shadow-[0_0_32px_rgba(108,92,231,0.12)]"
+              className="flex flex-col items-center rounded-2xl border border-divider bg-space-panel p-8 transition-all duration-300 hover:border-star-purple/40 hover:shadow-[0_0_32px_rgba(37, 99, 235,0.12)]"
               whileHover={{ y: -4 }}
             >
               {/* 二维码 */}

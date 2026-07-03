@@ -15,8 +15,8 @@ export default function Hero() {
             className="absolute h-full w-full rounded-full"
             style={{
               background: isDark
-                ? 'radial-gradient(circle, rgba(108,92,231,0.3) 0%, rgba(0,210,255,0.1) 40%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(108,92,231,0.45) 0%, rgba(79,70,229,0.18) 40%, transparent 70%)',
+                ? 'radial-gradient(circle, rgba(37, 99, 235,0.3) 0%, rgba(29, 78, 216,0.1) 40%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(37, 99, 235,0.45) 0%, rgba(37, 99, 235,0.18) 40%, transparent 70%)',
             }}
             animate={{
               scale: [1, 1.15, 1],
@@ -32,8 +32,8 @@ export default function Hero() {
             className="absolute h-20 w-20 rounded-full md:h-28 md:w-28"
             style={{
               background: isDark
-                ? 'radial-gradient(circle, rgba(255,217,61,0.6) 0%, rgba(108,92,231,0.3) 50%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(124,58,237,0.55) 0%, rgba(79,70,229,0.25) 50%, transparent 70%)',
+                ? 'radial-gradient(circle, rgba(255,217,61,0.6) 0%, rgba(37, 99, 235,0.3) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(37, 99, 235,0.55) 0%, rgba(37, 99, 235,0.25) 50%, transparent 70%)',
             }}
             animate={{
               scale: [1, 1.2, 1],
@@ -50,8 +50,8 @@ export default function Hero() {
             style={{
               background: isDark ? 'white' : 'white',
               boxShadow: isDark
-                ? '0 0 20px rgba(255,217,61,0.8), 0 0 60px rgba(108,92,231,0.5)'
-                : '0 0 20px rgba(124,58,237,0.7), 0 0 60px rgba(79,70,229,0.4)',
+                ? '0 0 20px rgba(255,217,61,0.8), 0 0 60px rgba(37, 99, 235,0.5)'
+                : '0 0 20px rgba(37, 99, 235,0.7), 0 0 60px rgba(37, 99, 235,0.4)',
             }}
             animate={{
               scale: [1, 1.3, 1],
@@ -95,7 +95,7 @@ export default function Hero() {
           >
             <a
               href="#pricing"
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(108,92,231,0.4)]"
+              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.4)]"
             >
               开始唤星
             </a>

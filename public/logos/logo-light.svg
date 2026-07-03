@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8B5CF6"/>
-      <stop offset="45%" stop-color="#6366F1"/>
-      <stop offset="100%" stop-color="#38BDF8"/>
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="45%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
     </linearGradient>
     <filter id="starGlow" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="outerGlow"/>
@@ -35,7 +35,7 @@
 
   <rect width="512" height="512" fill="#F8F9FC"/>
 
-  <circle cx="256" cy="220" r="135" fill="none" stroke="#6366F1" stroke-width="0.8" stroke-opacity="0.12"/>
+  <circle cx="256" cy="220" r="135" fill="none" stroke="#3B82F6" stroke-width="0.8" stroke-opacity="0.12"/>
 
   <g filter="url(#starGlow)" transform="translate(256,220)">
     <path d="M0 -95 C10 -17, 17 -10, 95 0 C17 10, 10 17, 0 95 C-10 17, -17 10, -95 0 C-17 -10, -10 -17, 0 -95 Z" fill="url(#brand)"/>
@@ -49,24 +49,24 @@
   </g>
 
   <!-- 发光小星星 -->
-  <circle cx="370" cy="145" r="3.5" fill="#A78BFA" filter="url(#dotGlow)" opacity="0.5"/>
-  <circle cx="370" cy="145" r="1.8" fill="#8B5CF6" opacity="0.75"/>
+  <circle cx="370" cy="145" r="3.5" fill="#93C5FD" filter="url(#dotGlow)" opacity="0.5"/>
+  <circle cx="370" cy="145" r="1.8" fill="#3B82F6" opacity="0.75"/>
 
-  <circle cx="155" cy="155" r="3" fill="#38BDF8" filter="url(#dotGlow)" opacity="0.45"/>
-  <circle cx="155" cy="155" r="1.5" fill="#0EA5E9" opacity="0.7"/>
+  <circle cx="155" cy="155" r="3" fill="#60A5FA" filter="url(#dotGlow)" opacity="0.45"/>
+  <circle cx="155" cy="155" r="1.5" fill="#2563EB" opacity="0.7"/>
 
   <circle cx="365" cy="300" r="2.5" fill="#FBBF24" filter="url(#dotGlowSm)" opacity="0.45"/>
   <circle cx="365" cy="300" r="1.3" fill="#F59E0B" opacity="0.7"/>
 
-  <circle cx="145" cy="285" r="3" fill="#818CF8" filter="url(#dotGlow)" opacity="0.4"/>
-  <circle cx="145" cy="285" r="1.5" fill="#6366F1" opacity="0.65"/>
+  <circle cx="145" cy="285" r="3" fill="#60A5FA" filter="url(#dotGlow)" opacity="0.4"/>
+  <circle cx="145" cy="285" r="1.5" fill="#3B82F6" opacity="0.65"/>
 
-  <circle cx="310" cy="105" r="2" fill="#67E8F9" filter="url(#dotGlowSm)" opacity="0.35"/>
-  <circle cx="310" cy="105" r="1" fill="#22D3EE" opacity="0.6"/>
+  <circle cx="310" cy="105" r="2" fill="#93C5FD" filter="url(#dotGlowSm)" opacity="0.35"/>
+  <circle cx="310" cy="105" r="1" fill="#60A5FA" opacity="0.6"/>
 
-  <circle cx="200" cy="340" r="1.8" fill="#C4B5FD" filter="url(#dotGlowSm)" opacity="0.3"/>
-  <circle cx="200" cy="340" r="0.9" fill="#8B5CF6" opacity="0.55"/>
+  <circle cx="200" cy="340" r="1.8" fill="#BFDBFE" filter="url(#dotGlowSm)" opacity="0.3"/>
+  <circle cx="200" cy="340" r="0.9" fill="#3B82F6" opacity="0.55"/>
 
   <text x="256" y="400" text-anchor="middle" font-family="'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-weight="700" font-size="50" fill="#12132A" letter-spacing="8">唤星</text>
-  <text x="256" y="440" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', sans-serif" font-weight="500" font-size="18" fill="#6366F1" letter-spacing="6">STELLARA</text>
+  <text x="256" y="440" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', sans-serif" font-weight="500" font-size="18" fill="#3B82F6" letter-spacing="6">STELLARA</text>
 </svg>

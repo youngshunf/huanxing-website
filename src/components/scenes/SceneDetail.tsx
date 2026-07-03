@@ -68,7 +68,7 @@ export default function SceneDetail({ icon, title, pains, solutions, chatExample
                       <span className="whitespace-pre-line text-xs leading-relaxed text-text-primary">{msg.text}</span>
                     </div>
                   ) : (
-                    <div className="max-w-[85%] rounded-[12px_2px_12px_12px] bg-gradient-to-br from-star-purple to-[#5A4BD5] px-3 py-2.5">
+                    <div className="max-w-[85%] rounded-[12px_2px_12px_12px] bg-gradient-to-br from-star-purple to-[#1D4ED8] px-3 py-2.5">
                       <span className="whitespace-pre-line text-xs leading-relaxed text-white">{msg.text}</span>
                     </div>
                   )}

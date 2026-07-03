@@ -42,7 +42,7 @@ export default function PainPoints() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {painPoints.map((item, i) => (
             <ScrollReveal key={i} delay={i * 0.1}>
-              <div className="group flex h-full flex-col rounded-xl border border-divider bg-space-panel p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+              <div className="group flex h-full flex-col rounded-xl border border-divider bg-space-panel p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-space-float">
                   {item.icon}
                 </div>

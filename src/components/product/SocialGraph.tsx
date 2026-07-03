@@ -10,16 +10,16 @@ const scenarios = [
 /* 关系图谱节点 */
 const nodes = [
   // 中心：我
-  { id: 'me', x: 200, y: 200, r: 28, label: '我', color: '#7C3AED', glow: 'rgba(124,58,237,0.5)', textColor: '#fff', fontSize: 14 },
+  { id: 'me', x: 200, y: 200, r: 28, label: '我', color: '#2563EB', glow: 'rgba(37, 99, 235,0.5)', textColor: '#fff', fontSize: 14 },
   // 第一层：核心关系
-  { id: 'zhang', x: 320, y: 110, r: 20, label: '张总', color: '#4F46E5', glow: 'rgba(79,70,229,0.4)', textColor: '#C4B5FD', fontSize: 11, tag: '客户' },
-  { id: 'li', x: 80, y: 120, r: 18, label: '李姐', color: '#06B6D4', glow: 'rgba(6,182,212,0.4)', textColor: '#67E8F9', fontSize: 11, tag: '同事' },
-  { id: 'wang', x: 100, y: 300, r: 19, label: '王总', color: '#4F46E5', glow: 'rgba(79,70,229,0.4)', textColor: '#C4B5FD', fontSize: 11, tag: '合作伙伴' },
+  { id: 'zhang', x: 320, y: 110, r: 20, label: '张总', color: '#2563EB', glow: 'rgba(37, 99, 235,0.4)', textColor: '#BFDBFE', fontSize: 11, tag: '客户' },
+  { id: 'li', x: 80, y: 120, r: 18, label: '李姐', color: '#1D4ED8', glow: 'rgba(29, 78, 216,0.4)', textColor: '#67E8F9', fontSize: 11, tag: '同事' },
+  { id: 'wang', x: 100, y: 300, r: 19, label: '王总', color: '#2563EB', glow: 'rgba(37, 99, 235,0.4)', textColor: '#BFDBFE', fontSize: 11, tag: '合作伙伴' },
   { id: 'mom', x: 310, y: 310, r: 17, label: '妈妈', color: '#EC4899', glow: 'rgba(236,72,153,0.4)', textColor: '#F9A8D4', fontSize: 11, tag: '家人' },
   // 第二层：次要关系
   { id: 'chen', x: 200, y: 60, r: 14, label: '陈老师', color: '#818CF8', glow: 'rgba(129,140,248,0.3)', textColor: '#A5B4FC', fontSize: 10, tag: '导师' },
   { id: 'liu', x: 360, y: 220, r: 13, label: '刘哥', color: '#22D3EE', glow: 'rgba(34,211,238,0.3)', textColor: '#67E8F9', fontSize: 10, tag: '朋友' },
-  { id: 'zhao', x: 40, y: 210, r: 13, label: '赵姐', color: '#A78BFA', glow: 'rgba(167,139,250,0.3)', textColor: '#C4B5FD', fontSize: 10, tag: '同事' },
+  { id: 'zhao', x: 40, y: 210, r: 13, label: '赵姐', color: '#A78BFA', glow: 'rgba(167,139,250,0.3)', textColor: '#BFDBFE', fontSize: 10, tag: '同事' },
   { id: 'sun', x: 200, y: 360, r: 12, label: '孙总', color: '#818CF8', glow: 'rgba(129,140,248,0.3)', textColor: '#A5B4FC', fontSize: 10, tag: '投资人' },
 ]
 
@@ -94,8 +94,8 @@ export default function SocialGraph() {
                 <defs>
                   {/* 连线渐变 */}
                   <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.4" />
+                    <stop offset="0%" stopColor="#2563EB" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#1D4ED8" stopOpacity="0.4" />
                   </linearGradient>
                   {/* 节点发光 */}
                   <filter id="graphGlow" x="-50%" y="-50%" width="200%" height="200%">
@@ -193,7 +193,7 @@ export default function SocialGraph() {
                   cy={200}
                   r={38}
                   fill="none"
-                  stroke="#7C3AED"
+                  stroke="#2563EB"
                   strokeWidth={1}
                   animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
                   transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -207,7 +207,7 @@ export default function SocialGraph() {
           <div className="space-y-4">
             {scenarios.map((item, i) => (
               <ScrollReveal key={i} delay={i * 0.15}>
-                <div className="rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+                <div className="rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                   <div className="flex items-start gap-3">
                     <span className="text-2xl">{item.emoji}</span>
                     <p className="text-sm text-text-secondary leading-relaxed italic">

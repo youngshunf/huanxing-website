@@ -23,7 +23,7 @@ export default function SectionCTA({ title, subtitle, buttonText, buttonHref, is
         >
           <div
             className="h-[400px] w-[400px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(108,92,231,0.3) 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, rgba(37, 99, 235,0.3) 0%, transparent 70%)' }}
           />
         </motion.div>
 
@@ -40,14 +40,14 @@ export default function SectionCTA({ title, subtitle, buttonText, buttonHref, is
           {isRoute ? (
             <Link
               to={buttonHref}
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(108,92,231,0.4)]"
+              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.4)]"
             >
               {buttonText}
             </Link>
           ) : (
             <a
               href={buttonHref}
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(108,92,231,0.4)]"
+              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.4)]"
             >
               {buttonText}
             </a>

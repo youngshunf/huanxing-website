@@ -25,8 +25,8 @@ export default function Overview() {
 
   const tierColorMap: Record<string, string> = {
     '星尘': '#6E7681',
-    '星芒': '#6C5CE7',
-    '星辰': '#00D2FF',
+    '星芒': '#2563EB',
+    '星辰': '#1D4ED8',
     '星耀': '#FFD93D',
   }
 
@@ -85,7 +85,7 @@ export default function Overview() {
           <div className="grid gap-4 sm:grid-cols-2">
             <button
               onClick={() => navigate('/dashboard/subscription')}
-              className="flex items-center gap-4 rounded-xl border border-divider bg-space-panel p-5 text-left transition-all hover:border-star-purple/30 hover:shadow-[0_0_16px_rgba(108,92,231,0.1)]"
+              className="flex items-center gap-4 rounded-xl border border-divider bg-space-panel p-5 text-left transition-all hover:border-star-purple/30 hover:shadow-[0_0_16px_rgba(37, 99, 235,0.1)]"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-star-purple/10">
                 <CreditCard className="h-5 w-5 text-star-purple" />

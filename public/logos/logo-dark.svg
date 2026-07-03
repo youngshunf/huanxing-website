@@ -2,9 +2,9 @@
   <defs>
     <!-- 更高级的渐变：深紫 → 靛蓝 → 冰蓝 -->
     <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8B5CF6"/>
-      <stop offset="45%" stop-color="#6366F1"/>
-      <stop offset="100%" stop-color="#38BDF8"/>
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="45%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
     </linearGradient>
     <!-- 星芒白色边缘发光 -->
     <filter id="starGlow" x="-40%" y="-40%" width="180%" height="180%">
@@ -41,7 +41,7 @@
   <rect width="512" height="512" fill="#08090D"/>
 
   <!-- 外圈轨道 -->
-  <circle cx="256" cy="220" r="135" fill="none" stroke="#6366F1" stroke-width="0.8" stroke-opacity="0.15"/>
+  <circle cx="256" cy="220" r="135" fill="none" stroke="#3B82F6" stroke-width="0.8" stroke-opacity="0.15"/>
 
   <!-- 八角星芒（带发光） -->
   <g filter="url(#starGlow)" transform="translate(256,220)">
@@ -58,23 +58,23 @@
 
   <!-- 发光小星星：轨道与星芒之间，不同颜色 -->
   <!-- 紫色星 -->
-  <circle cx="370" cy="145" r="4" fill="#A78BFA" filter="url(#dotGlow)" opacity="0.6"/>
-  <circle cx="370" cy="145" r="2" fill="#A78BFA" opacity="0.9"/>
+  <circle cx="370" cy="145" r="4" fill="#93C5FD" filter="url(#dotGlow)" opacity="0.6"/>
+  <circle cx="370" cy="145" r="2" fill="#93C5FD" opacity="0.9"/>
   <!-- 蓝色星 -->
-  <circle cx="155" cy="155" r="3.5" fill="#38BDF8" filter="url(#dotGlow)" opacity="0.5"/>
-  <circle cx="155" cy="155" r="1.8" fill="#38BDF8" opacity="0.85"/>
+  <circle cx="155" cy="155" r="3.5" fill="#60A5FA" filter="url(#dotGlow)" opacity="0.5"/>
+  <circle cx="155" cy="155" r="1.8" fill="#60A5FA" opacity="0.85"/>
   <!-- 金色星 -->
   <circle cx="365" cy="300" r="3" fill="#FBBF24" filter="url(#dotGlowSm)" opacity="0.5"/>
   <circle cx="365" cy="300" r="1.5" fill="#FBBF24" opacity="0.85"/>
   <!-- 靛蓝星 -->
-  <circle cx="145" cy="285" r="3.5" fill="#818CF8" filter="url(#dotGlow)" opacity="0.45"/>
-  <circle cx="145" cy="285" r="1.8" fill="#818CF8" opacity="0.8"/>
+  <circle cx="145" cy="285" r="3.5" fill="#60A5FA" filter="url(#dotGlow)" opacity="0.45"/>
+  <circle cx="145" cy="285" r="1.8" fill="#60A5FA" opacity="0.8"/>
   <!-- 冰蓝小星 -->
-  <circle cx="310" cy="105" r="2.5" fill="#67E8F9" filter="url(#dotGlowSm)" opacity="0.4"/>
-  <circle cx="310" cy="105" r="1.2" fill="#67E8F9" opacity="0.75"/>
+  <circle cx="310" cy="105" r="2.5" fill="#93C5FD" filter="url(#dotGlowSm)" opacity="0.4"/>
+  <circle cx="310" cy="105" r="1.2" fill="#93C5FD" opacity="0.75"/>
   <!-- 淡紫小星 -->
-  <circle cx="200" cy="340" r="2" fill="#C4B5FD" filter="url(#dotGlowSm)" opacity="0.35"/>
-  <circle cx="200" cy="340" r="1" fill="#C4B5FD" opacity="0.7"/>
+  <circle cx="200" cy="340" r="2" fill="#BFDBFE" filter="url(#dotGlowSm)" opacity="0.35"/>
+  <circle cx="200" cy="340" r="1" fill="#BFDBFE" opacity="0.7"/>
 
   <!-- 远处微光 -->
   <circle cx="420" cy="100" r="0.8" fill="white" opacity="0.15"/>
@@ -84,5 +84,5 @@
 
   <!-- 品牌文字 -->
   <text x="256" y="400" text-anchor="middle" font-family="'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-weight="700" font-size="50" fill="white" letter-spacing="8">唤星</text>
-  <text x="256" y="440" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', sans-serif" font-weight="400" font-size="18" fill="#818CF8" opacity="0.85" letter-spacing="6">STELLARA</text>
+  <text x="256" y="440" text-anchor="middle" font-family="'Inter', 'Helvetica Neue', sans-serif" font-weight="400" font-size="18" fill="#60A5FA" opacity="0.85" letter-spacing="6">STELLARA</text>
 </svg>

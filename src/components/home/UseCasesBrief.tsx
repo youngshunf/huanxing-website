@@ -30,7 +30,7 @@ export default function UseCasesBrief() {
             <ScrollReveal key={item.title} delay={i * 0.08}>
               <Link
                 to="/scenes"
-                className="group flex items-start gap-4 rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]"
+                className="group flex items-start gap-4 rounded-xl border border-divider bg-space-panel p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]"
               >
                 <span className="text-2xl">{item.icon}</span>
                 <div>

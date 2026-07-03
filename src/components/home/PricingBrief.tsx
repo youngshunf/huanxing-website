@@ -4,8 +4,8 @@ import ScrollReveal from '../shared/ScrollReveal'
 
 const plans = [
   { name: '微星', price: '免费', color: '#6E7681', features: ['每月 100 积分', '基础模型', '7 天记忆'] },
-  { name: '明星', price: '¥128/月', color: '#6C5CE7', features: ['每月 1000 积分', '基础+进阶模型', '永久记忆'] },
-  { name: '恒星', price: '¥238/月', color: '#00D2FF', features: ['每月 5000 积分', '全部模型', '永久记忆', '云备份'], recommended: true },
+  { name: '明星', price: '¥128/月', color: '#2563EB', features: ['每月 1000 积分', '基础+进阶模型', '永久记忆'] },
+  { name: '恒星', price: '¥238/月', color: '#1D4ED8', features: ['每月 5000 积分', '全部模型', '永久记忆', '云备份'], recommended: true },
   { name: '超新星', price: '¥598/月', color: '#FFD93D', features: ['每月 50000 积分', '全部+专属模型', '永久记忆', '专属客服'] },
 ]
 
@@ -30,9 +30,9 @@ export default function PricingBrief() {
               <div
                 className={`relative flex h-full flex-col rounded-xl p-6 ${
                   plan.recommended
-                    ? 'border-2 border-star-blue shadow-[0_0_20px_rgba(0,210,255,0.15)]'
+                    ? 'border-2 border-star-blue shadow-[0_0_20px_rgba(29, 78, 216,0.15)]'
                     : 'border border-divider'
-                } bg-space-panel transition-all duration-300 hover:shadow-[0_0_24px_rgba(108,92,231,0.15)]`}
+                } bg-space-panel transition-all duration-300 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.15)]`}
               >
                 {plan.recommended && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-br from-star-purple to-star-blue px-4 py-1 text-xs font-semibold text-white">

@@ -21,8 +21,8 @@ const values = [
 
 const roadmap = [
   { phase: '点亮', time: '2026', goal: '让第一批用户拥有自己的星', color: '#6E7681' },
-  { phase: '成长', time: '2026-2027', goal: '全平台覆盖，付费用户破万', color: '#6C5CE7' },
-  { phase: '连接', time: '2027-2028', goal: '分身协作、企业版、开发者平台', color: '#00D2FF' },
+  { phase: '成长', time: '2026-2027', goal: '全平台覆盖，付费用户破万', color: '#2563EB' },
+  { phase: '连接', time: '2027-2028', goal: '分身协作、企业版、开发者平台', color: '#1D4ED8' },
   { phase: '星河', time: '2028+', goal: '每个人的星，汇成星河', color: '#FFD93D' },
 ]
 
@@ -81,7 +81,7 @@ export default function About() {
           <div className="space-y-4">
             {promises.map((p, i) => (
               <ScrollReveal key={i} delay={i * 0.1}>
-                <div className="flex items-center gap-5 rounded-xl border border-divider bg-space-panel px-6 py-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+                <div className="flex items-center gap-5 rounded-xl border border-divider bg-space-panel px-6 py-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                   <span className="text-2xl">{p.icon}</span>
                   <div>
                     <h3 className="font-semibold text-text-primary">{p.text}</h3>
@@ -107,7 +107,7 @@ export default function About() {
           <div className="grid gap-6 sm:grid-cols-2">
             {values.map((v, i) => (
               <ScrollReveal key={v.title} delay={i * 0.1}>
-                <div className="rounded-xl border border-divider bg-space-panel p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+                <div className="rounded-xl border border-divider bg-space-panel p-6 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                   <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-space-float">{v.icon}</div>
                   <h3 className="mb-2 font-semibold text-text-primary">{v.title}</h3>
                   <p className="text-sm text-text-secondary leading-relaxed">{v.desc}</p>
@@ -131,7 +131,7 @@ export default function About() {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-[#6E7681] via-[#6C5CE7] via-50% to-[#FFD93D] md:left-1/2 md:-translate-x-0.5" />
+            <div className="absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-[#6E7681] via-[#2563EB] via-50% to-[#FFD93D] md:left-1/2 md:-translate-x-0.5" />
 
             <div className="space-y-8">
               {roadmap.map((item, i) => (

@@ -27,7 +27,7 @@ export default function MemorySystem() {
         <div className="space-y-4">
           {memoryTypes.map((item, i) => (
             <ScrollReveal key={item.name} delay={i * 0.1}>
-              <div className="flex items-center gap-5 rounded-xl border border-divider bg-space-panel px-6 py-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(108,92,231,0.1)]">
+              <div className="flex items-center gap-5 rounded-xl border border-divider bg-space-panel px-6 py-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(37, 99, 235,0.1)]">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-space-float">
                   {item.icon}
                 </div>

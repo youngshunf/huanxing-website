@@ -8,7 +8,7 @@ export default function BrandSlogan() {
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
           className="h-[500px] w-[500px] rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, rgba(108,92,231,0.3) 0%, transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, rgba(37, 99, 235,0.3) 0%, transparent 70%)' }}
           animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         />

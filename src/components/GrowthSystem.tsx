@@ -11,15 +11,15 @@ const levels = [
   },
   {
     name: '星芒',
-    color: '#6C5CE7',
-    glowColor: 'rgba(108, 92, 231, 0.4)',
+    color: '#2563EB',
+    glowColor: 'rgba(37, 99, 235, 0.4)',
     description: '开始记住你的偏好和习惯',
     size: 'h-14 w-14 md:h-20 md:w-20',
   },
   {
     name: '星辰',
-    color: '#00D2FF',
-    glowColor: 'rgba(0, 210, 255, 0.4)',
+    color: '#1D4ED8',
+    glowColor: 'rgba(29, 78, 216, 0.4)',
     description: '深度理解你，主动为你工作',
     size: 'h-16 w-16 md:h-24 md:w-24',
   },
@@ -94,8 +94,8 @@ export default function GrowthSystem() {
         {/* Progress line connecting levels - desktop only */}
         <ScrollReveal delay={0.3}>
           <div className="mx-auto mt-12 hidden max-w-3xl items-center md:flex">
-            <div className="h-0.5 flex-1 bg-gradient-to-r from-[#6E7681] via-[#6C5CE7] via-50% to-[#00D2FF]" />
-            <div className="h-0.5 flex-1 bg-gradient-to-r from-[#00D2FF] to-[#FFD93D]" />
+            <div className="h-0.5 flex-1 bg-gradient-to-r from-[#6E7681] via-[#2563EB] via-50% to-[#1D4ED8]" />
+            <div className="h-0.5 flex-1 bg-gradient-to-r from-[#1D4ED8] to-[#FFD93D]" />
           </div>
         </ScrollReveal>
       </div>

@@ -10,15 +10,15 @@ import type { SubscriptionTier } from '../types'
 // 未登录且接口失败时的兜底数据（name 必须与数据库 tier_name 一致）
 const fallbackPlans = [
   { name: 'free', display_name: '微星', monthly_price: 0, color: '#6E7681', features: ['每月积分：100', '可用模型：基础模型', '记忆保存：7天', '客服支持：社区支持'] },
-  { name: 'pro', display_name: '明星', monthly_price: 128, color: '#6C5CE7', features: ['每月积分：1000', '可用模型：基础+进阶模型', '记忆存储', '版本管理', '客服支持：邮件支持'] },
-  { name: 'advanced', display_name: '恒星', monthly_price: 238, color: '#00D2FF', features: ['每月积分：5000', '可用模型：全部模型', '记忆存储', '版本管理', '文件备份', '云存储', '客服支持：优先支持'], recommended: true },
+  { name: 'pro', display_name: '明星', monthly_price: 128, color: '#2563EB', features: ['每月积分：1000', '可用模型：基础+进阶模型', '记忆存储', '版本管理', '客服支持：邮件支持'] },
+  { name: 'advanced', display_name: '恒星', monthly_price: 238, color: '#1D4ED8', features: ['每月积分：5000', '可用模型：全部模型', '记忆存储', '版本管理', '文件备份', '云存储', '客服支持：优先支持'], recommended: true },
   { name: 'flagship', display_name: '超新星', monthly_price: 598, color: '#FFD93D', features: ['每月积分：50000', '可用模型：全部模型+专属部署', '记忆存储', '版本管理', '文件备份', '云存储', '专属模型通道', 'SLA 保障', '客服支持：专属客服'] },
 ]
 
 const tierColorMap: Record<string, string> = {
   '微星': '#6E7681',
-  '明星': '#6C5CE7',
-  '恒星': '#00D2FF',
+  '明星': '#2563EB',
+  '恒星': '#1D4ED8',
   '超新星': '#FFD93D',
 }
 
@@ -99,7 +99,7 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <ScrollReveal key={plan.name} delay={i * 0.1}>
               <div
-                className={`relative flex h-full min-w-0 flex-col rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_24px_rgba(108,92,231,0.15)] ${
+                className={`relative flex h-full min-w-0 flex-col rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.15)] ${
                   plan.recommended
                     ? 'border-2 border-transparent'
                     : 'border border-divider bg-space-panel'
@@ -107,7 +107,7 @@ export default function Pricing() {
                 style={
                   plan.recommended
                     ? {
-                        background: `linear-gradient(${panelBg}, ${panelBg}) padding-box, linear-gradient(135deg, #6C5CE7, #00D2FF) border-box`,
+                        background: `linear-gradient(${panelBg}, ${panelBg}) padding-box, linear-gradient(135deg, #2563EB, #1D4ED8) border-box`,
                       }
                     : undefined
                 }
@@ -153,7 +153,7 @@ export default function Pricing() {
                   }`}
                   style={
                     plan.recommended
-                      ? { background: 'linear-gradient(135deg, #6C5CE7, #00D2FF)' }
+                      ? { background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }
                       : undefined
                   }
                 >

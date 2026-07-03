@@ -22,8 +22,8 @@ export default function Subscription() {
 
   const tierColorMap: Record<string, string> = {
     '微星': '#6E7681',
-    '明星': '#6C5CE7',
-    '恒星': '#00D2FF',
+    '明星': '#2563EB',
+    '恒星': '#1D4ED8',
     '超新星': '#FFD93D',
   }
 

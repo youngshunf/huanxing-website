@@ -103,7 +103,7 @@ const messageVariants = {
 
 function ChatCard({ scenario }: { scenario: Scenario }) {
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-divider bg-space-panel shadow-[0_0_32px_rgba(108,92,231,0.08)]">
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl border border-divider bg-space-panel shadow-[0_0_32px_rgba(37, 99, 235,0.08)]">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-divider px-4 py-3">
         <div className="h-8 w-8 overflow-hidden rounded-full">
@@ -141,7 +141,7 @@ function ChatCard({ scenario }: { scenario: Scenario }) {
             ) : (
               <div
                 className="max-w-[80%] rounded-[12px_2px_12px_12px] px-3 py-2.5"
-                style={{ background: 'linear-gradient(135deg, #6C5CE7, #5A4BD5)' }}
+                style={{ background: 'linear-gradient(135deg, #2563EB, #1D4ED8)' }}
               >
                 <span className="whitespace-pre-line text-xs leading-relaxed text-white">
                   {msg.text}

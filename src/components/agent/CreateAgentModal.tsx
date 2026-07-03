@@ -137,7 +137,7 @@ export default function CreateAgentModal({ open, onClose, onCreated }: CreateAge
                     onClick={() => setSelectedTemplate(template.app_id)}
                     aria-pressed={active}
                     data-testid={`template-card-${template.app_id}`}
-                    className={`flex h-full flex-col gap-2 rounded-xl border p-4 text-left transition-colors ${active ? 'border-star-purple bg-star-purple/10 shadow-[0_0_16px_rgba(108,92,231,0.18)]' : 'border-divider bg-space-black hover:border-star-purple/40'}`}
+                    className={`flex h-full flex-col gap-2 rounded-xl border p-4 text-left transition-colors ${active ? 'border-star-purple bg-star-purple/10 shadow-[0_0_16px_rgba(37, 99, 235,0.18)]' : 'border-divider bg-space-black hover:border-star-purple/40'}`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-2xl leading-none">{template.emoji || '⭐'}</span>

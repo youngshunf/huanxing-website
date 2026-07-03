@@ -2,31 +2,31 @@
   <defs>
     <!-- 主渐变 -->
     <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7C3AED"/>
-      <stop offset="50%" stop-color="#4F46E5"/>
-      <stop offset="100%" stop-color="#06B6D4"/>
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="50%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
     </linearGradient>
     <linearGradient id="starInner" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C4B5FD"/>
-      <stop offset="50%" stop-color="#A5B4FC"/>
-      <stop offset="100%" stop-color="#67E8F9"/>
+      <stop offset="0%" stop-color="#BFDBFE"/>
+      <stop offset="50%" stop-color="#93C5FD"/>
+      <stop offset="100%" stop-color="#93C5FD"/>
     </linearGradient>
     <!-- 光圈渐变 -->
     <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0.5"/>
-      <stop offset="50%" stop-color="#818CF8" stop-opacity="0.35"/>
-      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0.5"/>
+      <stop offset="0%" stop-color="#93C5FD" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#60A5FA" stop-opacity="0.5"/>
     </linearGradient>
     <!-- 连线渐变 -->
     <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#A5B4FC" stop-opacity="0"/>
-      <stop offset="40%" stop-color="#A5B4FC" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#67E8F9" stop-opacity="0.1"/>
+      <stop offset="0%" stop-color="#93C5FD" stop-opacity="0"/>
+      <stop offset="40%" stop-color="#93C5FD" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#93C5FD" stop-opacity="0.1"/>
     </linearGradient>
     <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#C4B5FD" stop-opacity="0.1"/>
-      <stop offset="60%" stop-color="#A5B4FC" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#A5B4FC" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#BFDBFE" stop-opacity="0.1"/>
+      <stop offset="60%" stop-color="#93C5FD" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#93C5FD" stop-opacity="0"/>
     </linearGradient>
     <!-- 星芒发光 -->
     <filter id="starGlow" x="-30%" y="-30%" width="160%" height="160%">
@@ -44,10 +44,10 @@
   <!-- ===== 图标区 (左侧 64x64 内) ===== -->
   <g transform="translate(32, 32)">
     <!-- 微妙径向光 -->
-    <circle r="28" fill="#4F46E5" opacity="0.03"/>
+    <circle r="28" fill="#2563EB" opacity="0.03"/>
 
     <!-- 光圈 -->
-    <circle r="22" fill="none" stroke="#818CF8" stroke-width="3.5" stroke-opacity="0.04"/>
+    <circle r="22" fill="none" stroke="#60A5FA" stroke-width="3.5" stroke-opacity="0.04"/>
     <circle r="22" fill="none" stroke="url(#ringGrad)" stroke-width="0.5"/>
 
     <!-- 连线 -->
@@ -68,14 +68,14 @@
     <circle r="0.6" fill="white" opacity="0.95"/>
 
     <!-- 节点 -->
-    <circle cx="17" cy="-14" r="1.5" fill="#A78BFA" filter="url(#nodeGlow)" opacity="0.35"/>
-    <circle cx="17" cy="-14" r="0.7" fill="#C4B5FD" opacity="0.85"/>
-    <circle cx="-16" cy="-13" r="1.5" fill="#22D3EE" filter="url(#nodeGlow)" opacity="0.35"/>
-    <circle cx="-16" cy="-13" r="0.7" fill="#67E8F9" opacity="0.85"/>
-    <circle cx="18" cy="12" r="1.2" fill="#818CF8" filter="url(#nodeGlow)" opacity="0.3"/>
-    <circle cx="18" cy="12" r="0.6" fill="#A5B4FC" opacity="0.8"/>
-    <circle cx="-17" cy="11" r="1.2" fill="#A78BFA" filter="url(#nodeGlow)" opacity="0.3"/>
-    <circle cx="-17" cy="11" r="0.6" fill="#C4B5FD" opacity="0.8"/>
+    <circle cx="17" cy="-14" r="1.5" fill="#93C5FD" filter="url(#nodeGlow)" opacity="0.35"/>
+    <circle cx="17" cy="-14" r="0.7" fill="#BFDBFE" opacity="0.85"/>
+    <circle cx="-16" cy="-13" r="1.5" fill="#60A5FA" filter="url(#nodeGlow)" opacity="0.35"/>
+    <circle cx="-16" cy="-13" r="0.7" fill="#93C5FD" opacity="0.85"/>
+    <circle cx="18" cy="12" r="1.2" fill="#60A5FA" filter="url(#nodeGlow)" opacity="0.3"/>
+    <circle cx="18" cy="12" r="0.6" fill="#93C5FD" opacity="0.8"/>
+    <circle cx="-17" cy="11" r="1.2" fill="#93C5FD" filter="url(#nodeGlow)" opacity="0.3"/>
+    <circle cx="-17" cy="11" r="0.6" fill="#BFDBFE" opacity="0.8"/>
   </g>
 
   <!-- ===== 文字区 ===== -->
@@ -83,8 +83,8 @@
   <text x="68" y="38" font-family="'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-weight="700" font-size="26" fill="white" letter-spacing="3">唤星</text>
 
   <!-- 分割竖线 -->
-  <line x1="133" y1="20" x2="133" y2="44" stroke="#4F46E5" stroke-width="0.8" stroke-opacity="0.4"/>
+  <line x1="133" y1="20" x2="133" y2="44" stroke="#2563EB" stroke-width="0.8" stroke-opacity="0.4"/>
 
   <!-- 英文 -->
-  <text x="140" y="38" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="300" font-size="15" fill="#A5B4FC" letter-spacing="4" opacity="0.7">HUANXING</text>
+  <text x="140" y="38" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="300" font-size="15" fill="#93C5FD" letter-spacing="4" opacity="0.7">HUANXING</text>
 </svg>

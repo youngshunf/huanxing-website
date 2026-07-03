@@ -27,8 +27,8 @@ function applyTheme(resolved: ResolvedTheme) {
   }
 }
 
-// 初始化：从 localStorage 读取，默认 dark
-const stored = (localStorage.getItem('theme') as ThemeMode) || 'dark'
+// 初始化：从 localStorage 读取，默认 light（2026-07-03 起对齐新视觉规范：Light 皇家蓝，官网全线遵守）
+const stored = (localStorage.getItem('theme') as ThemeMode) || 'light'
 const initialResolved = resolveTheme(stored)
 applyTheme(initialResolved)
 

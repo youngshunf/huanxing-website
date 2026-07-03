@@ -19,7 +19,7 @@ export default function AgentCard({ agent }: { agent: AgentItem }) {
   const boundChannels = agent.channel_summary.filter((channel) => channel.status === 'bound')
 
   return (
-    <article className="rounded-xl border border-divider bg-space-panel p-5 transition-all hover:border-star-purple/40 hover:shadow-[0_0_18px_rgba(108,92,231,0.12)]">
+    <article className="rounded-xl border border-divider bg-space-panel p-5 transition-all hover:border-star-purple/40 hover:shadow-[0_0_18px_rgba(37, 99, 235,0.12)]">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-3 flex flex-wrap items-center gap-2">

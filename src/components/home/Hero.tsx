@@ -14,8 +14,8 @@ export default function Hero() {
             className="absolute h-[500px] w-[500px] rounded-full md:h-[700px] md:w-[700px]"
             style={{
               background: isDark
-                ? 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, rgba(79,70,229,0.12) 30%, rgba(6,182,212,0.06) 50%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, rgba(99,102,241,0.08) 30%, rgba(6,182,212,0.04) 50%, transparent 70%)',
+                ? 'radial-gradient(circle, rgba(37, 99, 235,0.25) 0%, rgba(37, 99, 235,0.12) 30%, rgba(29, 78, 216,0.06) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(37, 99, 235,0.15) 0%, rgba(99,102,241,0.08) 30%, rgba(29, 78, 216,0.04) 50%, transparent 70%)',
             }}
             animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.85, 0.5] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
@@ -27,7 +27,7 @@ export default function Hero() {
             style={{
               background: isDark
                 ? 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.06) 40%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, rgba(99,102,241,0.06) 40%, transparent 70%)',
+                : 'radial-gradient(circle, rgba(37, 99, 235,0.12) 0%, rgba(99,102,241,0.06) 40%, transparent 70%)',
             }}
             animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -38,8 +38,8 @@ export default function Hero() {
             className="relative h-48 w-48 md:h-64 md:w-64"
             style={{
               filter: isDark
-                ? 'drop-shadow(0 0 40px rgba(124,58,237,0.5)) drop-shadow(0 0 80px rgba(79,70,229,0.3))'
-                : 'drop-shadow(0 0 30px rgba(124,58,237,0.35)) drop-shadow(0 0 60px rgba(99,102,241,0.2))',
+                ? 'drop-shadow(0 0 40px rgba(37, 99, 235,0.5)) drop-shadow(0 0 80px rgba(37, 99, 235,0.3))'
+                : 'drop-shadow(0 0 30px rgba(37, 99, 235,0.35)) drop-shadow(0 0 60px rgba(99,102,241,0.2))',
             }}
             animate={{ scale: [1, 1.03, 1] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
@@ -57,10 +57,10 @@ export default function Hero() {
             style={{
               background: isDark
                 ? 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.6) 30%, rgba(255,255,255,0.15) 60%, transparent 80%)'
-                : 'radial-gradient(circle, rgba(124,58,237,0.6) 0%, rgba(99,102,241,0.3) 30%, rgba(99,102,241,0.08) 60%, transparent 80%)',
+                : 'radial-gradient(circle, rgba(37, 99, 235,0.6) 0%, rgba(99,102,241,0.3) 30%, rgba(99,102,241,0.08) 60%, transparent 80%)',
               boxShadow: isDark
-                ? '0 0 20px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.3), 0 0 80px rgba(124,58,237,0.3)'
-                : '0 0 15px rgba(124,58,237,0.4), 0 0 40px rgba(99,102,241,0.2)',
+                ? '0 0 20px rgba(255,255,255,0.7), 0 0 50px rgba(255,255,255,0.3), 0 0 80px rgba(37, 99, 235,0.3)'
+                : '0 0 15px rgba(37, 99, 235,0.4), 0 0 40px rgba(99,102,241,0.2)',
             }}
             animate={{ scale: [1, 1.4, 1], opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -98,7 +98,7 @@ export default function Hero() {
           >
             <a
               href="#beta-contact"
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(108,92,231,0.4)]"
+              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.4)]"
             >
               立即体验
             </a>
