@@ -16,7 +16,7 @@ import AgentsPage from './pages/dashboard/agents/AgentsPage'
 import AgentDetailPage from './pages/dashboard/agents/AgentDetailPage'
 import AgentChatPage from './pages/dashboard/agents/AgentChatPage'
 import PayPage from './pages/pay/PayPage'
-import SharePage from './pages/doc/SharePage'
+import PublishSharePage from './pages/share/PublishSharePage'
 import DocsListPage from './pages/doc/DocsListPage'
 import ViewPage from './pages/doc/ViewPage'
 import EditorPage from './pages/doc/EditorPage'
@@ -67,8 +67,8 @@ export default function App() {
             }
           />
 
-          {/* 分享页（公开，无需登录） */}
-          <Route path="/s/:token" element={<SharePage />} />
+          {/* 网页发布分享查看器（公开入口；private 分享内部引导登录） */}
+          <Route path="/s/:slug" element={<PublishSharePage />} />
 
           {/* 文档列表（重定向到 dashboard 内） */}
           <Route path="/docs" element={<Navigate to="/dashboard/docs" replace />} />
