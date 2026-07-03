@@ -1,24 +1,15 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, CreditCard, Coins, ArrowLeft, FileText, Target, PenTool, Share2, BarChart3, Lightbulb, Key, Bot } from 'lucide-react'
+import { LayoutDashboard, CreditCard, Coins, ArrowLeft, Key, Bot } from 'lucide-react'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useAuthStore } from '../../stores/useAuthStore'
 import { useThemeStore } from '../../stores/useThemeStore'
 
 const sidebarLinks = [
   { to: '/dashboard', icon: LayoutDashboard, label: '概览', end: true },
-  { to: '/dashboard/docs', icon: FileText, label: '我的文档' },
   { to: '/dashboard/subscription', icon: CreditCard, label: '订阅管理' },
   { to: '/dashboard/credits', icon: Coins, label: '积分详情' },
   { to: '/dashboard/apikeys', icon: Key, label: 'API Keys' },
   { to: '/dashboard/agents', icon: Bot, label: 'AI Agent' },
-]
-
-const creatorLinks = [
-  { to: '/dashboard/creator', icon: Target, label: '创作项目', end: true },
-  { to: '/dashboard/creator/contents', icon: PenTool, label: '内容管理' },
-  { to: '/dashboard/creator/publishes', icon: Share2, label: '发布记录' },
-  { to: '/dashboard/creator/analytics', icon: BarChart3, label: '数据分析' },
-  { to: '/dashboard/creator/topics', icon: Lightbulb, label: '选题池' },
 ]
 
 export default function DashboardLayout() {
@@ -42,27 +33,6 @@ export default function DashboardLayout() {
         {/* 导航 */}
         <nav className="flex-1 space-y-1 px-3 py-4">
           {sidebarLinks.map(({ to, icon: Icon, label, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                  isActive
-                    ? 'bg-star-purple/10 font-medium text-star-purple'
-                    : 'text-text-secondary hover:bg-space-float hover:text-text-primary'
-                }`
-              }
-            >
-              <Icon className="h-4 w-4" />
-              {label}
-            </NavLink>
-          ))}
-
-          {/* 创作中心分隔线 */}
-          <div className="!my-3 border-t border-divider" />
-          <div className="px-3 pb-1 text-xs font-medium text-text-secondary/60">创作中心</div>
-          {creatorLinks.map(({ to, icon: Icon, label, end }) => (
             <NavLink
               key={to}
               to={to}
@@ -151,22 +121,6 @@ function MobileNav() {
           </NavLink>
         ))}
         <div className="border-t border-divider" />
-        <div className="px-3 py-1.5 text-xs text-text-secondary/60">创作中心</div>
-        {creatorLinks.map(({ to, icon: Icon, label, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }) =>
-              `flex items-center gap-2.5 px-3 py-2.5 text-sm transition-colors ${
-                isActive ? 'text-star-purple' : 'text-text-secondary hover:bg-gray-100 dark:hover:bg-space-float'
-              }`
-            }
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-          </NavLink>
-        ))}
         <button
           onClick={logout}
           className="flex w-full items-center gap-2.5 px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-space-float"
