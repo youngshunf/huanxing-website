@@ -3,23 +3,27 @@ import ScrollReveal from '../shared/ScrollReveal'
 interface SceneProps {
   icon: string
   title: string
+  benchmark?: string
   pains: string[]
   solutions: string[]
   chatExample: { role: 'ai' | 'user'; text: string }[]
   reverse?: boolean
 }
 
-export default function SceneDetail({ icon, title, pains, solutions, chatExample, reverse }: SceneProps) {
+export default function SceneDetail({ icon, title, benchmark, pains, solutions, chatExample, reverse }: SceneProps) {
   return (
     <section className="relative z-10 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
       <div className={`mx-auto flex max-w-5xl flex-col gap-10 md:flex-row md:items-start ${reverse ? 'md:flex-row-reverse' : ''}`}>
         {/* Text side */}
         <div className="flex-1">
           <ScrollReveal>
-            <div className="mb-6 flex items-center gap-3">
+            <div className="mb-2 flex items-center gap-3">
               <span className="text-3xl">{icon}</span>
               <h3 className="text-2xl font-bold text-text-primary">{title}</h3>
             </div>
+            {benchmark && (
+              <p className="mb-6 text-sm font-medium text-text-tertiary">{benchmark}</p>
+            )}
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
