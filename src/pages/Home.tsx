@@ -1,50 +1,42 @@
 import Hero from '../components/home/Hero'
-import BetaContact from '../components/home/BetaContact'
+import ValueProp from '../components/home/ValueProp'
 import PainPoints from '../components/home/PainPoints'
-import SuperBrainBrief from '../components/home/SuperBrainBrief'
-import Features from '../components/Features'
-import GrowthSystem from '../components/GrowthSystem'
-import ChatPreview from '../components/ChatPreview'
-import UseCasesBrief from '../components/home/UseCasesBrief'
-import CompareTable from '../components/home/CompareTable'
+import SuperBrainLayer from '../components/home/SuperBrainLayer'
+import SocialFabricLayer from '../components/home/SocialFabricLayer'
+import ThreeFaces from '../components/home/ThreeFaces'
+import Differentiation from '../components/home/Differentiation'
 import PricingBrief from '../components/home/PricingBrief'
-import BrandStory from '../components/BrandStory'
+import BrandFinale from '../components/home/BrandFinale'
 
 export default function Home() {
   return (
     <>
-      {/* 1. 情感冲击 — 10秒定生死 */}
+      {/* 1. 情感冲击 — 发光八角星 + 主标题 */}
       <Hero />
 
-      {/* 2. 内测联系方式 — 第二屏 */}
-      <BetaContact />
+      {/* 2. 价值主张 — 分身干活，你做决定 */}
+      <ValueProp />
 
-      {/* 3. 痛点共鸣 — 你有这些问题 */}
+      {/* 3. 痛点共鸣 — 一个人扛不动 */}
       <PainPoints />
 
-      {/* 3. 超级大脑六大能力精简版 */}
-      <SuperBrainBrief />
+      {/* 4. 层0 · 超级大脑分身 — 全量记忆/主动执行/越用越像你 */}
+      <SuperBrainLayer />
 
-      {/* 4. 核心价值 — 养成感/全时在线/无限可能（原版灵魂） */}
-      <Features />
+      {/* 5. 层1+层2 · 分身进入社交网络 + AI-Native 双面范式 */}
+      <SocialFabricLayer />
 
-      {/* 5. 养成进化 — 四颗星球（原版灵魂 ✦） */}
-      <GrowthSystem />
+      {/* 6. 层3 · 三面同底 — IM / 社区 / AI 工具 */}
+      <ThreeFaces />
 
-      {/* 6. 对话预览 — 4个场景对话卡片（原版灵魂） */}
-      <ChatPreview />
+      {/* 7. 差异化 — vs 传统 AI 助手 */}
+      <Differentiation />
 
-      {/* 7. 六大场景精简版 */}
-      <UseCasesBrief />
-
-      {/* 8. Claw 系列产品对比 */}
-      <CompareTable />
-
-      {/* 9. 定价精简版 */}
+      {/* 8. 定价精简 */}
       <PricingBrief />
 
-      {/* 10. 品牌故事 — "每个人小时候都仰望过星空"（原版灵魂 ✦） */}
-      <BrandStory />
+      {/* 9. 品牌收尾 — 仰望星空 + CTA */}
+      <BrandFinale />
     </>
   )
 }
