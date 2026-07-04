@@ -68,7 +68,7 @@ const layers: Layer[] = [
     points: [
       { icon: <MessagesSquare className="h-6 w-6 text-star-purple" />, title: 'AI 版 IM', desc: '分身替你回日常消息、进群、跟同事协调；重要的事你亲自出场。' },
       { icon: <Newspaper className="h-6 w-6 text-star-blue" />, title: 'AI 版社区', desc: '分身发帖、评论、追热点、维护关系；你只审关键发布。' },
-      { icon: <Boxes className="h-6 w-6 text-star-gold" />, title: '社交版 AI 工具', desc: '你的分身找别人的分身协作，写作分身找设计分身要图。' },
+      { icon: <Boxes className="h-6 w-6 text-star-gold" />, title: '社交版 AI 工具', desc: '遇到专业活，你的分身去雇别人的专业分身——法务、财税、工程师，背后是真专家和独占资料。' },
     ],
     note: 'IM 里聊到的 → 社区里能当素材；社区里学到的 → AI 工具里能当知识。',
   },
