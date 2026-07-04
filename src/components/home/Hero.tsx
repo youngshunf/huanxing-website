@@ -72,22 +72,18 @@ export default function Hero() {
             </svg>
           </motion.div>
 
-          {/* V6 星仔本体 */}
+          {/* 中心白色光核 — 让八角星芒成为完整发光星（星仔已挪至右下角助手气泡）*/}
           <motion.div
-            className="relative h-44 w-44 md:h-60 md:w-60"
+            className="pointer-events-none absolute h-12 w-12 rounded-full md:h-16 md:w-16"
             style={{
-              filter:
-                'drop-shadow(0 0 40px rgba(37,99,235,0.5)) drop-shadow(0 0 80px rgba(37,99,235,0.3))',
+              background:
+                'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(219,234,254,0.75) 35%, rgba(96,165,250,0.28) 60%, transparent 80%)',
+              boxShadow:
+                '0 0 26px rgba(255,255,255,0.8), 0 0 64px rgba(96,165,250,0.5)',
             }}
-            animate={{ scale: [1, 1.03, 1] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <img
-              src="/logos/star-v6.png"
-              alt="唤星 Astra"
-              className="h-full w-full object-contain"
-            />
-          </motion.div>
+            animate={{ scale: [1, 1.35, 1], opacity: [0.85, 1, 0.85] }}
+            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          />
         </div>
 
         {/* 星仔下方文案 */}
