@@ -11,78 +11,93 @@ export default function Hero() {
       }}
     >
       <div className="relative z-10 flex flex-col items-center">
-        {/* 中心星仔 — V6 logo + 皇家蓝光晕 */}
-        <div className="relative flex h-56 w-56 items-center justify-center md:h-80 md:w-80">
-          {/* 最外层大光晕 — 呼吸脉冲 */}
+        {/* 中心发光八角星 — 忠实移植桌面端登录页 GlowingStar（缩小尺寸 + 更明显的中心发光球）*/}
+        <div className="relative flex h-52 w-52 items-center justify-center md:h-72 md:w-72">
+          {/* 外层大光晕 — 慢脉冲 */}
           <motion.div
-            className="absolute h-[500px] w-[500px] rounded-full md:h-[700px] md:w-[700px]"
+            className="absolute rounded-full"
             style={{
+              width: '170%',
+              height: '170%',
               background:
-                'radial-gradient(circle, rgba(37,99,235,0.30) 0%, rgba(37,99,235,0.14) 30%, rgba(29,78,216,0.06) 50%, transparent 70%)',
+                'radial-gradient(circle, rgba(37,99,235,0.20) 0%, rgba(29,78,216,0.10) 42%, transparent 70%)',
             }}
-            animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.85, 0.5] }}
+            animate={{ scale: [1, 1.12, 1], opacity: [0.55, 0.9, 0.55] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           />
-
-          {/* 中层柔光 */}
+          {/* 中层光晕 */}
           <motion.div
-            className="absolute h-64 w-64 rounded-full md:h-80 md:w-80"
+            className="absolute rounded-full"
             style={{
+              width: '112%',
+              height: '112%',
               background:
-                'radial-gradient(circle, rgba(96,165,250,0.22) 0%, rgba(96,165,250,0.08) 40%, transparent 70%)',
+                'radial-gradient(circle, rgba(96,165,250,0.22) 0%, rgba(37,99,235,0.16) 45%, transparent 72%)',
             }}
-            animate={{ scale: [1, 1.12, 1], opacity: [0.7, 1, 0.7] }}
+            animate={{ scale: [1, 1.08, 1], opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          {/* 八角星芒 — 星仔背后的放射星光（沿用旧 hero 造型，重上皇家蓝；缓慢旋转+脉冲）*/}
+          {/* 八角星 SVG — 四角外星 + 45° 旋转内星（忠实移植登录页），轻呼吸缩放 */}
           <motion.div
-            className="pointer-events-none absolute h-72 w-72 md:h-[26rem] md:w-[26rem]"
-            style={{ filter: 'drop-shadow(0 0 22px rgba(37,99,235,0.45))' }}
-            animate={{ rotate: 360, scale: [1, 1.06, 1] }}
-            transition={{
-              rotate: { duration: 64, repeat: Infinity, ease: 'linear' },
-              scale: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-            }}
+            className="relative h-36 w-36 md:h-48 md:w-48"
+            style={{ filter: 'drop-shadow(0 0 28px rgba(147,197,253,0.75))' }}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <svg viewBox="-60 -60 120 120" className="h-full w-full">
+            <svg aria-hidden="true" viewBox="0 0 256 256" className="h-full w-full">
               <defs>
-                <linearGradient id="heroBurstOuter" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#3B82F6" />
-                  <stop offset="100%" stopColor="#1D4ED8" />
+                <linearGradient id="heroStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#2563EB" />
+                  <stop offset="50%" stopColor="#1D4ED8" />
+                  <stop offset="100%" stopColor="#3B82F6" />
                 </linearGradient>
-                <linearGradient id="heroBurstInner" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#93C5FD" />
+                <linearGradient id="heroStarInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#BFDBFE" />
+                  <stop offset="52%" stopColor="#93C5FD" />
                   <stop offset="100%" stopColor="#60A5FA" />
                 </linearGradient>
+                <radialGradient id="heroStarCore" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#FFFFFF" />
+                  <stop offset="34%" stopColor="#DBEAFE" />
+                  <stop offset="70%" stopColor="#60A5FA" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                </radialGradient>
               </defs>
-              {/* 外层星芒（上下左右四角）*/}
+              {/* 轨道细环 */}
+              <circle cx="128" cy="128" r="78" fill="none" stroke="#60A5FA" strokeOpacity="0.3" />
+              {/* 外层四角星 */}
               <path
-                d="M0 -52 C5.5 -9.5, 9.5 -5.5, 52 0 C9.5 5.5, 5.5 9.5, 0 52 C-5.5 9.5, -9.5 5.5, -52 0 C-9.5 -5.5, -5.5 -9.5, 0 -52 Z"
-                fill="url(#heroBurstOuter)"
-                opacity="0.85"
+                d="M128 76c5.5 42.5 9.5 46.5 52 52-42.5 5.5-46.5 9.5-52 52-5.5-42.5-9.5-46.5-52-52 42.5-5.5 46.5-9.5 52-52Z"
+                fill="url(#heroStarGrad)"
               />
-              {/* 内层星芒（旋转45°补出八角，更亮）*/}
+              {/* 内层四角星（旋转45°补出八角，更亮更透）*/}
               <path
-                d="M0 -36 C3.8 -6.5, 6.5 -3.8, 36 0 C6.5 3.8, 3.8 6.5, 0 36 C-3.8 6.5, -6.5 3.8, -36 0 C-6.5 -3.8, -3.8 -6.5, 0 -36 Z"
-                fill="url(#heroBurstInner)"
-                opacity="0.6"
-                transform="rotate(45)"
+                d="M128 92c3.8 29.5 6.5 32.2 36 36-29.5 3.8-32.2 6.5-36 36-3.8-29.5-6.5-32.2-36-36 29.5-3.8 32.2-6.5 36-36Z"
+                fill="url(#heroStarInner)"
+                opacity="0.58"
+                transform="rotate(45 128 128)"
               />
+              {/* 中心发光球（比登录页更明显，贴合参考图）*/}
+              <circle cx="128" cy="128" r="30" fill="url(#heroStarCore)" />
+              <circle cx="128" cy="128" r="5" fill="white" opacity="0.95" />
+              {/* 四角社交节点微光 */}
+              <circle cx="188" cy="78" r="3" fill="#BFDBFE" opacity="0.75" />
+              <circle cx="72" cy="82" r="3" fill="#60A5FA" opacity="0.75" />
+              <circle cx="192" cy="170" r="2.5" fill="#93C5FD" opacity="0.65" />
+              <circle cx="68" cy="168" r="2.5" fill="#BFDBFE" opacity="0.65" />
             </svg>
           </motion.div>
 
-          {/* 中心白色光核 — 让八角星芒成为完整发光星（星仔已挪至右下角助手气泡）*/}
+          {/* 中心白核脉冲光点 */}
           <motion.div
-            className="pointer-events-none absolute h-12 w-12 rounded-full md:h-16 md:w-16"
+            className="pointer-events-none absolute h-3 w-3 rounded-full bg-white"
             style={{
-              background:
-                'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(219,234,254,0.75) 35%, rgba(96,165,250,0.28) 60%, transparent 80%)',
               boxShadow:
-                '0 0 26px rgba(255,255,255,0.8), 0 0 64px rgba(96,165,250,0.5)',
+                '0 0 20px rgba(255,255,255,0.9), 0 0 70px rgba(37,99,235,0.75)',
             }}
-            animate={{ scale: [1, 1.35, 1], opacity: [0.85, 1, 0.85] }}
-            transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+            animate={{ scale: [1, 1.5, 1], opacity: [0.85, 1, 0.85] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
 
