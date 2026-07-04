@@ -35,6 +35,43 @@ export default function Hero() {
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
           />
 
+          {/* 八角星芒 — 星仔背后的放射星光（沿用旧 hero 造型，重上皇家蓝；缓慢旋转+脉冲）*/}
+          <motion.div
+            className="pointer-events-none absolute h-72 w-72 md:h-[26rem] md:w-[26rem]"
+            style={{ filter: 'drop-shadow(0 0 22px rgba(37,99,235,0.45))' }}
+            animate={{ rotate: 360, scale: [1, 1.06, 1] }}
+            transition={{
+              rotate: { duration: 64, repeat: Infinity, ease: 'linear' },
+              scale: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+            }}
+          >
+            <svg viewBox="-60 -60 120 120" className="h-full w-full">
+              <defs>
+                <linearGradient id="heroBurstOuter" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#3B82F6" />
+                  <stop offset="100%" stopColor="#1D4ED8" />
+                </linearGradient>
+                <linearGradient id="heroBurstInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#93C5FD" />
+                  <stop offset="100%" stopColor="#60A5FA" />
+                </linearGradient>
+              </defs>
+              {/* 外层星芒（上下左右四角）*/}
+              <path
+                d="M0 -52 C5.5 -9.5, 9.5 -5.5, 52 0 C9.5 5.5, 5.5 9.5, 0 52 C-5.5 9.5, -9.5 5.5, -52 0 C-9.5 -5.5, -5.5 -9.5, 0 -52 Z"
+                fill="url(#heroBurstOuter)"
+                opacity="0.85"
+              />
+              {/* 内层星芒（旋转45°补出八角，更亮）*/}
+              <path
+                d="M0 -36 C3.8 -6.5, 6.5 -3.8, 36 0 C6.5 3.8, 3.8 6.5, 0 36 C-3.8 6.5, -6.5 3.8, -36 0 C-6.5 -3.8, -3.8 -6.5, 0 -36 Z"
+                fill="url(#heroBurstInner)"
+                opacity="0.6"
+                transform="rotate(45)"
+              />
+            </svg>
+          </motion.div>
+
           {/* V6 星仔本体 */}
           <motion.div
             className="relative h-44 w-44 md:h-60 md:w-60"
