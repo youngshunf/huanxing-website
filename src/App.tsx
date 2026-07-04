@@ -19,6 +19,7 @@ import PayPage from './pages/pay/PayPage'
 import PublishSharePage from './pages/share/PublishSharePage'
 import ProtectedRoute from './components/ProtectedRoute'
 import LoginModal from './components/LoginModal'
+import ScrollToTop from './components/shared/ScrollToTop'
 import { useAuthStore } from './stores/useAuthStore'
 
 // 初始化主题 store（触发 side effect）
@@ -33,6 +34,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="relative min-h-screen overflow-x-hidden bg-space-black">
         <Routes>
           {/* ===== 营销页面 — 共享 SiteLayout（Header + StarParticles + Footer）===== */}
