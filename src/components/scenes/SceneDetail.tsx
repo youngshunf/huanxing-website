@@ -59,8 +59,8 @@ export default function SceneDetail({ icon, title, benchmark, pains, solutions, 
         <ScrollReveal delay={0.15} className="flex-1">
           <div className="rounded-2xl border border-divider bg-space-panel overflow-hidden">
             <div className="flex items-center gap-3 border-b border-divider px-4 py-3">
-              <img src="/logos/icon-dark.svg" alt="小星" className="h-7 w-7 rounded-full" />
-              <span className="text-sm font-semibold text-text-primary">小星</span>
+              <img src="/logos/icon-v6.png" alt="星仔" className="h-7 w-7 rounded-lg" />
+              <span className="text-sm font-semibold text-text-primary">星仔</span>
               <span className="text-xs text-text-tertiary">{icon} {title}</span>
             </div>
             <div className="flex flex-col gap-3 p-4">
