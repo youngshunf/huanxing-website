@@ -107,6 +107,16 @@
 - 性能优化（图片懒加载、动画性能）
 - 代码整洁，组件化开发
 
+## 代码注释统一使用中文（铁律）
+
+> 权威在父仓 `huanxing-project/CLAUDE.md` 开发规范小节。
+
+**本仓所有代码注释一律用中文书写**——React / TS 组件的行内注释、块注释、`// TODO`/`// FIXME`、JSDoc/TSDoc。团队以中文协作，中文注释才能让队友第一时间读懂意图。
+
+- ✅ **正确**：`// Hero 星光粒子动画，滚动时降采样保帧率`
+- ❌ **错误**：`// hero starfield particles, downsample on scroll for fps`
+- **允许保留英文**：标识符、组件名、URL、命令、包名、技术术语/缩写（`React`、`Tailwind`、`Framer Motion` 等）；只要求注释里的**说明性文字**用中文。
+
 ## Git 工作流（多会话分支纪律）
 
 本仓库是唤星项目的**原生子仓**（独立 git 仓库，主分支 `main`）。完整项目上下文见父项目 `huanxing-project/CLAUDE.md`。
