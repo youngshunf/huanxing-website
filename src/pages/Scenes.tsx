@@ -3,7 +3,7 @@ import SceneDetail from '../components/scenes/SceneDetail'
 import TargetUsers from '../components/scenes/TargetUsers'
 import SectionCTA from '../components/shared/SectionCTA'
 
-// 三面同底：IM / 社区 / AI 工具——用同一个分身，在三个场景里替你干活
+// 四面同底：IM / 规划执行 / 社区 / AI 工具——用同一个分身，在四个场景里替你干活
 const scenes = [
   {
     icon: '💬',
@@ -24,6 +24,29 @@ const scenes = [
       { role: 'ai' as const, text: '你半天没看手机，我帮你回了 40 条日常消息、约好了明天的会、拒了两个不重要的邀请。有 3 条我留着等你亲自看。' },
       { role: 'user' as const, text: '那 3 条是什么' },
       { role: 'ai' as const, text: '①老王想约周五合作，我和他的分身把时间和议题谈好了，你点头就成；②财务催报销；③你妈问周末回不回家。要我先处理哪条？' },
+    ],
+  },
+  {
+    icon: '🎯',
+    title: 'AI 版规划 & 待办 · 分身主动规划、执行、汇报',
+    benchmark: '对标 Motion / Reclaim.ai / 滴答清单 / Todoist',
+    pains: [
+      '每天该做什么心里有数，但没时间自己排优先级、排日程',
+      '待办列了一堆，靠自制力硬推，做不完就堆着——越堆越焦虑',
+      '临时被插事，原计划乱了，后面该先做啥自己都要想半天',
+      '大目标定了半年没动——OKR 拆解太麻烦、拆完也没人盯执行',
+    ],
+    solutions: [
+      '你说方向，分身拆里程碑、拆待办、排日程；你只审核关键节点',
+      '分身自己盯进度——到点提醒、卡住主动问、完成主动汇报',
+      '不只排任务——会真的调工具、派子分身把待办执行完',
+      '临时插事自适应——分身重排后面的日程，告诉你影响了什么',
+      '每天一份简报：昨天做了什么、今天要干什么、有哪些需要你拍板',
+    ],
+    chatExample: [
+      { role: 'ai' as const, text: '早上好。昨天有 4 件事没做完，我挪了 2 件到今天下午、1 件到明天、1 件已经不重要我删了。今天核心 3 件我按你的精力曲线排好了，第一件 9:00 开始。' },
+      { role: 'user' as const, text: '第一件是什么' },
+      { role: 'ai' as const, text: '「和合作方对齐技术方案」——上周你标过高优先级。我已经派协作分身把方案初稿写了 70%，只差合作方一个关键数据。要不要我现在派分身去问对方？拿到后把稿子补齐给你审。' },
     ],
   },
   {
@@ -74,8 +97,8 @@ export default function Scenes() {
   return (
     <>
       <PageHero
-        title="三面同底，一个分身替你干活"
-        subtitle="IM、社区、AI 工具——共享同一个账号、同一个分身、同一段记忆。你在一面里积累的，另外两面直接能用。"
+        title="四面同底，一个分身替你干活"
+        subtitle="IM、规划执行、社区、AI 工具——共享同一个账号、同一个分身、同一段记忆。你在一面积累的，其他场景直接能用。"
       />
 
       {scenes.map((scene, i) => (
