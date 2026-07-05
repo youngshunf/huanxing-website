@@ -24,6 +24,15 @@ function DownloadGlyph() {
   )
 }
 
+// HASN（Human-Agent Social Network，人-Agent 社交网络）范式四大特点，
+// 作 Hero 底部胶囊呈现：让访客一眼看懂唤星「人机同网」的独特范式。
+const HASN_TRAITS = [
+  '人机同网 · 你和分身都是成员',
+  '分身认主 · 行动对你透明可接管',
+  '分身互联 · 社交 · 协作 · 交易',
+  '能力可安装 · 可授权 · 可组装',
+] as const
+
 // Hero 恒深色背景（皇家蓝调深空），不随主题翻浅——文字一律浅色。
 export default function Hero() {
   // 桌面客户端最新版本（读云端发布模块公开端点）：能识别当前系统就直下，否则引导到下载页。
@@ -145,73 +154,94 @@ export default function Hero() {
             <span className="mt-3 block text-white md:mt-4">AI与你共生</span>
           </motion.h1>
 
+          {/* 副标题：突出「分身替你干活」——分身是替你行动的一等成员，不是工具 */}
           <motion.p
-            className="mb-12 text-lg text-white/70 md:whitespace-nowrap md:text-xl"
+            className="mb-4 text-lg text-white/80 md:text-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            你的专属 AI 超级大脑。能思考、能记忆、能行动，7×24 小时为你而战。
+            养一个真正懂你的 AI 分身——替你思考、替你记忆、替你把活干了。
           </motion.p>
 
+          {/* HASN 范式一句话：人与分身共处同一张社交网络，分身认主、透明、可互联 */}
+          <motion.p
+            className="mx-auto mb-10 max-w-2xl text-sm leading-relaxed text-white/55 md:text-base"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.65 }}
+          >
+            在 HASN 人-Agent 社交网络里，你和你的分身都是有身份的成员：分身认你为主人、行动对你透明可接管，还能与他人的分身社交、协作、交易。
+          </motion.p>
+
+          {/* 主 CTA：下载当前系统匹配的桌面客户端（一键直下·带版本号）；副 CTA「其他版本」去下载页 */}
           <motion.div
             className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <a
-              href="#value-prop"
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37,99,235,0.45)]"
-            >
-              立即体验
-            </a>
-            <a
-              href="#pain-points"
-              className="inline-block rounded-lg border border-white/25 px-8 py-3 text-lg font-semibold text-white/80 transition-all duration-300 hover:border-white/50 hover:text-white"
-            >
-              了解更多 ↓
-            </a>
-          </motion.div>
-
-          {/* 桌面客户端下载区 —— 读云端最新版本：识别到当前系统就直下（带版本号），否则去下载页选平台 */}
-          <motion.div
-            className="mt-8 flex flex-col items-center gap-3"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-          >
             {installer ? (
-              <div className="flex flex-col items-center gap-x-5 gap-y-2 sm:flex-row">
-                <a
-                  href={assetDownloadUrl(installer)}
-                  className="group inline-flex items-center gap-2 rounded-lg border border-white/25 bg-white/5 px-6 py-3 text-base font-semibold text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white/50 hover:bg-white/10 hover:text-white"
-                >
-                  <DownloadGlyph />
-                  下载 {osLabel} 客户端
-                  {release?.version && (
-                    <span className="ml-1 rounded bg-white/15 px-2 py-0.5 text-xs font-medium text-white/80">
-                      v{release.version}
-                    </span>
-                  )}
-                </a>
-                <Link
-                  to="/download"
-                  className="text-sm text-white/55 underline-offset-4 transition-colors hover:text-white/85 hover:underline"
-                >
-                  其他平台 / 全部下载 →
-                </Link>
-              </div>
+              <a
+                href={assetDownloadUrl(installer)}
+                className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37,99,235,0.45)]"
+              >
+                <DownloadGlyph />
+                下载 {osLabel} 客户端
+                {release?.version && (
+                  <span className="ml-1 rounded bg-white/20 px-2 py-0.5 text-xs font-medium text-white/90">
+                    v{release.version}
+                  </span>
+                )}
+              </a>
             ) : (
               <Link
                 to="/download"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 text-sm text-white/60 transition-all duration-300 hover:border-white/35 hover:text-white/85"
+                className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37,99,235,0.45)]"
               >
                 <DownloadGlyph />
                 下载桌面客户端
               </Link>
             )}
+            <Link
+              to="/download"
+              className="inline-flex items-center rounded-lg border border-white/25 px-8 py-3 text-lg font-semibold text-white/80 transition-all duration-300 hover:border-white/50 hover:text-white"
+            >
+              其他版本
+            </Link>
           </motion.div>
+
+          {/* 次级：了解更多，锚到首屏下方内容 */}
+          <motion.div
+            className="mt-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1 }}
+          >
+            <a
+              href="#value-prop"
+              className="text-sm text-white/55 underline-offset-4 transition-colors hover:text-white/85 hover:underline"
+            >
+              了解唤星能为你做什么 ↓
+            </a>
+          </motion.div>
+
+          {/* HASN 范式特点胶囊：人机同网 / 分身认主·透明 / 分身互联 / 能力可组装 */}
+          <motion.ul
+            className="mt-9 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.15 }}
+          >
+            {HASN_TRAITS.map((trait) => (
+              <li
+                key={trait}
+                className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs text-white/65 backdrop-blur-sm"
+              >
+                {trait}
+              </li>
+            ))}
+          </motion.ul>
         </div>
       </div>
 
