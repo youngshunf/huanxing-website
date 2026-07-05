@@ -53,29 +53,16 @@ export default function Footer() {
         © {new Date().getFullYear()} 唤星 Astra. All rights reserved.
       </div>
 
-      {/* OpenClaw 生态 */}
-      <div className="mx-auto mt-4 max-w-6xl text-center text-xs text-text-tertiary">
-        <span className="opacity-60">Powered by </span>
+      {/* ICP 备案 */}
+      <div className="mx-auto mt-2 max-w-6xl text-center text-xs text-text-tertiary">
         <a
-          href="https://openclaw.com"
+          href="https://beian.miit.gov.cn/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-star-purple/70 transition-colors hover:text-star-purple"
+          className="opacity-70 transition-opacity hover:opacity-100"
         >
-          OpenClaw
+          滇ICP备20004726号-1
         </a>
-        <span className="mx-2 opacity-40">·</span>
-        <span className="opacity-60">
-          与{' '}
-          <span className="text-text-secondary">MiClaw</span>
-          <span className="opacity-40"> · </span>
-          <span className="text-text-secondary">EasyClaw</span>
-          <span className="opacity-40"> · </span>
-          <span className="text-text-secondary">ArkClaw</span>
-          <span className="opacity-40"> · </span>
-          <span className="text-text-secondary">QClaw</span>
-          {' '}等 Claw 系列产品同属 OpenClaw 生态
-        </span>
       </div>
     </footer>
   )
