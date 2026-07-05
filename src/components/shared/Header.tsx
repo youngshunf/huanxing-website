@@ -7,6 +7,7 @@ import ThemeToggle from './ThemeToggle'
 const navLinks = [
   { label: '首页', to: '/' },
   { label: '产品', to: '/product' },
+  { label: '技术', to: '/tech' },
   { label: '场景', to: '/scenes' },
   { label: '定价', to: '/pricing' },
   { label: '关于', to: '/about' },
