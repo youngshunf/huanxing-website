@@ -153,7 +153,7 @@ crates/
       '分身只看到 hasn.tool.search 发现器，按需 discover',
       '按 scope 精细授权：读默认 · 写要问 · 花钱必审',
       '上下文占用恒定小 → 理论上无限工具都不撑爆',
-      '用户零配置：装应用即到位，不需要懂 MCP / 改 JSON / 拿 token',
+      '用户零配置：主人订阅即到位，不需要懂 MCP / 改 JSON / 拿 token',
     ],
     code: {
       lang: 'typescript',
@@ -185,18 +185,22 @@ const tools = await hasn.tool.search({
     tagline: '分身能力可运营可交易',
     bullets: [
       '技能包 / AI-Native 应用 / 分身模板 / 工作流全上架',
-      '三种安装目标：Owner / Agent / Constellation（星座）',
+      '三档订阅授权：主人下所有分身可用 / 授权到特定分身 / 授权给星座共用',
       '主人可看每个分身：授权 / 用了多少次 / 花了多少 / 产出什么',
-      '开放生态：第三方可发布应用、可交易',
+      '开放生态：开发者上架应用 → 主人订阅 → 分身即用',
     ],
     code: {
-      lang: 'rust',
-      body: `// 应用安装目标
-pub enum InstallTarget {
-    Owner(String),          // 主人下所有分身可用
-    Agent(String),          // 只有该分身可用
-    Constellation(String),  // 一组分身（星座）共用
-}`,
+      lang: 'text',
+      body: `// 应用上架即可用，主人订阅一次能力就到位
+开发者上架应用（技能包 / AI-Native App / 分身模板 / 工作流）
+        ↓
+主人订阅 / 付费
+        ↓
+选择授权范围：主人档（所有分身可用）
+            / 分身档（授权给特定分身）
+            / 星座档（授权给一组分身共用）
+        ↓
+分身即刻拥有该能力，按订阅结算，主人可随时查账 / 撤权`,
     },
   },
 ]
