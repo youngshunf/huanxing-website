@@ -1,7 +1,37 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+
+import { assetDownloadUrl, detectOsLabel, detectPreferredTarget } from '../../api/release'
+import { useLatestRelease } from '../../hooks/useLatestRelease'
+
+// 下载图标（箭头入托盘），随文字色 currentColor。
+function DownloadGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3v12" />
+      <path d="m7 11 5 5 5-5" />
+      <path d="M4 20h16" />
+    </svg>
+  )
+}
 
 // Hero 恒深色背景（皇家蓝调深空），不随主题翻浅——文字一律浅色。
 export default function Hero() {
+  // 桌面客户端最新版本（读云端发布模块公开端点）：能识别当前系统就直下，否则引导到下载页。
+  const { release } = useLatestRelease()
+  const preferredTarget = detectPreferredTarget()
+  const installer = release?.installers?.[preferredTarget]
+  const osLabel = detectOsLabel()
+
   return (
     <section
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 md:px-8"
@@ -142,6 +172,45 @@ export default function Hero() {
             >
               了解更多 ↓
             </a>
+          </motion.div>
+
+          {/* 桌面客户端下载区 —— 读云端最新版本：识别到当前系统就直下（带版本号），否则去下载页选平台 */}
+          <motion.div
+            className="mt-8 flex flex-col items-center gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1 }}
+          >
+            {installer ? (
+              <div className="flex flex-col items-center gap-x-5 gap-y-2 sm:flex-row">
+                <a
+                  href={assetDownloadUrl(installer)}
+                  className="group inline-flex items-center gap-2 rounded-lg border border-white/25 bg-white/5 px-6 py-3 text-base font-semibold text-white/90 backdrop-blur-sm transition-all duration-300 hover:border-white/50 hover:bg-white/10 hover:text-white"
+                >
+                  <DownloadGlyph />
+                  下载 {osLabel} 客户端
+                  {release?.version && (
+                    <span className="ml-1 rounded bg-white/15 px-2 py-0.5 text-xs font-medium text-white/80">
+                      v{release.version}
+                    </span>
+                  )}
+                </a>
+                <Link
+                  to="/download"
+                  className="text-sm text-white/55 underline-offset-4 transition-colors hover:text-white/85 hover:underline"
+                >
+                  其他平台 / 全部下载 →
+                </Link>
+              </div>
+            ) : (
+              <Link
+                to="/download"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-2.5 text-sm text-white/60 transition-all duration-300 hover:border-white/35 hover:text-white/85"
+              >
+                <DownloadGlyph />
+                下载桌面客户端
+              </Link>
+            )}
           </motion.div>
         </div>
       </div>
