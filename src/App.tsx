@@ -7,6 +7,7 @@ import Scenes from './pages/Scenes'
 import PricingPage from './pages/PricingPage'
 import About from './pages/About'
 import Privacy from './pages/Privacy'
+import Download from './pages/Download'
 import DashboardLayout from './pages/dashboard/DashboardLayout'
 import Overview from './pages/dashboard/Overview'
 import Subscription from './pages/dashboard/Subscription'
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/product" element={<Product />} />
             <Route path="/scenes" element={<Scenes />} />
             <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/download" element={<Download />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
           </Route>

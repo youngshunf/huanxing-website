@@ -5,10 +5,12 @@ import { useAuthStore } from '../stores/useAuthStore'
 import { useThemeStore } from '../stores/useThemeStore'
 import ThemeToggle from './ThemeToggle'
 
+// route:true 走 react-router Link（跨页路由），否则 <a> 走同页锚点
 const navLinks = [
   { label: '特性', href: '#features' },
   { label: '养成', href: '#growth' },
   { label: '定价', href: '#pricing' },
+  { label: '下载', href: '/download', route: true },
 ]
 
 export default function Header() {
@@ -56,15 +58,25 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-text-secondary transition-colors hover:text-text-primary"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) =>
+            link.route ? (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-text-secondary transition-colors hover:text-text-primary"
+              >
+                {link.label}
+              </a>
+            ),
+          )}
 
           <ThemeToggle />
 
@@ -129,16 +141,27 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="border-t border-divider bg-space-black/95 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-1 px-4 py-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.route ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-lg px-4 py-3 text-sm text-text-secondary transition-colors hover:bg-space-float hover:text-text-primary"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ),
+            )}
 
             {isLoggedIn ? (
               <>

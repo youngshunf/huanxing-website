@@ -1,9 +1,19 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { Download } from 'lucide-react'
 import { useThemeStore } from '../stores/useThemeStore'
+import { useLatestRelease } from '../hooks/useLatestRelease'
+import { assetDownloadUrl, detectOsLabel, detectPreferredTarget } from '../api/release'
 
 export default function Hero() {
   const resolvedTheme = useThemeStore((s) => s.resolvedTheme)
   const isDark = resolvedTheme === 'dark'
+
+  // 动态最新版本 + 当前平台首选安装包（拉取失败则降级到 /download 页）
+  const { release, loading } = useLatestRelease()
+  const preferredTarget = detectPreferredTarget()
+  const preferredInstaller = release?.installers?.[preferredTarget] ?? null
+  const osLabel = detectOsLabel()
 
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 md:px-8">
@@ -89,16 +99,60 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
+            className="flex flex-col items-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <a
-              href="#pricing"
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.4)]"
-            >
-              开始唤星
-            </a>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#pricing"
+                className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37,99,235,0.4)]"
+              >
+                开始唤星
+              </a>
+
+              {/* 下载桌面端：命中当前平台安装包则直下，否则跳下载页 */}
+              {loading ? (
+                <span className="inline-flex items-center gap-2 rounded-lg bg-space-panel px-7 py-3 text-lg font-semibold text-text-tertiary">
+                  <Download className="h-5 w-5" />
+                  获取最新版…
+                </span>
+              ) : preferredInstaller ? (
+                <a
+                  href={assetDownloadUrl(preferredInstaller)}
+                  className="inline-flex items-center gap-2 rounded-lg bg-space-panel px-7 py-3 text-lg font-semibold text-text-primary ring-1 ring-star-blue/40 transition-all duration-300 hover:ring-star-blue hover:shadow-[0_0_20px_rgba(37,99,235,0.25)]"
+                >
+                  <Download className="h-5 w-5 text-star-blue" />
+                  下载桌面端 · {osLabel}
+                </a>
+              ) : (
+                <Link
+                  to="/download"
+                  className="inline-flex items-center gap-2 rounded-lg bg-space-panel px-7 py-3 text-lg font-semibold text-text-primary ring-1 ring-star-blue/40 transition-all duration-300 hover:ring-star-blue hover:shadow-[0_0_20px_rgba(37,99,235,0.25)]"
+                >
+                  <Download className="h-5 w-5 text-star-blue" />
+                  下载桌面端
+                </Link>
+              )}
+            </div>
+
+            {/* 版本说明：动态回显最新版本号 + 跳全平台下载页 */}
+            <p className="text-sm text-text-tertiary">
+              {release?.version ? (
+                <>
+                  最新版本 <span className="font-medium text-text-secondary">v{release.version}</span>
+                  <span className="mx-2 opacity-40">·</span>
+                  支持 macOS / Windows / Linux
+                </>
+              ) : (
+                <>桌面端支持 macOS / Windows / Linux</>
+              )}
+              <span className="mx-2 opacity-40">·</span>
+              <Link to="/download" className="text-star-blue transition-colors hover:text-star-purple">
+                查看所有平台 →
+              </Link>
+            </p>
           </motion.div>
         </div>
       </div>
