@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>场景工作流原型 · 唤星 Astra</title>
+  <meta name="description" content="唤星工作台「场景」机制原型：从一个想法到落地的完整链路，逐环派分身、串应用、出产物。" />
+  <style>
+    :root{
+      --brand:#2563EB; --brand-press:#1D4ED8;
+      --canvas:#F8FAFC; --card:#FFFFFF; --border:#E5E9F0;
+      --fg:#1F2328; --fg-2:#565f6b; --fg-3:#8A93A0;
+      --teal:#0D9488;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      background:var(--canvas); color:var(--fg);
+      font:14px/1.6 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Segoe UI',system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:1080px;margin:0 auto;padding:64px 24px 88px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--brand);
+      background:rgba(37,99,235,.08);border-radius:999px;padding:6px 14px}
+    h1{font-size:34px;line-height:1.2;font-weight:800;letter-spacing:-.02em;margin:20px 0 12px}
+    .lead{font-size:16px;color:var(--fg-2);max-width:62ch;margin:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:40px}
+    a.card{
+      display:block;text-decoration:none;color:inherit;background:var(--card);
+      border:1px solid var(--border);border-radius:16px;padding:26px 24px;
+      transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s,border-color .18s;
+      box-shadow:0 1px 2px rgba(16,24,40,.04);
+    }
+    a.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(16,24,40,.10);border-color:#cdd7e6}
+    .badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin-bottom:14px}
+    .b-brand{color:var(--brand);background:rgba(37,99,235,.10)}
+    .b-teal{color:var(--teal);background:rgba(13,148,136,.10)}
+    .b-slate{color:var(--fg-2);background:#eef1f5}
+    .card h3{margin:0 0 6px;font-size:18px;font-weight:700;letter-spacing:-.01em}
+    .card p{margin:0;color:var(--fg-2);font-size:14px}
+    .chev{margin-top:16px;display:inline-flex;align-items:center;gap:6px;color:var(--brand);font-weight:600;font-size:14px}
+    .foot{margin-top:44px;color:var(--fg-3);font-size:13px}
+    .foot a{color:var(--fg-2)}
+    @media (prefers-color-scheme: dark){
+      :root{--canvas:#0f141b;--card:#161c25;--border:#232c39;--fg:#e8edf4;--fg-2:#aab4c2;--fg-3:#7c869a}
+      a.card:hover{border-color:#31405a}
+      .b-slate{background:#1e2836;color:#aab4c2}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="eyebrow">场景 · Scenario · 交互原型</span>
+    <h1>从一个想法，到落地成事</h1>
+    <p class="lead">唤星工作台的「场景」是一条领域链路——把「分身 × AI-Native 应用」按行业打包成从想法到落地的完整路径。你只管在每一环派分身，产物顺着链路自己往下走。以下是高保真交互原型。</p>
+
+    <div class="grid">
+      <a class="card" href="工作台首页-场景重设计-原型.html">
+        <span class="badge b-brand">工作台首页</span>
+        <h3>场景为主 · 首页重设计</h3>
+        <p>进行中场景卡（迷你链路地图）+ 开启新场景模板条 + 全部应用降级入口。</p>
+        <span class="chev">查看原型 →</span>
+      </a>
+
+      <a class="card" href="场景-总览画廊-原型.html">
+        <span class="badge b-brand">场景总览</span>
+        <h3>场景画廊 · 机制说明</h3>
+        <p>四步闭环讲清机制，按领域分组的可开启场景（个人创业 / 金融投研 / 企业办公 / 专业服务）。</p>
+        <span class="chev">查看原型 →</span>
+      </a>
+
+      <a class="card" href="场景-一人公司-原型.html">
+        <span class="badge b-brand">一人公司</span>
+        <h3>场景详情 · 8 环链路（旗舰）</h3>
+        <p>想法 → 调研 → 方案 → 品牌 → 产品 → 运营 → 获客。链路地图 + 逐环派分身 + 产物顺链流动。</p>
+        <span class="chev">查看原型 →</span>
+      </a>
+
+      <a class="card" href="场景-金融投研-原型.html">
+        <span class="badge b-teal">金融投研</span>
+        <h3>场景详情 · 7 环链路（第二域）</h3>
+        <p>命题 → 行情 → 调研 → 策略 → 回测 → 研报 → 分发。同一结构跨领域复用的证明。</p>
+        <span class="chev">查看原型 →</span>
+      </a>
+    </div>
+
+    <p class="foot">这些页面是设计原型（静态 HTML），源文件在 <code>docs/hasn-node设计文档/10-WebUI产品设计/04-原型/</code>，机制设计见 <code>docs/hasn-node设计文档/14-AI-Native应用平台/33-场景工作流(Scenario)机制设计.md</code>。</p>
+  </div>
+</body>
+</html>
