@@ -4,6 +4,8 @@ import SiteLayout from './layouts/SiteLayout'
 import Home from './pages/Home'
 import Product from './pages/Product'
 import Scenes from './pages/Scenes'
+import SoloCompanyScene from './pages/scenes/SoloCompanyScene'
+import FinanceResearchScene from './pages/scenes/FinanceResearchScene'
 import PricingPage from './pages/PricingPage'
 import About from './pages/About'
 import Privacy from './pages/Privacy'
@@ -45,6 +47,8 @@ export default function App() {
             <Route path="/product" element={<Product />} />
             <Route path="/tech" element={<Tech />} />
             <Route path="/scenes" element={<Scenes />} />
+            <Route path="/scenes/solo-company" element={<SoloCompanyScene />} />
+            <Route path="/scenes/finance-research" element={<FinanceResearchScene />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/download" element={<Download />} />
             <Route path="/about" element={<About />} />
