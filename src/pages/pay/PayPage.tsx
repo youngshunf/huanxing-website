@@ -6,9 +6,9 @@ import {
   XCircle, RefreshCw,
 } from 'lucide-react'
 import * as payApi from '../../api/pay'
-import { getTiers } from '../../api/subscription'
+import { getTiers, getPackages } from '../../api/subscription'
 import type { PayChannel, CreateOrderResponse } from '../../api/pay'
-import type { SubscriptionTier } from '../../types'
+import type { SubscriptionTier, CreditPackage } from '../../types'
 import { useSubscriptionStore } from '../../stores/useSubscriptionStore'
 
 /** 计费周期中文 */
@@ -53,6 +53,10 @@ export default function PayPage() {
 
   const tier = params.get('tier') || ''
   const cycle = (params.get('cycle') || 'monthly') as 'monthly' | 'yearly'
+  // 积分包走同一条真实下单链路：?pack=<积分包 ID>。两种商品共用渠道选择、
+  // 二维码/跳转与轮询，只是订单摘要和下单参数不同。
+  const packageId = Number(params.get('pack') || 0) || 0
+  const isCreditPack = packageId > 0
 
   /** 切换计费周期 */
   const setCycle = (c: 'monthly' | 'yearly') => {
@@ -64,6 +68,7 @@ export default function PayPage() {
 
   const [channels, setChannels] = useState<PayChannel[]>([])
   const [tierInfo, setTierInfo] = useState<SubscriptionTier | null>(null)
+  const [packInfo, setPackInfo] = useState<CreditPackage | null>(null)
   const [selectedCode, setSelectedCode] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState<Step>('select')
@@ -81,11 +86,19 @@ export default function PayPage() {
       if (list.length > 0) setSelectedCode(list[0].code)
     }).catch(() => setErrorMsg('获取支付渠道失败'))
 
+    if (isCreditPack) {
+      getPackages().then((list) => {
+        const match = list.find(p => p.id === packageId)
+        if (match) setPackInfo(match)
+      }).catch(() => { /* 价格加载失败不阻塞，最终以订单金额为准 */ })
+      return
+    }
+
     getTiers().then((tiers) => {
       const match = tiers.find(t => t.tier_name === tier)
       if (match) setTierInfo(match)
     }).catch(() => { /* 价格加载失败不阻塞 */ })
-  }, [tier])
+  }, [tier, isCreditPack, packageId])
 
   // 轮询订单状态
   const startPolling = useCallback((orderNo: string) => {
@@ -128,10 +141,10 @@ export default function PayPage() {
 
   // 提交订单
   const handlePay = async () => {
-    if (!selectedCode || !tier) return
+    if (!selectedCode || (!tier && !isCreditPack)) return
 
     // 订阅渠道需要勾选协议
-    if (isSubscriptionChannel(selectedCode) && !agreeContract) {
+    if (!isCreditPack && isSubscriptionChannel(selectedCode) && !agreeContract) {
       setErrorMsg('请先阅读并同意自动续费服务协议')
       return
     }
@@ -139,12 +152,16 @@ export default function PayPage() {
     setLoading(true)
     setErrorMsg('')
     try {
-      const result = await payApi.createOrder({
-        tier,
-        billing_cycle: cycle,
-        channel_code: selectedCode,
-        auto_renew: isSubscriptionChannel(selectedCode),
-      })
+      const result = await payApi.createOrder(
+        isCreditPack
+          ? { order_type: 'credit_pack', package_id: packageId, channel_code: selectedCode }
+          : {
+              tier,
+              billing_cycle: cycle,
+              channel_code: selectedCode,
+              auto_renew: isSubscriptionChannel(selectedCode),
+            },
+      )
       setOrderData(result)
       setStep('paying')
 
@@ -179,8 +196,13 @@ export default function PayPage() {
   // 实时价格（元），来自接口
   const monthlyPrice = tierInfo ? Number(tierInfo.monthly_price) : null
   const yearlyPrice = tierInfo?.yearly_price != null ? Number(tierInfo.yearly_price) : null
-  const displayPrice = cycle === 'yearly' && yearlyPrice != null ? yearlyPrice : monthlyPrice
-  const hasYearlyOption = yearlyPrice != null && yearlyPrice > 0
+  const displayPrice = isCreditPack
+    ? (packInfo ? Number(packInfo.price) : null)
+    : cycle === 'yearly' && yearlyPrice != null
+      ? yearlyPrice
+      : monthlyPrice
+  // 积分包是一次性商品，没有月/年切换
+  const hasYearlyOption = !isCreditPack && yearlyPrice != null && yearlyPrice > 0
 
   // 年付折扣（节省百分比）
   const yearlyDiscount = tierInfo?.yearly_discount != null
@@ -195,7 +217,7 @@ export default function PayPage() {
   const subscribeChannels = channels.filter(ch => getChannelGroup(ch.code) === 'subscribe')
 
   // 无效参数
-  if (!tier) {
+  if (!tier && !isCreditPack) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-space-black">
         <div className="text-center">
@@ -261,11 +283,17 @@ export default function PayPage() {
         <div className="mb-8 rounded-xl border border-divider bg-space-panel p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-text-secondary">订阅套餐</p>
+              <p className="text-sm text-text-secondary">{isCreditPack ? '积分包' : '订阅套餐'}</p>
               <p className="mt-1 text-xl font-bold text-text-primary">
-                唤星AI · {tierName}会员
+                {isCreditPack ? (packInfo?.package_name || '积分包') : `唤星AI · ${tierName}会员`}
               </p>
-              <p className="mt-1 text-sm text-text-secondary">{cycleName}订阅</p>
+              <p className="mt-1 text-sm text-text-secondary">
+                {isCreditPack
+                  ? packInfo
+                    ? `${packInfo.credits}${Number(packInfo.bonus_credits) > 0 ? ` + ${packInfo.bonus_credits} 赠送` : ''} 积分 · 永久有效`
+                    : '积分永久有效'
+                  : `${cycleName}订阅`}
+              </p>
             </div>
             <div className="text-right">
               <p className="text-sm text-text-secondary">需支付</p>

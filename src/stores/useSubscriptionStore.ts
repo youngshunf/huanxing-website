@@ -3,7 +3,6 @@ import type {
   SubscriptionInfo,
   SubscriptionTier,
   CreditPackage,
-  PaymentResult,
   CreditHistory,
 } from '../types'
 import * as subApi from '../api/subscription'
@@ -20,8 +19,6 @@ interface SubscriptionState {
   fetchTiers: () => Promise<void>
   fetchPackages: () => Promise<void>
   fetchCreditHistory: () => Promise<void>
-  upgrade: (tierName: string, period: string) => Promise<PaymentResult>
-  purchaseCredits: (packageId: number) => Promise<PaymentResult>
 }
 
 export const useSubscriptionStore = create<SubscriptionState>((set) => ({
@@ -55,13 +52,5 @@ export const useSubscriptionStore = create<SubscriptionState>((set) => ({
   fetchCreditHistory: async () => {
     const list = await subApi.getBalanceHistory()
     set({ creditHistory: list, historyTotal: list.length })
-  },
-
-  upgrade: async (tierName, period) => {
-    return subApi.upgrade(tierName, period)
-  },
-
-  purchaseCredits: async (packageId) => {
-    return subApi.purchaseCredits(packageId)
   },
 }))
