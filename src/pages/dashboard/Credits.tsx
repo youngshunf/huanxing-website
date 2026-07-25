@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import { Coins, Package, Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Coins, Package } from 'lucide-react'
 import { useSubscriptionStore } from '../../stores/useSubscriptionStore'
 
 const creditTypeMap: Record<string, string> = {
@@ -21,11 +22,9 @@ export default function Credits() {
     fetchInfo,
     fetchPackages,
     fetchCreditHistory,
-    purchaseCredits,
   } = useSubscriptionStore()
 
-  const [purchasing, setPurchasing] = useState<number | null>(null)
-  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchInfo()
@@ -33,23 +32,10 @@ export default function Credits() {
     fetchCreditHistory()
   }, [fetchInfo, fetchPackages, fetchCreditHistory])
 
-  const handlePurchase = async (packageId: number) => {
-    setPurchasing(packageId)
-    setMessage('')
-    try {
-      const result = await purchaseCredits(packageId)
-      if (result.success) {
-        setMessage('购买成功！')
-        fetchInfo()
-        fetchCreditHistory()
-      } else {
-        setMessage(result.message || '购买失败')
-      }
-    } catch (e) {
-      setMessage(e instanceof Error ? e.message : '购买失败')
-    } finally {
-      setPurchasing(null)
-    }
+  // 积分包购买改走真实下单与支付：原先的「模拟支付」接口把模拟成功当成购买成功，
+  // 页面显示已到账但额度从未发放，该接口已在云端退役。
+  const handlePurchase = (packageId: number) => {
+    navigate(`/pay?pack=${packageId}`)
   }
 
   const totalCredits = subscription?.current_credits ?? 0
@@ -158,21 +144,14 @@ export default function Credits() {
                       <span className="text-lg font-bold text-text-primary">¥{Number(pkg.price)}</span>
                       <button
                         onClick={() => handlePurchase(pkg.id)}
-                        disabled={purchasing === pkg.id}
-                        className="flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-4 py-2 text-sm font-medium text-white transition-all hover:brightness-110 disabled:opacity-60"
+                        className="flex items-center gap-1.5 rounded-lg bg-star-purple px-4 py-2 text-sm font-medium text-white transition-all hover:brightness-110"
                       >
-                        {purchasing === pkg.id && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                         购买
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
-              {message && (
-                <p className={`mt-3 text-sm ${message.includes('成功') ? 'text-green-500' : 'text-red-500'}`}>
-                  {message}
-                </p>
-              )}
             </div>
           )}
 

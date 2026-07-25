@@ -4,7 +4,6 @@ import type {
   SubscriptionTier,
   CreditPackage,
   UpgradeCalculation,
-  PaymentResult,
   CreditHistory,
 } from '../types'
 
@@ -32,23 +31,8 @@ export function calculateUpgrade(tierName: string, subscriptionType: string) {
   })
 }
 
-// 升级订阅
-export function upgrade(tierName: string, subscriptionType: string) {
-  return request<PaymentResult>({
-    method: 'POST',
-    url: '/user_tier/app/subscription/upgrade',
-    data: { tier_name: tierName, subscription_type: subscriptionType },
-  })
-}
-
-// 购买积分包
-export function purchaseCredits(packageId: number) {
-  return request<PaymentResult>({
-    method: 'POST',
-    url: '/user_tier/app/subscription/purchase',
-    data: { package_id: packageId },
-  })
-}
+// 升级订阅与购买积分包不再有「模拟支付」接口：
+// 两者都走 api/pay.ts 的真实下单（createOrder）+ 支付回调履约，见 pages/pay/PayPage。
 
 // ===== 不需要登录（open/）=====
 

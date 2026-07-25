@@ -7,13 +7,29 @@ export interface PayChannel {
   name: string   // 微信支付 / 支付宝
 }
 
-/** 创建订单参数 */
-export interface CreateOrderParams {
+/** 订阅下单参数 */
+export interface CreateSubscribeOrderParams {
+  order_type?: 'subscribe'
   tier: string          // star_glow / star_shine / star_glory
   billing_cycle: string // monthly / yearly
   channel_code: string  // wx_native / alipay_pc
   auto_renew?: boolean
 }
+
+/** 积分包下单参数 */
+export interface CreateCreditPackOrderParams {
+  order_type: 'credit_pack'
+  package_id: number
+  channel_code: string
+}
+
+/**
+ * 创建订单参数。
+ *
+ * 积分包购买必须和订阅走同一条真实下单链路：下单 → 第三方支付回调验签 → 履约事件 → 额度到账。
+ * 原先官网调用的「模拟支付」接口把模拟成功当成真实购买成功，已在云端退役。
+ */
+export type CreateOrderParams = CreateSubscribeOrderParams | CreateCreditPackOrderParams
 
 /** 创建订单响应 */
 export interface CreateOrderResponse {
