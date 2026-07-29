@@ -11,6 +11,11 @@ const latestRelease: LatestRelease = {
   channel: 'stable',
   published_time: '2026-07-30T00:00:00Z',
   release_notes_md: '修复桌面端启动问题，并改进本机发布流程。',
+  platform_versions: {
+    'darwin-aarch64': '0.3.0',
+    'darwin-x86_64': '0.3.0',
+    'windows-x86_64': '0.3.1',
+  },
   installers: {
     'darwin-aarch64': {
       id: 1,
@@ -74,7 +79,8 @@ describe('下载页', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getAllByText('v0.3.1')).toHaveLength(3)
+    expect(screen.getAllByText('v0.3.0')).toHaveLength(2)
+    expect(screen.getAllByText('v0.3.1')).toHaveLength(1)
     expect(screen.getByText('v0.3.1 更新内容')).toBeInTheDocument()
     expect(
       screen.getByText('修复桌面端启动问题，并改进本机发布流程。'),

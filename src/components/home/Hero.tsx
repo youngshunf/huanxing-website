@@ -39,6 +39,7 @@ export default function Hero() {
   const { release } = useLatestRelease()
   const preferredTarget = detectPreferredTarget()
   const installer = release?.installers?.[preferredTarget]
+  const installerVersion = release?.platform_versions?.[preferredTarget]
   const osLabel = detectOsLabel()
 
   return (
@@ -188,9 +189,9 @@ export default function Hero() {
               >
                 <DownloadGlyph />
                 下载 {osLabel} 客户端
-                {release?.version && (
+                {installerVersion && (
                   <span className="ml-1 rounded bg-white/20 px-2 py-0.5 text-xs font-medium text-white/90">
-                    v{release.version}
+                    v{installerVersion}
                   </span>
                 )}
               </a>

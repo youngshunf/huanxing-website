@@ -57,6 +57,7 @@ export default function Download() {
             {PLATFORM_META.map((meta, i) => {
               const Icon = platformIcon(meta.os)
               const installer = release?.installers?.[meta.target] ?? null
+              const installerVersion = release?.platform_versions?.[meta.target] ?? null
               const isPreferred = meta.target === preferredTarget
               return (
                 <ScrollReveal key={meta.target} delay={i * 0.08}>
@@ -74,9 +75,9 @@ export default function Download() {
                       <div>
                         <h3 className="flex items-center gap-2 font-semibold text-text-primary">
                           {meta.label}
-                          {installer && release?.version && (
+                          {installer && installerVersion && (
                             <span className="rounded bg-star-blue/10 px-1.5 py-0.5 text-xs font-medium text-star-blue">
-                              v{release.version}
+                              v{installerVersion}
                             </span>
                           )}
                           {isPreferred && (

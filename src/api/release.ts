@@ -36,6 +36,8 @@ export interface LatestRelease {
   channel: string
   published_time: string | null
   release_notes_md: string | null
+  // platform_target → 对应安装包自己的版本
+  platform_versions: Record<string, string>
   // platform_target → installer 资产（仅含 installer，不含 updater）
   installers: Record<string, ReleaseAsset>
 }
