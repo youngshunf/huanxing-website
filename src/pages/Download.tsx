@@ -74,6 +74,11 @@ export default function Download() {
                       <div>
                         <h3 className="flex items-center gap-2 font-semibold text-text-primary">
                           {meta.label}
+                          {installer && release?.version && (
+                            <span className="rounded bg-star-blue/10 px-1.5 py-0.5 text-xs font-medium text-star-blue">
+                              v{release.version}
+                            </span>
+                          )}
                           {isPreferred && (
                             <span className="rounded bg-star-blue/15 px-1.5 py-0.5 text-xs font-medium text-star-blue">
                               推荐
@@ -119,7 +124,7 @@ export default function Download() {
               <p>
                 桌面端<strong className="text-text-primary">内置自动更新</strong>：启动时会自动检查新版本，
                 有更新时后台静默下载并在你确认后一键升级，也可以在应用内「关于」页手动检查。
-                所有安装包均经过<strong className="text-text-primary">数字签名校验</strong>，确保来源可信、内容完整。
+                自动更新包均经过<strong className="text-text-primary">数字签名校验</strong>，确保下载内容完整。
               </p>
             </div>
           </ScrollReveal>
