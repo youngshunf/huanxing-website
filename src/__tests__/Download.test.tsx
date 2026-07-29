@@ -10,7 +10,8 @@ const latestRelease: LatestRelease = {
   version: '0.3.1',
   channel: 'stable',
   published_time: '2026-07-30T00:00:00Z',
-  release_notes_md: '修复桌面端启动问题，并改进本机发布流程。',
+  release_notes_md:
+    '- **新增**：支持按平台独立发布安装包\n- **修复**：解决桌面端启动问题',
   platform_versions: {
     'darwin-aarch64': '0.3.0',
     'darwin-x86_64': '0.3.0',
@@ -72,7 +73,7 @@ describe('下载页', () => {
     )
   })
 
-  it('在每个可下载平台卡片展示当前版本，并显示真实更新内容', () => {
+  it('展示各平台版本并将更新内容渲染为 Markdown', () => {
     render(
       <MemoryRouter>
         <Download />
@@ -82,9 +83,12 @@ describe('下载页', () => {
     expect(screen.getAllByText('v0.3.0')).toHaveLength(2)
     expect(screen.getAllByText('v0.3.1')).toHaveLength(1)
     expect(screen.getByText('v0.3.1 更新内容')).toBeInTheDocument()
-    expect(
-      screen.getByText('修复桌面端启动问题，并改进本机发布流程。'),
-    ).toBeInTheDocument()
+    expect(screen.getByText('新增').tagName).toBe('STRONG')
+    expect(screen.getByText('修复').tagName).toBe('STRONG')
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+      '新增：支持按平台独立发布安装包',
+      '修复：解决桌面端启动问题',
+    ])
     expect(screen.queryByText('所有安装包均经过')).not.toBeInTheDocument()
   })
 })

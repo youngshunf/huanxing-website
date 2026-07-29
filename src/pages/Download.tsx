@@ -1,5 +1,6 @@
 import { Apple, CalendarDays, Download as DownloadIcon, History, Monitor, RefreshCw, Terminal } from 'lucide-react'
 import PageHero from '../components/shared/PageHero'
+import MarkdownContent from '../components/shared/MarkdownContent'
 import ScrollReveal from '../components/shared/ScrollReveal'
 import SectionCTA from '../components/shared/SectionCTA'
 import { useLatestRelease } from '../hooks/useLatestRelease'
@@ -140,10 +141,8 @@ export default function Download() {
               <h2 className="mb-6 text-center text-2xl font-bold text-text-primary">
                 v{release.version} 更新内容
               </h2>
-              <div className="rounded-xl border border-divider bg-space-panel p-6">
-                <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-text-secondary">
-                  {release.release_notes_md}
-                </pre>
+              <div className="rounded-xl border border-divider bg-space-panel p-6 sm:p-7">
+                <MarkdownContent content={release.release_notes_md} />
               </div>
             </ScrollReveal>
           </div>
@@ -190,9 +189,7 @@ export default function Download() {
                         </div>
 
                         {item.release_notes_md && (
-                          <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
-                            {item.release_notes_md}
-                          </p>
+                          <MarkdownContent content={item.release_notes_md} className="mt-4" />
                         )}
 
                         <div className="mt-5 flex flex-wrap gap-2">
