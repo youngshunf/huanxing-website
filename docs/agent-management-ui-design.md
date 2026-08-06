@@ -2,7 +2,7 @@
 
 ## 1. 目标
 
-在 `huanxing-website` 登录后的控制台中新增 Agent 管理能力，让用户可以在网页端完成：
+在 `hasn-website` 登录后的控制台中新增 Agent 管理能力，让用户可以在网页端完成：
 
 1. 创建一个或多个托管 Agent；
 2. 查看和管理 Agent 状态；
@@ -11,13 +11,13 @@
 5. 查看 gateway、workspace、执行沙箱、channel 绑定状态；
 6. 从 Agent 管理页进入 Web Chat。
 
-Web UI 只接入 `huanxing-cloud-backend` 的业务 API，不直接访问 `huanxing-hermes-runtime`。`cloud-backend` 负责鉴权、业务权限和调用 runtime。
+Web UI 只接入 `hasn-cloud-backend` 的业务 API，不直接访问 `huanxing-hermes-runtime`。`cloud-backend` 负责鉴权、业务权限和调用 runtime。
 
 ---
 
 ## 2. 当前前端落点
 
-当前 `huanxing-website` 是 React + Vite + Tailwind 项目，登录后页面统一放在 `/dashboard` 下：
+当前 `hasn-website` 是 React + Vite + Tailwind 项目，登录后页面统一放在 `/dashboard` 下：
 
 - 路由入口：`src/App.tsx`
 - Dashboard 布局：`src/pages/dashboard/DashboardLayout.tsx`

@@ -7,7 +7,7 @@
 
 ## 1. 一句话目标
 
-把 `huanxing-website` 的 Agent 管理 UI 从"骨架 + mock fallback"推到"MVP 端到端真后端可用"：
+把 `hasn-website` 的 Agent 管理 UI 从"骨架 + mock fallback"推到"MVP 端到端真后端可用"：
 
 1. **`src/api/agent.ts` 加 2 个方法** — `listTemplates()` / `getUsageSummary(agentId)`；`sendChatCompletion` 改造为 SSE 流式
 2. **CreateAgentModal 改造** — 模板选择从硬编码改为调 `listTemplates()` 拉真数据；UI 用卡片形式展示（emoji + name + description）
@@ -26,9 +26,9 @@
 
 | 路径 | 用途 |
 |---|---|
-| `huanxing-website/HUANXING-BRAND.md` | 品牌色/语气/字体规范 |
-| `huanxing-website/HUANXING-UI-SPEC.md` | UI 组件规范 |
-| `huanxing-website/CLAUDE.md` | 仓库自身约定 |
+| `hasn-website/HUANXING-BRAND.md` | 品牌色/语气/字体规范 |
+| `hasn-website/HUANXING-UI-SPEC.md` | UI 组件规范 |
+| `hasn-website/CLAUDE.md` | 仓库自身约定 |
 | `docs/agent-management-ui-design.md`（仓内 docs/ 目录） | Agent 管理 UI 设计文档 |
 | `src/api/agent.ts` | 17 个现有方法；本任务加 2 个 + 改 1 个 |
 | `src/api/client.ts` | HTTP 客户端约定（auth header / base URL / 错误处理） |
@@ -143,7 +143,7 @@
 ### 5.7 验收命令
 
 ```bash
-cd huanxing-website
+cd hasn-website
 pnpm install              # 或 npm install，按现有 lockfile
 pnpm typecheck            # tsc --noEmit 无错
 pnpm lint                 # eslint 0 error

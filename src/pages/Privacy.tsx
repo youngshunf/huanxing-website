@@ -2,7 +2,7 @@ import PageHero from '../components/shared/PageHero'
 
 /**
  * 唤星隐私政策页面 /privacy
- * 法律源文件在 huanxing-website/docs/privacy.md，本页面为公开展示入口。
+ * 法律源文件在 hasn-website/docs/privacy.md，本页面为公开展示入口。
  */
 export default function Privacy() {
   return (
@@ -169,7 +169,7 @@ export default function Privacy() {
           <p className="mt-12 text-sm italic">
             本页面为 M1 草案，发布前需法务过目。完整源文件见{' '}
             <a
-              href="https://github.com/youngshunf/huanxing-website/blob/main/docs/privacy.md"
+              href="https://github.com/youngshunf/hasn-website/blob/main/docs/privacy.md"
               className="text-star-blue"
               target="_blank"
               rel="noreferrer"
