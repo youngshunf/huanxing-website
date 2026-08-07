@@ -36,8 +36,24 @@ export interface LatestRelease {
   channel: string
   published_time: string | null
   release_notes_md: string | null
+  // platform_target → 对应安装包自己的版本
+  platform_versions: Record<string, string>
   // platform_target → installer 资产（仅含 installer，不含 updater）
   installers: Record<string, ReleaseAsset>
+}
+
+// 已正式发布的历史版本（草稿批次不会出现在公开接口）。
+export interface ReleaseVersion {
+  id: number
+  version: string
+  channel: string
+  release_notes_md: string | null
+  status: 'published'
+  is_latest: boolean
+  release_tag: string | null
+  published_time: string | null
+  created_time: string
+  assets: ReleaseAsset[]
 }
 
 // 拉取最新版本；失败（端点未上线 / 尚无发布版本 / 网络错误）时返回 null，
@@ -53,6 +69,31 @@ export async function getLatestRelease(channel = 'stable'): Promise<LatestReleas
     // 静默降级：调用方据 null 兜底
     return null
   }
+}
+
+// 拉取正式发布历史；后端按发布时间倒序返回，并过滤草稿和已下线版本。
+export async function getReleaseHistory(
+  channel = 'stable',
+  limit = 20,
+): Promise<ReleaseVersion[]> {
+  try {
+    return await request<ReleaseVersion[]>({
+      url: '/release/open/releases',
+      method: 'GET',
+      params: { channel, limit },
+    })
+  } catch {
+    return []
+  }
+}
+
+// 从版本资产列表中提取分平台安装包。
+export function installersOf(release: ReleaseVersion): Record<string, ReleaseAsset> {
+  return Object.fromEntries(
+    release.assets
+      .filter((asset) => asset.asset_kind === 'installer')
+      .map((asset) => [asset.platform_target, asset]),
+  )
 }
 
 // 计数下载链接：走后端 302 重定向端点，累加下载计数后跳七牛 CDN。

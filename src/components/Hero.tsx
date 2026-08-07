@@ -13,6 +13,7 @@ export default function Hero() {
   const { release, loading } = useLatestRelease()
   const preferredTarget = detectPreferredTarget()
   const preferredInstaller = release?.installers?.[preferredTarget] ?? null
+  const preferredVersion = release?.platform_versions?.[preferredTarget] ?? null
   const osLabel = detectOsLabel()
 
   return (
@@ -137,11 +138,11 @@ export default function Hero() {
               )}
             </div>
 
-            {/* 版本说明：动态回显最新版本号 + 跳全平台下载页 */}
+            {/* 版本说明：动态回显当前平台安装包版本 + 跳全平台下载页 */}
             <p className="text-sm text-text-tertiary">
-              {release?.version ? (
+              {preferredVersion ? (
                 <>
-                  最新版本 <span className="font-medium text-text-secondary">v{release.version}</span>
+                  当前平台版本 <span className="font-medium text-text-secondary">v{preferredVersion}</span>
                   <span className="mx-2 opacity-40">·</span>
                   支持 macOS / Windows / Linux
                 </>

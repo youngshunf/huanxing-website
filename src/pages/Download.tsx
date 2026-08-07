@@ -1,12 +1,15 @@
-import { Apple, Download as DownloadIcon, Monitor, RefreshCw, Terminal } from 'lucide-react'
+import { Apple, CalendarDays, Download as DownloadIcon, History, Monitor, RefreshCw, Terminal } from 'lucide-react'
 import PageHero from '../components/shared/PageHero'
+import MarkdownContent from '../components/shared/MarkdownContent'
 import ScrollReveal from '../components/shared/ScrollReveal'
 import SectionCTA from '../components/shared/SectionCTA'
 import { useLatestRelease } from '../hooks/useLatestRelease'
+import { useReleaseHistory } from '../hooks/useReleaseHistory'
 import {
   assetDownloadUrl,
   detectPreferredTarget,
   formatFileSize,
+  installersOf,
   PLATFORM_META,
   type PlatformMeta,
 } from '../api/release'
@@ -20,7 +23,9 @@ function platformIcon(os: PlatformMeta['os']) {
 
 export default function Download() {
   const { release, loading } = useLatestRelease()
+  const { releases, loading: historyLoading } = useReleaseHistory()
   const preferredTarget = detectPreferredTarget()
+  const history = releases.filter((item) => item.version !== release?.version)
 
   return (
     <>
@@ -53,6 +58,7 @@ export default function Download() {
             {PLATFORM_META.map((meta, i) => {
               const Icon = platformIcon(meta.os)
               const installer = release?.installers?.[meta.target] ?? null
+              const installerVersion = release?.platform_versions?.[meta.target] ?? null
               const isPreferred = meta.target === preferredTarget
               return (
                 <ScrollReveal key={meta.target} delay={i * 0.08}>
@@ -70,6 +76,11 @@ export default function Download() {
                       <div>
                         <h3 className="flex items-center gap-2 font-semibold text-text-primary">
                           {meta.label}
+                          {installer && installerVersion && (
+                            <span className="rounded bg-star-blue/10 px-1.5 py-0.5 text-xs font-medium text-star-blue">
+                              v{installerVersion}
+                            </span>
+                          )}
                           {isPreferred && (
                             <span className="rounded bg-star-blue/15 px-1.5 py-0.5 text-xs font-medium text-star-blue">
                               推荐
@@ -115,7 +126,7 @@ export default function Download() {
               <p>
                 桌面端<strong className="text-text-primary">内置自动更新</strong>：启动时会自动检查新版本，
                 有更新时后台静默下载并在你确认后一键升级，也可以在应用内「关于」页手动检查。
-                所有安装包均经过<strong className="text-text-primary">数字签名校验</strong>，确保来源可信、内容完整。
+                自动更新包均经过<strong className="text-text-primary">数字签名校验</strong>，确保下载内容完整。
               </p>
             </div>
           </ScrollReveal>
@@ -130,12 +141,85 @@ export default function Download() {
               <h2 className="mb-6 text-center text-2xl font-bold text-text-primary">
                 v{release.version} 更新内容
               </h2>
-              <div className="rounded-xl border border-divider bg-space-panel p-6">
-                <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-text-secondary">
-                  {release.release_notes_md}
-                </pre>
+              <div className="rounded-xl border border-divider bg-space-panel p-6 sm:p-7">
+                <MarkdownContent content={release.release_notes_md} />
               </div>
             </ScrollReveal>
+          </div>
+        </section>
+      )}
+
+      {/* 历史版本只展示已经完整发布的批次，下载仍走计数重定向。 */}
+      {(historyLoading || history.length > 0) && (
+        <section className="relative z-10 px-4 py-12 sm:px-6 md:px-8 lg:px-12">
+          <div className="mx-auto max-w-4xl">
+            <ScrollReveal>
+              <div className="mb-7 flex items-center justify-center gap-2">
+                <History className="h-6 w-6 text-star-blue" />
+                <h2 className="text-2xl font-bold text-text-primary">历史版本</h2>
+              </div>
+            </ScrollReveal>
+
+            {historyLoading ? (
+              <div className="space-y-4">
+                {[0, 1].map((item) => (
+                  <div key={item} className="h-40 animate-pulse rounded-xl bg-space-panel" />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {history.map((item, index) => {
+                  const installers = installersOf(item)
+                  return (
+                    <ScrollReveal key={item.id} delay={Math.min(index * 0.05, 0.2)}>
+                      <article className="rounded-xl border border-divider bg-space-panel p-6">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <h3 className="text-lg font-semibold text-text-primary">
+                              唤星AI v{item.version}
+                            </h3>
+                            <div className="mt-1 flex items-center gap-1.5 text-xs text-text-tertiary">
+                              <CalendarDays className="h-3.5 w-3.5" />
+                              {item.published_time
+                                ? new Date(item.published_time).toLocaleDateString('zh-CN')
+                                : '发布时间未知'}
+                              {item.release_tag && <span>· {item.release_tag}</span>}
+                            </div>
+                          </div>
+                        </div>
+
+                        {item.release_notes_md && (
+                          <MarkdownContent content={item.release_notes_md} className="mt-4" />
+                        )}
+
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {PLATFORM_META.map((meta) => {
+                            const installer = installers[meta.target]
+                            if (!installer) return null
+                            const Icon = platformIcon(meta.os)
+                            return (
+                              <a
+                                key={meta.target}
+                                href={assetDownloadUrl(installer)}
+                                className="inline-flex items-center gap-2 rounded-lg bg-star-blue px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-star-purple"
+                              >
+                                <Icon className="h-4 w-4" />
+                                {meta.label}
+                                {installer.file_size > 0 && (
+                                  <span className="opacity-75">
+                                    {formatFileSize(installer.file_size)}
+                                  </span>
+                                )}
+                              </a>
+                            )
+                          })}
+                        </div>
+                      </article>
+                    </ScrollReveal>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </section>
       )}

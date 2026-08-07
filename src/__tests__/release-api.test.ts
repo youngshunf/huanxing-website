@@ -5,8 +5,10 @@ import {
   detectOsLabel,
   detectPreferredTarget,
   formatFileSize,
+  installersOf,
   PLATFORM_META,
   type ReleaseAsset,
+  type ReleaseVersion,
 } from '../api/release'
 
 // 用真实 UA 字符串驱动平台探测，覆盖 mac/win/linux/兜底
@@ -74,5 +76,22 @@ describe('release api', () => {
     expect(targets).toContain('darwin-x86_64')
     expect(targets).toContain('windows-x86_64')
     expect(targets).toContain('linux-x86_64')
+  })
+
+  it('installersOf 只保留安装包并按平台索引', () => {
+    const updater = { ...sampleAsset, id: 43, asset_kind: 'updater' }
+    const release: ReleaseVersion = {
+      id: 3,
+      version: '0.3.0',
+      channel: 'stable',
+      release_notes_md: '改进桌面端体验。',
+      status: 'published',
+      is_latest: false,
+      release_tag: 'v0.3.0',
+      published_time: '2026-07-29T00:00:00Z',
+      created_time: '2026-07-29T00:00:00Z',
+      assets: [sampleAsset, updater],
+    }
+    expect(installersOf(release)).toEqual({ 'darwin-aarch64': sampleAsset })
   })
 })
