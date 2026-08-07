@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Bot, RotateCcw, Send } from 'lucide-react'
-import { getAgent, sendChatCompletionStream } from '../../../api/agent'
+import { getAgent, getChatHistory, sendChatCompletionStream } from '../../../api/agent'
 import type { AgentDetail, ChatMessage } from '../../../types/agent'
 
 interface DisplayMessage extends ChatMessage {
@@ -26,6 +26,23 @@ export default function AgentChatPage() {
   useEffect(() => {
     loadAgent()
   }, [loadAgent])
+
+  useEffect(() => {
+    let cancelled = false
+    getChatHistory(agentId)
+      .then((history) => {
+        if (cancelled) return
+        if (Array.isArray(history.messages) && history.messages.length > 0) {
+          setMessages(history.messages.map((m) => ({ ...m })))
+        }
+      })
+      .catch(() => {
+        // 历史加载失败不阻断 UI（用户可继续新对话）
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [agentId])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -127,19 +144,41 @@ export default function AgentChatPage() {
             <p className="mt-2 text-sm">这里通过 cloud-backend 的 Agent Chat API 流式接收回复，每个 token 会即时呈现。</p>
           </div>
         )}
-        {messages.map((message, index) => (
-          <div
-            key={`${message.role}-${index}`}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+        {messages.map((message, index) => {
+          const isUser = message.role === 'user'
+          const isThinking = message.streaming && !message.content
+          return (
             <div
-              className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-sm ${message.role === 'user' ? 'bg-star-purple text-white' : 'border border-divider bg-space-black text-text-primary'}`}
+              key={`${message.role}-${index}`}
+              className={`flex items-end gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}
             >
-              {message.content}
-              {message.streaming && <span className="ml-0.5 inline-block animate-pulse text-star-purple">▋</span>}
+              {!isUser && (
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-star-purple/15 text-star-purple ring-1 ring-star-purple/30">
+                  <Bot className="h-4 w-4" />
+                </div>
+              )}
+              <div
+                className={`max-w-[85%] whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-sm ${isUser ? 'bg-star-purple text-white' : 'border border-divider bg-space-black text-text-primary'}`}
+              >
+                {isThinking ? (
+                  <span className="inline-flex items-center gap-2 text-text-secondary">
+                    <span>{agent?.agent_name || '助理'}正在思考</span>
+                    <span className="inline-flex gap-0.5">
+                      <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-star-purple [animation-delay:-0.3s]"></span>
+                      <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-star-purple [animation-delay:-0.15s]"></span>
+                      <span className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-star-purple"></span>
+                    </span>
+                  </span>
+                ) : (
+                  <>
+                    {message.content}
+                    {message.streaming && <span className="ml-0.5 inline-block animate-pulse text-star-purple">▋</span>}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         {streamError && (
           <div className="flex items-center justify-center gap-2 text-sm text-red-400">
             <span>{streamError}</span>

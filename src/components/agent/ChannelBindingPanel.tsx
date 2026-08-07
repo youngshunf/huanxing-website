@@ -16,11 +16,17 @@ export default function ChannelBindingPanel({ agentId, onChanged }: { agentId: s
   const [manualAppId, setManualAppId] = useState('')
   const [manualSecret, setManualSecret] = useState('')
   const [notice, setNotice] = useState('')
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
     setLoading(true)
+    setLoadError(null)
     try {
       setChannels(await listChannels(agentId))
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '渠道列表加载失败'
+      setLoadError(msg)
+      setChannels([])
     } finally {
       setLoading(false)
     }
@@ -115,6 +121,12 @@ export default function ChannelBindingPanel({ agentId, onChanged }: { agentId: s
 
   return (
     <div className="space-y-4">
+      {loadError && (
+        <div className="flex items-center justify-between gap-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          <span>渠道列表加载失败：{loadError}</span>
+          <button type="button" onClick={refresh} className="shrink-0 rounded-md border border-red-500/50 px-3 py-1 text-xs text-red-200 hover:bg-red-500/20">重试</button>
+        </div>
+      )}
       {notice && <div className="rounded-lg border border-star-blue/30 bg-star-blue/10 px-4 py-3 text-sm text-star-blue">{notice}</div>}
       <div className="grid gap-4 lg:grid-cols-2">
         {channels.map((channel) => (

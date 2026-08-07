@@ -186,11 +186,11 @@ export function UsageSummaryCard({ agentId }: { agentId: string }) {
               <div className="mt-1 text-2xl font-semibold text-star-gold">{formatCost(usage.total_cost)}</div>
             </div>
           </div>
-          {usage.by_model.length > 0 ? (
+          {(usage.by_model ?? []).length > 0 ? (
             <div>
               <div className="mb-2 text-xs uppercase tracking-wide text-text-secondary">按模型分布</div>
               <ul className="space-y-2 text-sm">
-                {usage.by_model.map((row) => (
+                {(usage.by_model ?? []).map((row) => (
                   <li
                     key={row.model_name}
                     className="flex items-center justify-between gap-3 rounded-lg border border-divider bg-space-black px-3 py-2"
