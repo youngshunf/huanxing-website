@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowUp, Loader2 } from 'lucide-react'
 import { useSubscriptionStore } from '../../stores/useSubscriptionStore'
 import * as subApi from '../../api/subscription'
+import { tierDisplayColorMap } from '../../data/pricingPlans'
 import type { UpgradeCalculation } from '../../types'
 
 export default function Subscription() {
@@ -18,14 +19,8 @@ export default function Subscription() {
     fetchTiers()
   }, [fetchInfo, fetchTiers])
 
-  const currentTierName = subscription?.tier_display_name || '微星'
-
-  const tierColorMap: Record<string, string> = {
-    '微星': '#6E7681',
-    '明星': '#2563EB',
-    '恒星': '#1D4ED8',
-    '超新星': '#FFD93D',
-  }
+  const currentTierName = subscription?.tier_display_name || '免费版'
+  const currentTierColor = tierDisplayColorMap[currentTierName] || '#6E7681'
 
   const handleCalculate = async (tierName: string) => {
     setSelectedTier(tierName)
@@ -67,18 +62,17 @@ export default function Subscription() {
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-full"
                 style={{
-                  background: `radial-gradient(circle, ${tierColorMap[currentTierName] || '#6E7681'} 0%, transparent 70%)`,
-                  boxShadow: `0 0 20px ${tierColorMap[currentTierName] || '#6E7681'}40`,
+                  backgroundColor: `${currentTierColor}20`,
                 }}
               >
                 <div
                   className="h-3 w-3 rounded-full"
-                  style={{ backgroundColor: tierColorMap[currentTierName], boxShadow: `0 0 8px ${tierColorMap[currentTierName]}` }}
+                  style={{ backgroundColor: currentTierColor }}
                 />
               </div>
               <div>
                 <div className="text-sm text-text-secondary">当前等级</div>
-                <div className="text-xl font-bold" style={{ color: tierColorMap[currentTierName] }}>
+                <div className="text-xl font-bold" style={{ color: currentTierColor }}>
                   {currentTierName}
                 </div>
               </div>
@@ -92,10 +86,10 @@ export default function Subscription() {
 
           {/* 等级列表 */}
           <h2 className="mb-4 text-lg font-semibold text-text-primary">全部等级</h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {tiers.map((tier) => {
               const isCurrent = tier.display_name === currentTierName
-              const color = tierColorMap[tier.display_name] || '#6E7681'
+              const color = tierDisplayColorMap[tier.display_name] || '#6E7681'
               const isSelected = selectedTier === tier.tier_name
 
               return (
@@ -162,7 +156,7 @@ export default function Subscription() {
               <div className="flex gap-3">
                 <button
                   onClick={handleUpgrade}
-                  className="flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-6 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
+                  className="flex items-center gap-2 rounded-lg bg-star-blue px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-star-blue/90"
                 >
                   去支付
                 </button>

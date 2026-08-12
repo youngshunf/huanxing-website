@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { pricingPlans } from '../data/pricingPlans'
+import { pricingPlans, tierDisplayColorMap } from '../data/pricingPlans'
 
 describe('官网订阅档位事实源', () => {
   it('只包含定档的五个稳定键和中文名称', () => {
@@ -31,5 +31,9 @@ describe('官网订阅档位事实源', () => {
     expect(serialized).not.toContain('flagship')
     expect(serialized).not.toContain('恒星')
     expect(serialized).not.toContain('超新星')
+  })
+
+  it('订阅管理的颜色映射也只使用五个正式中文名', () => {
+    expect(Object.keys(tierDisplayColorMap)).toEqual(['免费版', '轻享版', '专业版', '高级版', '旗舰版'])
   })
 })

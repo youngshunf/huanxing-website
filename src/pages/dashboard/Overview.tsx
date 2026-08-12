@@ -30,7 +30,7 @@ export default function Overview() {
     '星耀': '#FFD93D',
   }
 
-  const tierName = subscription?.tier_display_name || '星尘'
+  const tierName = subscription?.tier_display_name || '免费版'
   const tierColor = tierColorMap[tierName] || '#6E7681'
   const totalCredits = subscription?.current_credits ?? 0
 

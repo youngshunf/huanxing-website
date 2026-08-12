@@ -50,4 +50,8 @@ export const tierColorMap: Record<string, string> = Object.fromEntries(
   pricingPlans.map((plan) => [plan.name, plan.color]),
 )
 
+export const tierDisplayColorMap: Record<string, string> = Object.fromEntries(
+  pricingPlans.map((plan) => [plan.display_name, plan.color]),
+)
+
 export const recommendedTierKey = pricingPlans.find((plan) => plan.recommended)?.name
