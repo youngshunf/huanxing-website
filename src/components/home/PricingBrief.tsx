@@ -1,21 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Check } from 'lucide-react'
 import ScrollReveal from '../shared/ScrollReveal'
-
-const plans = [
-  { name: '微星', price: '免费', color: '#6E7681', features: ['每月 100 积分', '基础模型', '7 天记忆'] },
-  { name: '明星', price: '¥128/月', color: '#2563EB', features: ['每月 1000 积分', '基础+进阶模型', '永久记忆'] },
-  { name: '恒星', price: '¥238/月', color: '#1D4ED8', features: ['每月 5000 积分', '全部模型', '永久记忆', '云备份'], recommended: true },
-  { name: '超新星', price: '¥598/月', color: '#FFD93D', features: ['每月 50000 积分', '全部+专属模型', '永久记忆', '专属客服'] },
-]
+import { pricingPlans } from '../../data/pricingPlans'
 
 export default function PricingBrief() {
   return (
     <section className="relative z-10 px-4 py-24 sm:px-6 md:px-8 lg:px-12 md:py-32">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         <ScrollReveal>
           <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
-            <span className="bg-gradient-to-r from-star-purple to-star-blue bg-clip-text text-transparent">
+            <span className="text-star-blue">
               选择你的星
             </span>
           </h2>
@@ -24,8 +18,8 @@ export default function PricingBrief() {
           </p>
         </ScrollReveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {plans.map((plan, i) => (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+          {pricingPlans.map((plan, i) => (
             <ScrollReveal key={plan.name} delay={i * 0.1}>
               <div
                 className={`relative flex h-full flex-col rounded-xl p-6 ${
@@ -39,8 +33,10 @@ export default function PricingBrief() {
                     推荐
                   </div>
                 )}
-                <h3 className="mb-1 text-lg font-semibold" style={{ color: plan.color }}>{plan.name}</h3>
-                <p className="mb-4 text-2xl font-bold text-text-primary">{plan.price}</p>
+                <h3 className="mb-1 text-lg font-semibold" style={{ color: plan.color }}>{plan.display_name}</h3>
+                <p className="mb-4 text-2xl font-bold text-text-primary">
+                  {plan.monthly_price === 0 ? '免费' : `¥${plan.monthly_price}/月`}
+                </p>
                 <ul className="mb-6 flex-1 space-y-2">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2 text-sm text-text-secondary">

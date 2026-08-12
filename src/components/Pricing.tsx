@@ -6,24 +6,7 @@ import { useAuthStore } from '../stores/useAuthStore'
 import { useSubscriptionStore } from '../stores/useSubscriptionStore'
 import { useThemeStore } from '../stores/useThemeStore'
 import type { SubscriptionTier } from '../types'
-
-// 未登录且接口失败时的兜底数据（name 必须与数据库 tier_name 一致）
-const fallbackPlans = [
-  { name: 'free', display_name: '微星', monthly_price: 0, color: '#6E7681', features: ['每月积分：100', '可用模型：基础模型', '记忆保存：7天', '客服支持：社区支持'] },
-  { name: 'pro', display_name: '明星', monthly_price: 128, color: '#2563EB', features: ['每月积分：1000', '可用模型：基础+进阶模型', '记忆存储', '版本管理', '客服支持：邮件支持'] },
-  { name: 'advanced', display_name: '恒星', monthly_price: 238, color: '#1D4ED8', features: ['每月积分：5000', '可用模型：全部模型', '记忆存储', '版本管理', '文件备份', '云存储', '客服支持：优先支持'], recommended: true },
-  { name: 'flagship', display_name: '超新星', monthly_price: 598, color: '#FFD93D', features: ['每月积分：50000', '可用模型：全部模型+专属部署', '记忆存储', '版本管理', '文件备份', '云存储', '专属模型通道', 'SLA 保障', '客服支持：专属客服'] },
-]
-
-const tierColorMap: Record<string, string> = {
-  '微星': '#6E7681',
-  '明星': '#2563EB',
-  '恒星': '#1D4ED8',
-  '超新星': '#FFD93D',
-}
-
-// 推荐等级
-const recommendedTier = '恒星'
+import { pricingPlans, recommendedTierKey, tierColorMap } from '../data/pricingPlans'
 
 /**
  * 将 features JSON 直接转为展示列表
@@ -46,9 +29,9 @@ function tierToDisplayPlan(tier: SubscriptionTier) {
     name: tier.tier_name,
     display_name: tier.display_name,
     monthly_price: Number(tier.monthly_price),
-    color: tierColorMap[tier.display_name] || '#6E7681',
+    color: tierColorMap[tier.tier_name] || '#6E7681',
     features: tierToFeatures(tier.features),
-    recommended: tier.display_name === recommendedTier,
+    recommended: tier.tier_name === recommendedTierKey,
   }
 }
 
@@ -64,7 +47,7 @@ export default function Pricing() {
 
   const plans = tiers.length > 0
     ? tiers.map(tierToDisplayPlan)
-    : fallbackPlans
+    : pricingPlans
 
   const panelBg = resolvedTheme === 'dark' ? '#161B22' : '#FFFFFF'
 
@@ -83,10 +66,10 @@ export default function Pricing() {
 
   return (
     <section id="pricing" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 lg:px-12 md:py-32">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-7xl">
         <ScrollReveal>
           <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
-            <span className="bg-gradient-to-r from-star-purple to-star-blue bg-clip-text text-transparent">
+            <span className="text-star-blue">
               选择你的星
             </span>
           </h2>
@@ -95,7 +78,7 @@ export default function Pricing() {
           </p>
         </ScrollReveal>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {plans.map((plan, i) => (
             <ScrollReveal key={plan.name} delay={i * 0.1}>
               <div
