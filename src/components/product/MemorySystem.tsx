@@ -15,7 +15,7 @@ export default function MemorySystem() {
       <div className="mx-auto max-w-5xl">
         <ScrollReveal>
           <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
-            <span className="bg-gradient-to-r from-star-purple to-star-blue bg-clip-text text-transparent">
+            <span className="text-star-blue">
               全量记忆系统
             </span>
           </h2>
@@ -44,11 +44,12 @@ export default function MemorySystem() {
         </div>
 
         <ScrollReveal delay={0.5}>
-          <div className="mt-10 rounded-xl border border-star-purple/30 bg-star-purple/5 p-5 text-center">
-            <p className="text-sm text-text-secondary">
-              💡 <strong className="text-text-primary">核心付费逻辑</strong>：免费版只保留 7 天记忆，付费版永久保留。
-              <br />
-              <span className="text-star-purple">"你的超级大脑会忘记你"</span> — 这是最强的付费动机。
+          <div className="mt-10 rounded-xl bg-star-blue/5 p-6 text-center">
+            <p className="text-base font-semibold text-text-primary">
+              永久记忆是每个用户的基础能力
+            </p>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary">
+              无论使用免费版还是付费版，你与分身共同积累的记忆都会持续保留。付费套餐只扩展积分、云存储、分身数量和客服支持。
             </p>
           </div>
         </ScrollReveal>
