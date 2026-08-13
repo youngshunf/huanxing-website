@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-12T12:16:33Z",
+  "title": "Design System: 唤星官网",
+  "extensions": {
+    "colorMeta": {
+      "brand-primary": {
+        "role": "primary",
+        "displayName": "星轨皇家蓝",
+        "canonical": "#2563EB",
+        "tonalRamp": ["#172554", "#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#93C5FD", "#EFF6FF"]
+      },
+      "brand-primary-hover": {
+        "role": "primary",
+        "displayName": "深轨皇家蓝",
+        "canonical": "#1D4ED8",
+        "tonalRamp": ["#172554", "#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#93C5FD", "#EFF6FF"]
+      },
+      "brand-primary-soft": {
+        "role": "primary",
+        "displayName": "皇家蓝薄雾",
+        "canonical": "rgba(37, 99, 235, 0.10)",
+        "tonalRamp": ["#172554", "#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#60A5FA", "#BFDBFE", "#EFF6FF"]
+      },
+      "hero-azure": {
+        "role": "primary",
+        "displayName": "晨星浅蓝",
+        "canonical": "#60A5FA",
+        "tonalRamp": ["#172554", "#1E3A8A", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#BFDBFE", "#EFF6FF"]
+      },
+      "accent-gold": {
+        "role": "tertiary",
+        "displayName": "星光暖金",
+        "canonical": "#FFD93D",
+        "tonalRamp": ["#422006", "#713F12", "#A16207", "#CA8A04", "#EAB308", "#FACC15", "#FDE68A", "#FFFBEB"]
+      },
+      "light-canvas": {
+        "role": "neutral",
+        "displayName": "晨雾画布",
+        "canonical": "#F8F9FC",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#D0D7DE", "#E2E6EA", "#F0F2F5", "#F8F9FC"]
+      },
+      "light-panel": {
+        "role": "neutral",
+        "displayName": "纯白面板",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#D0D7DE", "#E2E6EA", "#F8F9FC", "#FFFFFF"]
+      },
+      "light-float": {
+        "role": "neutral",
+        "displayName": "浅雾浮层",
+        "canonical": "#F0F2F5",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#D0D7DE", "#E2E6EA", "#F0F2F5", "#FFFFFF"]
+      },
+      "light-input": {
+        "role": "neutral",
+        "displayName": "浅色输入面",
+        "canonical": "#E8EBF0",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#D0D7DE", "#E8EBF0", "#F0F2F5", "#FFFFFF"]
+      },
+      "light-text-primary": {
+        "role": "neutral",
+        "displayName": "浅色主墨",
+        "canonical": "#1F2328",
+        "tonalRamp": ["#0D1117", "#1F2328", "#30363D", "#656D76", "#8B949E", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "light-text-secondary": {
+        "role": "neutral",
+        "displayName": "浅色次墨",
+        "canonical": "#656D76",
+        "tonalRamp": ["#0D1117", "#1F2328", "#30363D", "#656D76", "#8B949E", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "light-text-tertiary": {
+        "role": "neutral",
+        "displayName": "浅色弱墨",
+        "canonical": "#8B949E",
+        "tonalRamp": ["#0D1117", "#1F2328", "#30363D", "#656D76", "#8B949E", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "light-border-default": {
+        "role": "neutral",
+        "displayName": "浅色结构线",
+        "canonical": "#D0D7DE",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#B0B8C1", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "light-border-hover": {
+        "role": "neutral",
+        "displayName": "浅色强调线",
+        "canonical": "#B0B8C1",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#B0B8C1", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "light-divider": {
+        "role": "neutral",
+        "displayName": "浅色分隔线",
+        "canonical": "#E2E6EA",
+        "tonalRamp": ["#0D1117", "#21262D", "#484F58", "#8B949E", "#B0B8C1", "#D0D7DE", "#E2E6EA", "#F8F9FC"]
+      },
+      "dark-canvas": {
+        "role": "neutral",
+        "displayName": "深空画布",
+        "canonical": "#0D1117",
+        "tonalRamp": ["#0D1117", "#161B22", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-panel": {
+        "role": "neutral",
+        "displayName": "深空面板",
+        "canonical": "#161B22",
+        "tonalRamp": ["#0D1117", "#161B22", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-float": {
+        "role": "neutral",
+        "displayName": "深空浮层",
+        "canonical": "#1C2128",
+        "tonalRamp": ["#0D1117", "#161B22", "#1C2128", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-input": {
+        "role": "neutral",
+        "displayName": "深色输入面",
+        "canonical": "#242A33",
+        "tonalRamp": ["#0D1117", "#161B22", "#242A33", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-text-primary": {
+        "role": "neutral",
+        "displayName": "深色主墨",
+        "canonical": "#E6EDF3",
+        "tonalRamp": ["#0D1117", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#D0D7DE", "#E6EDF3"]
+      },
+      "dark-text-secondary": {
+        "role": "neutral",
+        "displayName": "深色次墨",
+        "canonical": "#8B949E",
+        "tonalRamp": ["#0D1117", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#D0D7DE", "#E6EDF3"]
+      },
+      "dark-text-tertiary": {
+        "role": "neutral",
+        "displayName": "深色弱墨",
+        "canonical": "#6E7681",
+        "tonalRamp": ["#0D1117", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#D0D7DE", "#E6EDF3"]
+      },
+      "dark-border-default": {
+        "role": "neutral",
+        "displayName": "深色结构线",
+        "canonical": "#30363D",
+        "tonalRamp": ["#0D1117", "#161B22", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-border-hover": {
+        "role": "neutral",
+        "displayName": "深色强调线",
+        "canonical": "#484F58",
+        "tonalRamp": ["#0D1117", "#161B22", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      },
+      "dark-divider": {
+        "role": "neutral",
+        "displayName": "深色分隔线",
+        "canonical": "#21262D",
+        "tonalRamp": ["#0D1117", "#161B22", "#21262D", "#30363D", "#484F58", "#6E7681", "#8B949E", "#E6EDF3"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "品牌展示",
+        "purpose": "只用于首页 Slogan 和少量首屏品牌表达。"
+      },
+      "headline": {
+        "displayName": "逐屏标题",
+        "purpose": "用于页面级标题和每屏唯一主张。"
+      },
+      "title": {
+        "displayName": "组件标题",
+        "purpose": "用于卡片标题、关键数字和主要按钮。"
+      },
+      "body": {
+        "displayName": "正文",
+        "purpose": "用于价值解释、功能说明和操作含义。"
+      },
+      "label": {
+        "displayName": "标签",
+        "purpose": "用于导航、眉题、状态与短辅助信息。"
+      },
+      "mono": {
+        "displayName": "技术等宽",
+        "purpose": "仅用于代码、协议名和技术片段。"
+      }
+    },
+    "shadows": [
+      {
+        "name": "蓝色环境微光",
+        "value": "0 0 24px rgba(37, 99, 235, 0.12)",
+        "purpose": "可交互卡片的悬停、选中或推荐状态。"
+      },
+      {
+        "name": "行动聚光",
+        "value": "0 0 24px rgba(37, 99, 235, 0.45)",
+        "purpose": "深空首屏或关键 CTA 的悬停反馈。"
+      },
+      {
+        "name": "浮层结构阴影",
+        "value": "0 24px 60px rgba(13, 17, 23, 0.24)",
+        "purpose": "菜单、对话框和悬浮帮助面板的覆盖关系。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "状态快速反馈",
+        "value": "200ms ease-out",
+        "purpose": "链接、边框与轻量颜色状态。"
+      },
+      {
+        "name": "组件标准反馈",
+        "value": "300ms ease-out",
+        "purpose": "按钮、卡片、菜单和导航状态。"
+      },
+      {
+        "name": "内容进入",
+        "value": "600ms ease-out",
+        "purpose": "滚动进入时的淡入与短距离上移。"
+      },
+      {
+        "name": "品牌呼吸",
+        "value": "4000ms ease-in-out infinite",
+        "purpose": "首页星核的低频呼吸，不用于常规组件。"
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "主按钮",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "用于每屏唯一主操作，纯皇家蓝、清晰焦点、悬停时克制聚光。",
+      "html": "<button class=\"ds-btn-primary\">下载桌面客户端</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 8px; padding: 12px 32px; background: var(--color-star-purple, #2563EB); color: #FFFFFF; font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; font-size: 18px; font-weight: 600; transition: background-color 300ms ease-out, box-shadow 300ms ease-out, transform 300ms ease-out; } .ds-btn-primary:hover { background: var(--color-star-purple-hover, #1D4ED8); box-shadow: 0 0 24px rgba(37, 99, 235, 0.28); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-star-purple, #2563EB); outline-offset: 3px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "次按钮",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "用于次要路径，以边框和文字对比回应交互，不与主按钮争夺层级。",
+      "html": "<button class=\"ds-btn-secondary\">了解产品</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--color-border-default, #D0D7DE); border-radius: 8px; padding: 12px 32px; background: transparent; color: var(--color-text-secondary, #656D76); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; font-size: 18px; font-weight: 600; transition: border-color 300ms ease-out, color 300ms ease-out, background-color 300ms ease-out; } .ds-btn-secondary:hover { border-color: var(--color-border-hover, #B0B8C1); color: var(--color-text-primary, #1F2328); background: var(--color-space-float, #F0F2F5); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-star-purple, #2563EB); outline-offset: 3px; } .ds-btn-secondary:active { background: var(--color-space-input, #E8EBF0); }"
+    },
+    {
+      "name": "品牌特征标签",
+      "kind": "chip",
+      "refersTo": "chip-brand",
+      "description": "用于短特征和状态，不承载长句或主要操作。",
+      "html": "<span class=\"ds-chip-brand\">本地优先</span>",
+      "css": ".ds-chip-brand { display: inline-flex; align-items: center; border: 1px solid rgba(37, 99, 235, 0.24); border-radius: 9999px; padding: 6px 14px; background: rgba(37, 99, 235, 0.10); color: var(--color-star-purple, #2563EB); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; font-size: 14px; font-weight: 600; } .ds-chip-brand:hover { background: rgba(37, 99, 235, 0.14); } .ds-chip-brand:focus-visible { outline: 2px solid var(--color-star-purple, #2563EB); outline-offset: 2px; }"
+    },
+    {
+      "name": "内容卡片",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "安静承载一组主张与证据，常态平面，交互时才获得蓝色微光。",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-label\">主人控制</span><h3>代表你，但不越过你</h3><p>重要操作对你透明，关键决定始终由你确认。</p></article>",
+      "css": ".ds-card { width: 320px; border: 1px solid var(--color-divider, #E2E6EA); border-radius: 12px; padding: 24px; background: var(--color-space-panel, #FFFFFF); color: var(--color-text-primary, #1F2328); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; transition: border-color 300ms ease-out, box-shadow 300ms ease-out; } .ds-card:hover { border-color: rgba(37, 99, 235, 0.40); box-shadow: 0 0 24px rgba(37, 99, 235, 0.12); } .ds-card-label { color: var(--color-star-purple, #2563EB); font-size: 14px; font-weight: 600; } .ds-card h3 { margin: 10px 0 8px; font-size: 18px; line-height: 1.5; } .ds-card p { margin: 0; color: var(--color-text-secondary, #656D76); font-size: 16px; line-height: 1.75; }"
+    },
+    {
+      "name": "输入框",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "直接、清晰的主题输入面，聚焦时以皇家蓝建立确定状态。",
+      "html": "<label class=\"ds-field\"><span>手机号</span><input class=\"ds-input\" type=\"tel\" placeholder=\"请输入手机号\"></label>",
+      "css": ".ds-field { display: grid; gap: 8px; width: 320px; color: var(--color-text-secondary, #656D76); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; font-size: 14px; font-weight: 600; } .ds-input { border: 1px solid var(--color-border-default, #D0D7DE); border-radius: 8px; padding: 10px 12px; background: var(--color-space-input, #E8EBF0); color: var(--color-text-primary, #1F2328); font: inherit; font-weight: 400; transition: border-color 200ms ease-out, box-shadow 200ms ease-out; } .ds-input::placeholder { color: var(--color-text-tertiary, #8B949E); } .ds-input:hover { border-color: var(--color-border-hover, #B0B8C1); } .ds-input:focus-visible { border-color: var(--color-star-purple, #2563EB); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16); }"
+    },
+    {
+      "name": "顶部导航",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "品牌与核心栏目保持单行清晰可达，当前路由以主墨和字重确认。",
+      "html": "<nav class=\"ds-nav\" aria-label=\"主导航\"><strong>唤星</strong><a class=\"ds-nav-active\" href=\"#\">首页</a><a href=\"#\">产品</a><a href=\"#\">技术</a><a href=\"#\">场景</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 4px; border-bottom: 1px solid var(--color-divider, #E2E6EA); padding: 16px 24px; background: rgba(248, 249, 252, 0.88); color: var(--color-text-primary, #1F2328); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; backdrop-filter: blur(16px); } .ds-nav strong { margin-right: 20px; font-size: 18px; } .ds-nav a { border-radius: 8px; padding: 8px 12px; color: var(--color-text-secondary, #656D76); font-size: 14px; text-decoration: none; transition: color 200ms ease-out, background-color 200ms ease-out; } .ds-nav a:hover { color: var(--color-text-primary, #1F2328); background: var(--color-space-float, #F0F2F5); } .ds-nav a:focus-visible { outline: 2px solid var(--color-star-purple, #2563EB); outline-offset: 2px; } .ds-nav .ds-nav-active { color: var(--color-text-primary, #1F2328); font-weight: 600; }"
+    },
+    {
+      "name": "推荐方案卡",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "定价中唯一推荐项，以皇家蓝边框和小标签强调，不靠浓重悬浮阴影。",
+      "html": "<article class=\"ds-plan\"><span class=\"ds-plan-badge\">推荐</span><h3>专业版</h3><strong>¥99<small>/月</small></strong><p>更多分身、资源与专业能力</p><button>立即订阅</button></article>",
+      "css": ".ds-plan { position: relative; width: 260px; border: 2px solid var(--color-star-purple, #2563EB); border-radius: 12px; padding: 28px 24px 24px; background: var(--color-space-panel, #FFFFFF); color: var(--color-text-primary, #1F2328); font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif; } .ds-plan-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); border-radius: 9999px; padding: 4px 16px; background: var(--color-star-purple, #2563EB); color: #FFFFFF; font-size: 12px; font-weight: 600; } .ds-plan h3 { margin: 0 0 12px; color: var(--color-star-purple, #2563EB); font-size: 18px; } .ds-plan strong { display: block; font-size: 30px; } .ds-plan small { margin-left: 4px; color: var(--color-text-secondary, #656D76); font-size: 16px; font-weight: 400; } .ds-plan p { min-height: 48px; color: var(--color-text-secondary, #656D76); font-size: 14px; line-height: 1.7; } .ds-plan button { width: 100%; border: 0; border-radius: 8px; padding: 12px 16px; background: var(--color-star-purple, #2563EB); color: #FFFFFF; font: inherit; font-weight: 600; transition: background-color 300ms ease-out; } .ds-plan button:hover { background: var(--color-star-purple-hover, #1D4ED8); } .ds-plan button:focus-visible { outline: 2px solid var(--color-star-purple, #2563EB); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "可控星图",
+    "overview": "唤星官网像一张可控的星图：深空首屏负责唤起想象，清晰的皇家蓝标示行动与连接，明亮的内容表面让复杂能力回到可理解、可验证的秩序。每个视觉节点都应有明确角色和层级，呼应分身有主人、行动可见、关键决定可接管的产品承诺。\n\n整体气质是可信、清澈、克制。默认浅色界面承担长时间阅读和决策，深色只用于首页品牌首屏、用户主动选择的暗色主题及确有沉浸价值的局部；星光、辉光和动效是方向提示，不是持续抢夺注意力的装饰。",
+    "keyCharacteristics": [
+      "皇家蓝是唯一品牌主声部，暖金只作少量功能点缀。",
+      "深空品牌瞬间与明亮、易读的内容表面形成节奏对比。",
+      "色阶和细边框负责常态分层，蓝色环境光只响应交互与关键状态。",
+      "组件克制而笃定：按钮有力、卡片安静、输入直接。",
+      "中文系统字体优先，跨平台自然渲染，禁止使用 Inter。"
+    ],
+    "rules": [
+      {
+        "name": "The One Blue Voice Rule",
+        "body": "皇家蓝是唯一品牌主声部；禁止用泛 AI 紫色、蓝紫霓虹或多彩渐变制造“智能感”。",
+        "section": "colors"
+      },
+      {
+        "name": "The Light-by-Default Rule",
+        "body": "除恒深色品牌首屏和用户主动选择的暗色主题外，面向用户的官网默认使用浅色表面。",
+        "section": "colors"
+      },
+      {
+        "name": "The Gold Is Punctuation Rule",
+        "body": "暖金像标点一样稀少，只强化特定信息，不铺满按钮、标题或大面积背景。",
+        "section": "colors"
+      },
+      {
+        "name": "The Native Chinese Rule",
+        "body": "禁止使用 Inter；中文系统字体始终排在字体栈最前，并在 macOS、Windows 和 Linux 上保持可靠回退。",
+        "section": "typography"
+      },
+      {
+        "name": "The Size Is Not Hierarchy Rule",
+        "body": "正文不得小于正常阅读尺度；层级优先通过字重、颜色和间距建立，辅助文字才使用更小字号。",
+        "section": "typography"
+      },
+      {
+        "name": "The One Screen, One Claim Rule",
+        "body": "每个营销屏先表达一个主张，再用不超过一组证据或一个结构化组件支撑；不要把多个同权重区块塞进同一视觉层级。",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat-at-Rest Rule",
+        "body": "普通卡片静止时保持安静；只有交互、焦点或明确的优先级才获得蓝色环境光。",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glow Must Explain Rule",
+        "body": "每一道辉光都必须解释“可点击、已选中或品牌焦点”之一；纯装饰辉光应删除。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** 使用纯皇家蓝统一主按钮、关键链接、焦点和当前状态。",
+      "**Do** 让浅色界面承担主要阅读与操作，只在品牌首屏和明确的暗色主题中使用深空表面。",
+      "**Do** 使用 8px、12px、16px 的分级圆角和 1px 细边框建立稳定组件秩序。",
+      "**Do** 让动效解释进入、状态变化或可操作性，并尊重用户的减弱动态效果偏好。",
+      "**Do** 使用中文系统字体栈，确保跨平台中文清晰自然。"
+    ],
+    "donts": [
+      "**Don't** 使用 Inter，或让远程西文字体排在中文系统字体之前。",
+      "**Don't** 使用泛 AI 紫色、蓝紫渐变、霓虹过载和大面积玻璃拟态作为品牌门面。",
+      "**Don't** 把所有内容做成同权重 SaaS 卡片墙；每一屏必须有明确主张与证据层级。",
+      "**Don't** 让常态卡片普遍悬浮，也不要用浓重阴影掩盖缺失的空间层级。",
+      "**Don't** 为了“科技感”堆叠粒子、发光描边、无限循环动效或难以解释的装饰线。"
+    ]
+  }
+}

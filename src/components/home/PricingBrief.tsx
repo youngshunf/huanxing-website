@@ -5,16 +5,14 @@ import { pricingPlans } from '../../data/pricingPlans'
 
 export default function PricingBrief() {
   return (
-    <section className="relative z-10 px-4 py-24 sm:px-6 md:px-8 lg:px-12 md:py-32">
+    <section id="plans" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 lg:px-12 md:py-32">
       <div className="mx-auto max-w-7xl">
         <ScrollReveal>
-          <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
-            <span className="text-star-blue">
-              选择你的星
-            </span>
+          <h2 className="mb-4 text-center text-3xl font-bold tracking-tight text-text-primary md:text-5xl">
+            记住你，是分身的基础，不是收费开关
           </h2>
           <p className="mx-auto mb-16 max-w-2xl text-center text-text-secondary">
-            每个人都值得一颗星，从免费开始体验
+            永久记忆向所有用户免费开放。付费购买的是更高资源额度、更多分身、云端常驻设备与专业能力。
           </p>
         </ScrollReveal>
 
@@ -29,7 +27,7 @@ export default function PricingBrief() {
                 } bg-space-panel transition-all duration-300 hover:shadow-[0_0_24px_rgba(37, 99, 235,0.15)]`}
               >
                 {plan.recommended && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-br from-star-purple to-star-blue px-4 py-1 text-xs font-semibold text-white">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-star-purple px-4 py-1 text-xs font-semibold text-white">
                     推荐
                   </div>
                 )}
@@ -56,7 +54,7 @@ export default function PricingBrief() {
               to="/pricing"
               className="inline-block text-sm text-star-purple transition-colors hover:text-star-purple-hover"
             >
-              查看详细定价方案 →
+              查看全部套餐 →
             </Link>
           </div>
         </ScrollReveal>

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import ScrollReveal from '../shared/ScrollReveal'
 
-// 品牌收尾 · 仰望星空的故事 + 唤/星 + CTA
+// 品牌收尾只保留一个行动目标：下载桌面端开始第一项任务。
 export default function BrandFinale() {
   return (
     <section className="relative z-10 overflow-hidden px-4 py-28 sm:px-6 md:px-8 lg:px-12 md:py-36">
@@ -27,41 +27,30 @@ export default function BrandFinale() {
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <p className="mb-8 text-lg leading-relaxed text-text-secondary md:text-xl">
-            每个人小时候都仰望过星空，幻想过其中一颗是属于自己的。
-            <br />
-            唤星，就是帮你找到那颗星，点亮它。
-          </p>
+          <h2 className="mb-5 text-3xl font-bold leading-tight tracking-tight text-text-primary md:text-5xl">
+            先把一件真实的事交给分身
+          </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="mb-10 space-y-1.5 text-base text-text-tertiary">
-            <p><span className="font-semibold text-text-primary">唤</span> — 是你主动的选择，你唤醒它、塑造它。</p>
-            <p><span className="font-semibold text-text-primary">星</span> — 是无限的可能，每颗星都独一无二。</p>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.3}>
-          <h2 className="mb-10 text-3xl font-bold leading-tight md:text-4xl">
-            <span className="bg-gradient-to-r from-star-purple to-star-blue bg-clip-text text-transparent">
-              唤醒属于你的那颗星
-            </span>
-          </h2>
+          <p className="mx-auto mb-10 max-w-xl text-base leading-7 text-text-secondary md:text-lg">
+            下载桌面端，创建你的第一个 AI 分身。从一项任务开始，让它在长期使用中真正理解你、代表你、帮助你。
+          </p>
         </ScrollReveal>
 
         <ScrollReveal delay={0.4}>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              to="/pricing"
-              className="inline-block rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_24px_rgba(37,99,235,0.4)]"
+              to="/download"
+              className="inline-block rounded-lg bg-star-purple px-8 py-3 text-lg font-semibold text-white transition-colors duration-300 hover:bg-star-purple-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-star-purple focus-visible:ring-offset-2 focus-visible:ring-offset-space-black"
             >
-              免费开始
+              免费下载
             </Link>
             <Link
-              to="/about"
+              to="/product"
               className="inline-block rounded-lg border border-border-default px-8 py-3 text-lg font-semibold text-text-secondary transition-all duration-300 hover:border-border-hover hover:text-text-primary"
             >
-              我们的故事 →
+              查看产品功能
             </Link>
           </div>
         </ScrollReveal>

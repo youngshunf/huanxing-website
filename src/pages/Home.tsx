@@ -1,41 +1,33 @@
 import Hero from '../components/home/Hero'
-import ValueProp from '../components/home/ValueProp'
 import PainPoints from '../components/home/PainPoints'
-import SuperBrainLayer from '../components/home/SuperBrainLayer'
-import SocialFabricLayer from '../components/home/SocialFabricLayer'
-import ThreeFaces from '../components/home/ThreeFaces'
-import Differentiation from '../components/home/Differentiation'
+import Offerings from '../components/home/Offerings'
+import PrivacyFlow from '../components/home/PrivacyFlow'
+import CompetitorComparison from '../components/home/CompetitorComparison'
 import PricingBrief from '../components/home/PricingBrief'
 import BrandFinale from '../components/home/BrandFinale'
 
 export default function Home() {
   return (
     <>
-      {/* 1. 情感冲击 — 发光八角星 + 主标题 */}
+      {/* 1. 品牌首屏：保留发光八角星、Slogan、下载识别与按钮结构。 */}
       <Hero />
 
-      {/* 2. 价值主张 — 分身干活，你做决定 */}
-      <ValueProp />
-
-      {/* 3. 痛点共鸣 — 一个人扛不动 */}
+      {/* 2. 用户问题。 */}
       <PainPoints />
 
-      {/* 4. 层0 · 超级大脑分身 — 全量记忆/主动执行/越用越像你 */}
-      <SuperBrainLayer />
+      {/* 3. 产品与服务。 */}
+      <Offerings />
 
-      {/* 5. 层1+层2 · 分身进入社交网络 + AI-Native 双面范式 */}
-      <SocialFabricLayer />
+      {/* 4. 产品归属、本地优先与隐私边界。 */}
+      <PrivacyFlow />
 
-      {/* 6. 层3 · 三面同底 — IM / 社区 / AI 工具 */}
-      <ThreeFaces />
+      {/* 5. 竞品位置与事实边界。 */}
+      <CompetitorComparison />
 
-      {/* 7. 差异化 — vs 传统 AI 助手 */}
-      <Differentiation />
-
-      {/* 8. 定价精简 */}
+      {/* 6. 免费基础与付费权益。 */}
       <PricingBrief />
 
-      {/* 9. 品牌收尾 — 仰望星空 + CTA */}
+      {/* 7. 单一行动收口。 */}
       <BrandFinale />
     </>
   )

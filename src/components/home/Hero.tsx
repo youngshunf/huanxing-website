@@ -24,13 +24,12 @@ function DownloadGlyph() {
   )
 }
 
-// HASN（Human-Agent Social Network，人-Agent 社交网络）范式四大特点，
-// 作 Hero 底部胶囊呈现：让访客一眼看懂唤星「人机同网」的独特范式。
-const HASN_TRAITS = [
-  '人机同网 · 你和分身都是成员',
-  '分身认主 · 行动对你透明可接管',
-  '分身互联 · 社交 · 协作 · 交易',
-  '能力可授权 · 可组装',
+// 首屏只保留最需要用户立即理解的四项产品承诺。
+const PRODUCT_TRAITS = [
+  '身份长期属于你',
+  '永久记忆',
+  '本地优先，隐私由你掌控',
+  '能调用工具、技能和应用',
 ] as const
 
 // Hero 恒深色背景（皇家蓝调深空），不随主题翻浅——文字一律浅色。
@@ -149,30 +148,30 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <span className="bg-gradient-to-r from-[#93C5FD] to-[#3B82F6] bg-clip-text text-transparent">
+            <span className="text-[#60A5FA]">
               唤醒星辰的力量
             </span>
             <span className="mt-3 block text-white md:mt-4">AI与你共生</span>
           </motion.h1>
 
-          {/* 副标题：突出「分身替你干活」——分身是替你行动的一等成员，不是工具 */}
+          {/* 副标题保留品牌情绪，解释文案补足产品事实。 */}
           <motion.p
             className="mb-4 text-lg text-white/80 md:text-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
           >
-            养一个真正懂你的 AI 分身——替你思考、替你记忆、替你把活干了。
+            真正属于你的 AI 分身——记得你、替你做事，也和你一起成长。
           </motion.p>
 
-          {/* HASN 范式一句话：人与分身共处同一张社交网络，分身认主、透明、可互联 */}
           <motion.p
             className="mx-auto mb-10 max-w-2xl text-sm leading-relaxed text-white/55 md:text-base"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.65 }}
           >
-            在 HASN 人-Agent 社交网络里，你和你的分身都是有身份的成员：分身认你为主人、主动行动;分身对你负责，透明可接管，还能与他人的分身社交、协作、交易。
+            它拥有长期身份和永久记忆，能调用工具、技能和应用完成任务，也能与人和其他分身协作。
+            任务和产物优先留在你的设备；它代表你行动时，重要决定始终由你确认。
           </motion.p>
 
           {/* 主 CTA：下载当前系统匹配的桌面客户端（一键直下·带版本号）；副 CTA「其他版本」去下载页 */}
@@ -227,14 +226,14 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          {/* HASN 范式特点胶囊：人机同网 / 分身认主·透明 / 分身互联 / 能力可组装 */}
+          {/* 产品特点胶囊：归属、记忆、隐私与执行能力。 */}
           <motion.ul
             className="mt-9 flex flex-wrap items-center justify-center gap-x-3 gap-y-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.15 }}
           >
-            {HASN_TRAITS.map((trait) => (
+            {PRODUCT_TRAITS.map((trait) => (
               <li
                 key={trait}
                 className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs text-white/65 backdrop-blur-sm"

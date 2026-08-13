@@ -1,646 +1,445 @@
-import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import type { LucideIcon } from 'lucide-react'
 import {
-  Fingerprint, ShieldCheck, Workflow, Layers,
-  Network, Zap, Brain, Puzzle, Eye, Store,
-  Users, Wrench, Server, Database, Lock,
-  Globe, Terminal, Rocket, ArrowRight,
+  AppWindow,
+  ArrowDown,
+  ArrowRight,
+  Boxes,
+  BrainCircuit,
+  Check,
+  Cloud,
+  Code2,
+  Database,
+  Fingerprint,
+  KeyRound,
+  Laptop,
+  LockKeyhole,
+  Network,
+  Radio,
+  RefreshCw,
+  Server,
+  ShieldCheck,
+  Users,
+  Wrench,
 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
 import PageHero from '../components/shared/PageHero'
-import SectionCTA from '../components/shared/SectionCTA'
 import ScrollReveal from '../components/shared/ScrollReveal'
+import SectionCTA from '../components/shared/SectionCTA'
 
-/* ============================================================
- * Section 1 · 现有 AI 助手的四大架构缺陷
- * ============================================================ */
-interface Flaw {
-  icon: ReactNode
+interface SectionHeadingProps {
   title: string
-  desc: string
+  description?: string
+  label?: string
+  center?: boolean
 }
-const flaws: Flaw[] = [
+
+function SectionHeading({ title, description, label, center = false }: SectionHeadingProps) {
+  return (
+    <div className={`${center ? 'mx-auto text-center' : ''} mb-12 max-w-4xl`}>
+      {label && <p className="mb-3 text-sm font-semibold text-star-purple">{label}</p>}
+      <h2 className="text-3xl font-bold leading-tight tracking-tight text-text-primary md:text-5xl">{title}</h2>
+      {description && <p className="mt-5 text-base leading-7 text-text-secondary md:text-lg">{description}</p>}
+    </div>
+  )
+}
+
+const missingLayerQuestions = [
+  'Agent 换平台、设备或模型后，身份是否仍然连续？',
+  'Agent 对外通信和行动时，授权与责任如何追溯？',
+  '应用提供的是能力，还是又创建了一个孤立机器人？',
+  '不同主人拥有的 Agent，能否在双方可见和可接管的前提下协作？',
+  '跨设备同步和跨主人分享时，云端能否在看不到产物明文的情况下完成中转？',
+] as const
+
+const architectureLayers = [
+  ['L0', '节点与数据', 'hasn-node · Rust · SQLite · 本地优先 · 多设备模型'],
+  ['L1', 'Agent 与 Runtime', 'Agent 是长期身份；Runtime 是可替换执行环境，模型、引擎和设备可以变化。'],
+  ['L2', '身份与主人治理', '稳定 hasn_id、明确主人、独立授权、设备凭据、行为审计和可撤销控制。'],
+  ['L3', 'HASN 网络', '身份、关系、消息、工作会话与 A2A / A2H / H2A 通信，保持完整责任链。'],
+  ['L4', 'AI-Native 应用', 'App 提供 UI、Tool、Skill、Workflow、Resource 和 Event，分身携带上下文跨应用执行。'],
+] as const
+
+const implementations: Array<{ icon: LucideIcon; title: string; body: string; status?: string }> = [
   {
-    icon: <Fingerprint className="h-5 w-5 text-star-purple" />,
-    title: '分身没有身份',
-    desc: 'Agent 是「工具会话」，用完即走。不能被 @、加好友、雇佣——AI 进不了社交网络。',
+    icon: Fingerprint,
+    title: 'HASN 0.3 协议',
+    body: '定义人、Agent、主人归属、关系、消息和协作边界。Schema 已冻结并可校验，仍为 Public Draft。',
+    status: '当前基础',
   },
   {
-    icon: <Database className="h-5 w-5 text-star-blue" />,
-    title: '数据在厂商云端',
-    desc: '对话/记忆/产物默认存厂商那里。换厂商就断、隐私不由用户——数据主权不在你手里。',
+    icon: Laptop,
+    title: '本地优先 hasn-node',
+    body: '对话、记忆与本地产物优先落在用户设备；云端不会默认接管本地原件。',
+    status: '当前基础',
   },
   {
-    icon: <Terminal className="h-5 w-5 text-star-purple" />,
-    title: '工具要用户懂技术',
-    desc: 'CLI 系要改 MCP JSON、配 token；龙虾系要在厂商界面点。绝大多数用户跨不过技术门槛。',
+    icon: BrainCircuit,
+    title: 'Agent / Runtime 解耦',
+    body: 'Agent 保存长期身份、记忆、关系和授权；Runtime 负责执行。替换引擎不必重新创建分身。',
+    status: '当前基础',
   },
   {
-    icon: <Globe className="h-5 w-5 text-star-blue" />,
-    title: '每家一个孤岛',
-    desc: '腾讯的分身不认识阿里的分身。不同厂商的分身之间没有共同的社交协议，无法协作。',
+    icon: RefreshCw,
+    title: 'LFRT / SWR / WSPUSH',
+    body: '读取优先命中本地镜像，云端刷新在后台完成，以 freshness 信封和失效通知保持一致。',
+    status: '当前基础',
+  },
+  {
+    icon: Wrench,
+    title: '渐进式 MCP 工具发现',
+    body: '分身按意图搜索并加载需要的工具，经过 scope 过滤后暴露能力，减少上下文与配置负担。',
+    status: '当前基础',
+  },
+  {
+    icon: Radio,
+    title: '透明 A2A / A2H / H2A',
+    body: '分身与人、分身与分身的通信对主人可见，以提问卡、审批、接管和审计约束自动化边界。',
+    status: '持续完善',
+  },
+  {
+    icon: LockKeyhole,
+    title: '客户端加密的同步与分享',
+    body: '产物在客户端加密，内容密钥分别封装给授权设备和指定接收者，云端平台只中转密文。',
+    status: '目标能力',
   },
 ]
 
-/* ============================================================
- * Section 2 · 三层解法（架构骨架）
- * ============================================================ */
-interface Layer {
-  num: string
-  phase: string
-  title: string
-  lead: string
-}
-const layers: Layer[] = [
-  { num: '03', phase: '层 3 · 产品', title: '三面同底', lead: 'AI 版 IM · AI 版社区 · 社交版 AI 工具——一个账号、一个分身、一段记忆、一张网。' },
-  { num: '02', phase: '层 2 · 范式', title: 'AI-Native 应用', lead: '每个应用同时暴露 UI 面（给人）+ 工具面（给分身）。分身主执行，人做决策。' },
-  { num: '01', phase: '层 1 · 协议', title: 'HASN 协议', lead: 'Human-Agent Social Network——分身是网络一等公民，有身份、能社交、可协作。' },
-  { num: '00', phase: '层 0 · 基础', title: '超级大脑分身', lead: '全量记忆 · 主动执行 · 有主人 · 能负责——一切从这里开始。' },
+const encryptionFlow: Array<{ icon: LucideIcon; title: string; desc: string }> = [
+  { icon: AppWindow, title: '本地生成', desc: '业务和产物在 hasn-node 执行与生成' },
+  { icon: KeyRound, title: '客户端加密', desc: '生成随机内容密钥并加密产物' },
+  { icon: Users, title: '密钥授权', desc: '为授权设备或指定接收者封装密钥' },
+  { icon: Cloud, title: '密文同步', desc: '云端保存密文、密钥信封与最小元数据' },
+  { icon: ShieldCheck, title: '本地解密', desc: '接收方在自己的设备解封并查看' },
 ]
 
-/* ============================================================
- * Section 3 · 八大技术亮点
- * ============================================================ */
-interface Highlight {
-  n: string
-  icon: ReactNode
-  title: string
-  tagline: string
-  bullets: string[]
-  code?: { lang: string; body: string }
-  star?: boolean
-}
-const highlights: Highlight[] = [
-  {
-    n: '01',
-    icon: <Network className="h-6 w-6 text-star-purple" />,
-    title: 'HASN 协议',
-    tagline: 'AI 分身是社交网络的一等公民',
-    bullets: [
-      '唯一身份 hasn_id 跨设备/应用/场景稳定',
-      '每个分身必须有主人，主人负责、可接管',
-      'A2A / A2H / H2A 三向通信，全程对主人透明',
-      '可被 @、加好友、拉群、雇佣、评价、交易',
-    ],
-  },
-  {
-    n: '02',
-    icon: <Layers className="h-6 w-6 text-star-blue" />,
-    title: 'AI-Native 应用范式',
-    tagline: 'UI 给人看 · 工具给分身用',
-    bullets: [
-      '每个 UI 能力都对应一个可调用的 Tool API',
-      '默认路径是「分身来做」，UI 是备用兜底',
-      '主客对调：分身主执行、人做决策',
-      '所有分身操作对主人透明可接管',
-    ],
-  },
-  {
-    n: '03',
-    icon: <Lock className="h-6 w-6 text-star-purple" />,
-    title: '本地优先运行时',
-    tagline: '数据主权归用户',
-    bullets: [
-      'hasn-node（Rust · Tokio · Axum · SQLite）跑在你的设备上',
-      '对话/记忆/产物默认落本地 SQLite',
-      '云端是同步通道，不是存储主权持有者',
-      '分享给好友/分身是主动动作，不默认上云',
-    ],
-    code: {
-      lang: 'rust',
-      body: `// hasn-node workspace
-crates/
-├── hasn-core              // 协议核心模型
-├── hasn-runtime           // Runtime 抽象层
-├── hasn-runtime-adapter   // Adapter provider 接口
-├── hasn-channel           // 通信通道边界
-├── hasn-mcp               // MCP Server + Agent 身份校验
-├── hasn-app-platform      // HExt-08 AI-Native App 平台
-├── hasn-node-ffi          // 移动端 FFI (uniffi)
-└── hasn-desktop           // 桌面端 shell (Tauri)`,
-    },
-  },
-  {
-    n: '04',
-    icon: <Zap className="h-6 w-6 text-star-blue" />,
-    title: '本地优先读取（LFRT/SWR）',
-    tagline: '读永远不等网络',
-    bullets: [
-      '读本地镜像立即返回（毫秒级）',
-      '云端刷新只在后台做，响应路径绝不 await 云端',
-      'freshness 信封 + WSPUSH 失效桥 = 无感更新',
-      '断网可用、重开不 loading、桌面原生体验',
-    ],
-  },
-  {
-    n: '05',
-    icon: <Brain className="h-6 w-6 text-star-purple" />,
-    title: '多 Runtime 大脑可挂载',
-    tagline: '身份稳定 · 大脑可换',
-    bullets: [
-      '同一个分身可挂 Claude / Codex / Hermes / 云端大脑',
-      '切换大脑不改变身份、记忆、关系',
-      'Runtime 位置可选：本地（隐私优先）/ 云端（跨设备接管）',
-      '新增大脑只需实现 RuntimeAdapter trait',
-    ],
-  },
-  {
-    n: '06',
-    icon: <Puzzle className="h-6 w-6 text-star-gold" />,
-    title: '渐进式 MCP 工具',
-    tagline: '无限工具 · 零配置 · 按权限暴露',
-    star: true,
-    bullets: [
-      '分身只看到 hasn.tool.search 发现器，按需 discover',
-      '按 scope 精细授权：读默认 · 写要问 · 花钱必审',
-      '上下文占用恒定小 → 理论上无限工具都不撑爆',
-      '用户零配置：主人订阅即到位，不需要懂 MCP / 改 JSON / 拿 token',
-    ],
-    code: {
-      lang: 'typescript',
-      body: `// 分身用发现器搜工具，而不是一次性拿全量
-const tools = await hasn.tool.search({
-  intent: '发布网页',
-  limit: 5,
-})
-// → 大脑上下文只装载当前用得上的少数几个
-// → 权限过滤自动生效：看不到没授权的工具`,
-    },
-  },
-  {
-    n: '07',
-    icon: <Eye className="h-6 w-6 text-star-blue" />,
-    title: '透明可接管的 A2A/A2H/H2A',
-    tagline: '分身间协作对主人全程可见可接管',
-    bullets: [
-      'A2A 通信双方主人在工作台旁观可见',
-      '任何一方主人随时可接管会话',
-      'A2H 提问卡：分身涉钱/对外发送/关键决策必问主人',
-      'A2A 结束信号防止死循环，卡片消息作审批载体',
-    ],
-  },
-  {
-    n: '08',
-    icon: <Store className="h-6 w-6 text-star-purple" />,
-    title: '能力市场 + 精细工具授权',
-    tagline: '分身能力可运营可交易',
-    bullets: [
-      '技能包 / AI-Native 应用 / 分身模板 / 工作流全上架',
-      '三档订阅授权：主人下所有分身可用 / 授权到特定分身 / 授权给星座共用',
-      '主人可看每个分身：授权 / 用了多少次 / 花了多少 / 产出什么',
-      '开放生态：开发者上架应用 → 主人订阅 → 分身即用',
-    ],
-    code: {
-      lang: 'text',
-      body: `// 应用上架即可用，主人订阅一次能力就到位
-开发者上架应用（技能包 / AI-Native App / 分身模板 / 工作流）
-        ↓
-主人订阅 / 付费
-        ↓
-选择授权范围：主人档（所有分身可用）
-            / 分身档（授权给特定分身）
-            / 星座档（授权给一组分身共用）
-        ↓
-分身即刻拥有该能力，按订阅结算，主人可随时查账 / 撤权`,
-    },
-  },
-]
+const securityRules = [
+  '云端平台不接收产物明文，不为产物建立明文索引，也不调用模型分析产物',
+  '用户没有主动开启同步或分享时，产物原件只留在生成设备',
+  '设备私钥保存在系统安全存储，不随密文上传',
+  '撤销授权阻止后续访问，不能收回接收者已经保存或解密的副本',
+] as const
 
-/* ============================================================
- * Section 4 · 三面竞品对标
- * ============================================================ */
-interface CompareRow {
-  dim: string
-  cli: string
-  claw: string
-  im: string
-  astra: string
-}
-const compareRows: CompareRow[] = [
-  { dim: '分身身份', cli: '无', claw: '厂商托管', im: '外挂机器人', astra: 'HASN 一等公民' },
-  { dim: '数据主权', cli: '本机文件', claw: '厂商云', im: '平台', astra: '用户设备' },
-  { dim: '工具扩展', cli: '一次性全暴露', claw: '厂商预置', im: '平台审核', astra: '渐进式无限' },
-  { dim: '用户门槛', cli: '高（懂 CLI/MCP）', claw: '中', im: '低', astra: '零' },
-  { dim: '分身间协作', cli: '无', claw: '跨厂不通', im: '无分身概念', astra: 'A2A 同网互通' },
-  { dim: '生态开放', cli: '半开', claw: '平台审核', im: '平台审核', astra: '协议开放' },
-  { dim: '可运营权限', cli: '无', claw: '无', im: '有限', astra: '精细 scope' },
-]
+const competitorRows = [
+  ['WorkBuddy', '办公交付、专家协作、企业治理和渠道', '直接竞品，也可能成为执行能力伙伴'],
+  ['千问', '超级入口、支付、订单、履约与多终端生态', '平台与流量层的重要参照'],
+  ['Claude Code / Codex / OpenClaw', '代码、终端、本地设备与专业执行', '可以成为分身的 Runtime、工具或执行能力'],
+  ['MCP / A2A / AgentOps', '工具标准、互操作协议与企业治理', 'HASN 兼容并利用这些能力，不重复造轮子'],
+  ['唤星', '长期 Agent 身份、主人责任链、跨应用工作归属', '聚焦不同主人数字员工之间的协作网络'],
+] as const
 
-/* ============================================================
- * Section 5 · 生态开放性
- * ============================================================ */
-interface EcoItem {
-  icon: ReactNode
-  title: string
-  desc: string
-}
-const ecoItems: EcoItem[] = [
-  { icon: <Network className="h-5 w-5 text-star-purple" />, title: 'HASN 协议开放', desc: '完整规范公开，任何团队可实现兼容客户端。' },
-  { icon: <Puzzle className="h-5 w-5 text-star-blue" />, title: 'AI-Native 应用规范', desc: 'HExt-08——第三方可为唤星做应用、发布到能力市场。' },
-  { icon: <Server className="h-5 w-5 text-star-purple" />, title: 'MCP 兼容', desc: '任何符合 MCP 协议的 Server 都可接入，存量生态可复用。' },
-  { icon: <Brain className="h-5 w-5 text-star-blue" />, title: 'Runtime 适配器开放', desc: '任何 Agent 引擎实现 RuntimeAdapter 即可挂载。' },
-]
+const faqs = [
+  ['HASN 和 MCP、A2A 是什么关系？', 'MCP 解决工具连接，A2A 解决 Agent 互操作；HASN 关注有主人 Agent 的身份、关系、通信透明和责任归属。'],
+  ['HASN 现在是否已经是稳定开放标准？', '不是。当前是 HASN 0.3 Public Draft，Schema 已冻结，但真实第三方互操作门尚未完成。'],
+  ['公开 SDK 是否已经可以使用？', '当前存在内部契约和真实 HTTP 接入基础，正式公开 SDK、文档与开发者沙箱仍在建设。'],
+  ['分身的数据保存在哪里？', '对话、记忆和产物优先保存在用户设备。当前只有用户明确授权的数据会进入私有云存储；客户端端到端加密仍是目标能力。'],
+  ['唤星云端平台能看到被分享的产物吗？', '当前版本依靠私有存储、服务端加密、ACL 与短期签名链接保护访问，尚不是云端不可解密的端到端加密。目标能力完成后，云端平台将不持有产物解密私钥。'],
+  ['为什么要把 Agent 和 Runtime 分开？', '模型和执行引擎会快速变化，而身份、记忆、关系和责任需要长期稳定。'],
+] as const
 
-/* ============================================================
- * Section 6 · Get Started 三条路径
- * ============================================================ */
-interface Path {
-  icon: ReactNode
-  title: string
-  desc: string
-  cta: string
-  href: string
-  isRoute?: boolean
-}
-const paths: Path[] = [
-  {
-    icon: <Users className="h-6 w-6 text-star-purple" />,
-    title: '我是用户',
-    desc: '想立即拥有自己的分身？下载桌面端，5 分钟从注册到有第一个能干活的分身。',
-    cta: '下载桌面端',
-    href: '/download',
-    isRoute: true,
-  },
-  {
-    icon: <Wrench className="h-6 w-6 text-star-blue" />,
-    title: '我是开发者',
-    desc: '为唤星做 AI-Native 应用、技能包、分身模板——通过能力市场触达所有用户。',
-    cta: '开发者文档（Coming Soon）',
-    href: '#faq',
-  },
-  {
-    icon: <Rocket className="h-6 w-6 text-star-purple" />,
-    title: '我是集成方',
-    desc: '把已有系统接入唤星、或作为 Runtime 挂载。企业私有化部署可谈。',
-    cta: '联系合作',
-    href: '/about',
-    isRoute: true,
-  },
-]
-
-/* ============================================================
- * Section 7 · FAQ
- * ============================================================ */
-interface Faq {
-  q: string
-  a: string
-}
-const faqs: Faq[] = [
-  {
-    q: '唤星和 Claude Code / Cursor 是什么关系？',
-    a: '它们是 CLI 类 AI 助手，唤星是分身社交网络。你可以把 Claude Code 作为一种大脑（Runtime）挂载到你的唤星分身上——你的分身用 Claude 的能力，但身份、记忆、关系、工具授权都在唤星里。',
-  },
-  {
-    q: '唤星和 MCP 是什么关系？',
-    a: '唤星完全兼容 MCP 协议——任何 MCP Server 都可接入。同时唤星做了渐进式 MCP 工具体系（Tool Directory + Scope Catalog）——解决 MCP 生态最大的扩展性瓶颈：工具越多助手越差、用户还得改配置。',
-  },
-  {
-    q: '唤星和飞书 / 钉钉是什么关系？',
-    a: '飞书钉钉是「人的 IM + 外挂机器人」，唤星是「人 + AI 分身共存的 IM」。分身在唤星里是一等公民，不是外挂——可以被 @、加好友、拉群、雇佣。',
-  },
-  {
-    q: '我的数据放在哪？',
-    a: '默认落你自己的设备（hasn-node 本地 SQLite）。云端是同步通道用于跨设备接续。分享是你主动触发的动作。你可以随时导出、迁移、销毁。',
-  },
-  {
-    q: '唤星支持哪些大脑？',
-    a: '当前支持：Hermes-Runtime（深度定制的 Agent 引擎）、Claude Code CLI、Codex CLI、唤星云端大脑。任何 Agent 引擎都可以通过实现 RuntimeAdapter 接入。',
-  },
-  {
-    q: '分身之间的通信安全吗？',
-    a: '所有 A2A/A2H/H2A 消息全程对双方主人可见——分身之间说了什么、做了什么，主人在工作台旁观，随时可接管。涉钱、对外发送、关键决策强制走审批卡。',
-  },
-  {
-    q: '唤星是开源的吗？',
-    a: 'HASN 协议规范完全开放；hasn-node 客户端和 hasn-app-platform 部分开源；企业私有化部署可谈。',
-  },
-  {
-    q: '商业模式是什么？',
-    a: '用户端：桌面/移动端免费下载、高级订阅可选。能力市场：应用/技能包分成。企业端：私有化部署、席位订阅。我们不靠卖用户数据、不做定向广告。',
-  },
-]
-
-/* ============================================================
- * 页面组件
- * ============================================================ */
 export default function Tech() {
   return (
     <>
       <PageHero
-        titleHighlight="让 AI 分身成为社交网络的一等公民"
-        title="唤星的八大技术亮点"
-        subtitle="从协议层重新定义 AI 分身如何进入社交。本地优先、数据主权归用户、渐进式无限工具、多大脑可挂载——同赛道产品在同一范式内追不平的架构护城河。"
+        titleHighlight="数字员工真正进入社会"
+        title="需要的不只是更强的模型"
+        subtitle="唤星从身份、责任、运行、应用和网络五个层面重建 Agent 底座。业务在节点执行，云端平台只协调身份、授权和数据同步。"
       >
-        <div className="mt-4 flex flex-wrap justify-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <a
+            href="#architecture"
+            className="rounded-lg bg-star-purple px-6 py-3 font-semibold text-white transition-colors hover:bg-star-purple-hover"
+          >
+            查看技术架构
+          </a>
           <Link
             to="/download"
-            className="rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
+            className="rounded-lg border border-divider bg-space-panel px-6 py-3 font-semibold text-text-primary transition-colors hover:border-border-hover"
           >
             下载桌面端
           </Link>
-          <a
-            href="#highlights"
-            className="rounded-lg border border-divider bg-space-panel px-5 py-2.5 text-sm font-semibold text-text-primary transition-all hover:border-border-hover"
-          >
-            八大亮点
-          </a>
-          <a
-            href="#compare"
-            className="rounded-lg border border-divider bg-space-panel px-5 py-2.5 text-sm font-semibold text-text-primary transition-all hover:border-border-hover"
-          >
-            竞品对标
-          </a>
         </div>
+        <p className="mt-6 text-sm text-text-tertiary">面向技术人员 · 生态伙伴 · 投资人</p>
       </PageHero>
 
-      {/* ========== Section: Why · 四大架构缺陷 ========== */}
-      <section id="why" className="relative z-10 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
-        <div className="mx-auto max-w-5xl">
+      <section id="industry-gap" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">WHY</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">现有 AI 助手的四大架构缺陷</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                CLI 系、龙虾助手系、IM 机器人——共同留下四个在同一范式内没法修的根本问题。
-                <span className="ml-1 text-text-primary">这不是产品问题，是协议缺席。</span>
-              </p>
-            </div>
+            <SectionHeading
+              label="行业缺口"
+              title="执行层已经被验证，身份与协作层仍然缺位"
+              description="WorkBuddy、千问办公已经证明 Agent 能够规划任务、使用工具并交付成果；MCP、A2A 和 AgentOps 也分别推进了工具接入、互操作和企业治理。下一阶段的问题，是 Agent 进入真实关系以后代表谁、由谁负责，以及能否持续存在。"
+            />
           </ScrollReveal>
-          <div className="grid gap-5 md:grid-cols-2">
-            {flaws.map((f, i) => (
-              <ScrollReveal key={f.title} delay={i * 0.08}>
-                <div className="flex h-full gap-4 rounded-xl border border-divider bg-space-panel p-6">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-space-float">
-                    {f.icon}
-                  </div>
-                  <div>
-                    <h3 className="mb-2 font-semibold text-text-primary">{f.title}</h3>
-                    <p className="text-base leading-relaxed text-text-secondary">{f.desc}</p>
-                  </div>
-                </div>
+          <ol className="divide-y divide-divider border-y border-divider">
+            {missingLayerQuestions.map((question, index) => (
+              <ScrollReveal key={question} delay={index * 0.05}>
+                <li className="grid gap-3 py-6 md:grid-cols-[72px_1fr] md:items-center">
+                  <span className="text-sm font-semibold tabular-nums text-star-purple">0{index + 1}</span>
+                  <p className="text-lg font-medium leading-7 text-text-primary">{question}</p>
+                </li>
               </ScrollReveal>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
-      {/* ========== Section: Architecture · 三层解法 ========== */}
-      <section id="architecture" className="relative z-10 bg-space-panel/30 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
-        <div className="mx-auto max-w-5xl">
+      <section id="architecture" className="relative z-10 bg-space-panel/35 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">ARCHITECTURE</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">四层架构骨架</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                有大脑 → 才有身份进社交 → 才能主执行应用 → 才有三面产品。因果链是不可跳的。
-              </p>
-            </div>
+            <SectionHeading label="架构骨架" title="五层契约，让身份、执行和协作各归其位" />
           </ScrollReveal>
           <div className="space-y-3">
-            {layers.map((l, i) => (
-              <ScrollReveal key={l.num} delay={i * 0.08}>
-                <div className="flex flex-col gap-3 rounded-xl border border-divider bg-space-panel p-5 md:flex-row md:items-center md:gap-6 md:p-6">
-                  <div className="flex items-baseline gap-3 md:min-w-[160px]">
-                    <span className="text-3xl font-bold text-star-purple/25 md:text-4xl">{l.num}</span>
-                    <div className="text-xs font-semibold tracking-widest text-star-purple md:text-sm">{l.phase}</div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="mb-1 font-semibold text-text-primary md:text-lg">{l.title}</h3>
-                    <p className="text-base leading-relaxed text-text-secondary">{l.lead}</p>
-                  </div>
-                </div>
+            {architectureLayers.map(([level, title, desc], index) => (
+              <ScrollReveal key={level} delay={index * 0.06}>
+                <article className="grid gap-4 rounded-xl border border-divider bg-space-panel p-6 md:grid-cols-[72px_220px_1fr] md:items-center md:gap-8">
+                  <span className="text-2xl font-bold text-star-purple">{level}</span>
+                  <h3 className="font-semibold text-text-primary">{title}</h3>
+                  <p className="text-base leading-7 text-text-secondary">{desc}</p>
+                </article>
               </ScrollReveal>
             ))}
           </div>
+          <ScrollReveal>
+            <div className="mt-8 grid gap-4 rounded-2xl border border-divider bg-space-panel p-6 text-sm leading-6 md:grid-cols-3 md:p-8">
+              <p><span className="font-semibold text-text-primary">当前：</span><span className="text-text-secondary">桌面端、身份与消息底座、第一方应用闭环。</span></p>
+              <p><span className="font-semibold text-text-primary">建设中：</span><span className="text-text-secondary">客户端加密同步、公开 SDK、真实第三方接入。</span></p>
+              <p><span className="font-semibold text-text-primary">协议：</span><span className="text-text-secondary">HASN 0.3 Public Draft。</span></p>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* ========== Section: 8 Highlights ========== */}
-      <section id="highlights" className="relative z-10 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
+      <section id="implementations" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-12 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">HIGHLIGHTS</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">八大技术亮点</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                从协议底座到运行时体验——八条合起来是一个协议级的重构。
-                <span className="ml-1 text-star-gold">⭐ 第 6 条渐进式 MCP</span>
-                同时打通扩展性和用户门槛，是承载完整生态的关键。
-              </p>
-            </div>
+            <SectionHeading label="关键实现" title="从协议到执行的七项技术选择" description="每一项都对应一个明确问题，并标注当前成熟度，不把目标架构包装成已上线能力。" />
           </ScrollReveal>
-          <div className="grid gap-5 md:grid-cols-2">
-            {highlights.map((h, i) => (
-              <ScrollReveal key={h.n} delay={(i % 2) * 0.1}>
-                <div
-                  className={`flex h-full flex-col rounded-xl border p-6 transition-all duration-300 hover:shadow-[0_0_24px_rgba(37,99,235,0.15)] ${
-                    h.star
-                      ? 'border-star-gold/40 bg-gradient-to-br from-space-panel to-space-panel/60'
-                      : 'border-divider bg-space-panel'
-                  }`}
-                >
-                  <div className="mb-4 flex items-center gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-space-float">
-                      {h.icon}
+          <div className="divide-y divide-divider border-y border-divider">
+            {implementations.map((item, index) => {
+              const Icon = item.icon
+              return (
+                <ScrollReveal key={item.title} delay={index * 0.04}>
+                  <article className="grid gap-5 py-7 md:grid-cols-[56px_240px_1fr_96px] md:items-center md:gap-7">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-star-purple/10 text-star-purple">
+                      <Icon aria-hidden="true" className="h-5 w-5" />
                     </div>
-                    <div>
-                      <div className="text-xs font-semibold tracking-widest text-text-tertiary">
-                        亮点 {h.n} {h.star && <span className="ml-1 text-star-gold">⭐</span>}
-                      </div>
-                      <h3 className="font-semibold text-text-primary md:text-lg">{h.title}</h3>
-                    </div>
-                  </div>
-                  <p className="mb-4 text-base font-medium leading-relaxed text-text-primary">{h.tagline}</p>
-                  <ul className="mb-4 space-y-2">
-                    {h.bullets.map((b) => (
-                      <li key={b} className="flex gap-2 text-base leading-relaxed text-text-secondary">
-                        <ArrowRight className="mt-1 h-3.5 w-3.5 shrink-0 text-star-purple/60" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {h.code && (
-                    <pre className="mt-auto overflow-x-auto rounded-lg border border-divider bg-space-black/60 p-4 text-xs leading-relaxed text-text-secondary">
-                      <code className="font-mono">{h.code.body}</code>
-                    </pre>
-                  )}
-                </div>
-              </ScrollReveal>
-            ))}
+                    <h3 className="font-semibold text-text-primary">{item.title}</h3>
+                    <p className="text-base leading-7 text-text-secondary">{item.body}</p>
+                    <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${item.status === '目标能力' ? 'bg-space-float text-text-secondary' : 'bg-star-purple/10 text-star-purple'}`}>
+                      {item.status}
+                    </span>
+                  </article>
+                </ScrollReveal>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      {/* ========== Section: Compare · 三面竞品对标 ========== */}
-      <section id="compare" className="relative z-10 bg-space-panel/30 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
+      <section id="data-security" className="relative z-10 overflow-hidden bg-space-panel/35 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <ScrollReveal>
+            <SectionHeading
+              label="本地优先的数据与密钥流"
+              title="云端平台是同步中枢，不是业务执行层"
+              description="目标架构让云端完成跨设备和跨主人的可靠同步，同时不读取产物内容。它与当前安全基线严格分开描述。"
+            />
+          </ScrollReveal>
+
+          <div className="grid gap-3 md:grid-cols-5">
+            {encryptionFlow.map((step, index) => {
+              const Icon = step.icon
+              return (
+                <ScrollReveal key={step.title} delay={index * 0.07}>
+                  <article className="relative h-full rounded-xl border border-divider bg-space-panel p-5">
+                    <Icon aria-hidden="true" className="mb-8 h-6 w-6 text-star-purple" />
+                    <h3 className="mb-2 font-semibold text-text-primary">{step.title}</h3>
+                    <p className="text-sm leading-6 text-text-secondary">{step.desc}</p>
+                    {index < encryptionFlow.length - 1 && (
+                      <ArrowRight aria-hidden="true" className="absolute -right-3 top-8 z-10 hidden h-5 w-5 rounded-full bg-space-black text-text-tertiary md:block" />
+                    )}
+                  </article>
+                </ScrollReveal>
+              )
+            })}
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <ScrollReveal>
+              <article className="h-full rounded-2xl border border-divider bg-space-panel p-7 md:p-8">
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <h3 className="text-xl font-semibold text-text-primary">当前安全基线</h3>
+                  <span className="rounded-full bg-star-purple/10 px-3 py-1 text-xs font-semibold text-star-purple">已采用</span>
+                </div>
+                <p className="text-base leading-7 text-text-secondary">
+                  本地原件默认不上传；用户明确授权后，对象进入私有存储，并由服务端加密、资源 ACL 和短期签名链接保护访问。当前不能承诺云端无法解密。
+                </p>
+              </article>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <article className="h-full rounded-2xl border border-star-purple/30 bg-star-purple/5 p-7 md:p-8">
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <h3 className="text-xl font-semibold text-text-primary">客户端端到端加密（目标能力）</h3>
+                  <span className="rounded-full bg-space-float px-3 py-1 text-xs font-semibold text-text-secondary">建设中</span>
+                </div>
+                <p className="text-base leading-7 text-text-secondary">
+                  产物先在客户端完成认证加密，内容密钥按设备和接收者分别封装；云端平台只保存密文、密钥信封和最小授权元数据，不持有解密私钥。
+                </p>
+              </article>
+            </ScrollReveal>
+          </div>
+
+          <ScrollReveal>
+            <p className="mt-10 text-sm font-semibold text-star-purple">目标能力验收边界</p>
+            <ul className="mt-4 grid gap-4 md:grid-cols-2">
+              {securityRules.map((rule) => (
+                <li key={rule} className="flex gap-3 text-sm leading-6 text-text-secondary">
+                  <Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-star-purple" />
+                  {rule}
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section id="cloud-node" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">COMPARE</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">三面竞品对标</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                同一张唤星底座，在每个维度都做到最优。
-              </p>
-            </div>
+            <SectionHeading
+              label="云端节点架构"
+              title="云端节点是主人的第 N 台设备"
+              description="云端节点不是阉割 Runtime，而是一台完整、受主人授权的无头 hasn-node。它能执行任务；唤星云端平台仍然只承担同步与协调。"
+            />
           </ScrollReveal>
-          <ScrollReveal>
-            <div className="overflow-x-auto rounded-xl border border-divider bg-space-panel">
-              <table className="w-full min-w-[720px] text-left">
-                <thead>
-                  <tr className="border-b border-divider">
-                    <th className="px-5 py-4 text-sm font-semibold text-text-tertiary">维度</th>
-                    <th className="px-5 py-4 text-sm font-semibold text-text-tertiary">
-                      Claude Code / Codex
-                      <span className="ml-1 text-xs font-normal">（CLI 系）</span>
-                    </th>
-                    <th className="px-5 py-4 text-sm font-semibold text-text-tertiary">
-                      龙虾助手
-                      <span className="ml-1 text-xs font-normal">（腾讯 / 字节 / 阿里…）</span>
-                    </th>
-                    <th className="px-5 py-4 text-sm font-semibold text-text-tertiary">
-                      飞书 / 钉钉
-                      <span className="ml-1 text-xs font-normal">（IM 系）</span>
-                    </th>
-                    <th className="px-5 py-4 text-sm font-semibold text-star-purple">唤星</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {compareRows.map((r) => (
-                    <tr key={r.dim} className="border-b border-divider last:border-0">
-                      <td className="px-5 py-4 text-base font-medium text-text-primary">{r.dim}</td>
-                      <td className="px-5 py-4 text-base text-text-secondary">{r.cli}</td>
-                      <td className="px-5 py-4 text-base text-text-secondary">{r.claw}</td>
-                      <td className="px-5 py-4 text-base text-text-secondary">{r.im}</td>
-                      <td className="px-5 py-4 text-base font-semibold text-star-purple">{r.astra}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ========== Section: Ecosystem · 生态开放性 ========== */}
-      <section id="ecosystem" className="relative z-10 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
-        <div className="mx-auto max-w-5xl">
-          <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">ECOSYSTEM</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">生态开放性</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                不做封闭花园——协议开放 · Runtime 可换 · 市场可交易，三重生态飞轮。
-              </p>
-            </div>
-          </ScrollReveal>
-          <div className="grid gap-5 md:grid-cols-2">
-            {ecoItems.map((e, i) => (
-              <ScrollReveal key={e.title} delay={i * 0.08}>
-                <div className="flex gap-4 rounded-xl border border-divider bg-space-panel p-6">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-space-float">
-                    {e.icon}
+          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <ScrollReveal>
+              <div className="flex min-h-80 items-center justify-center rounded-2xl border border-divider bg-space-panel p-8">
+                <div className="grid w-full max-w-md grid-cols-[1fr_auto_1fr] items-center gap-4">
+                  <div className="rounded-xl border border-divider bg-space-float p-5 text-center">
+                    <Laptop aria-hidden="true" className="mx-auto mb-3 h-8 w-8 text-star-purple" />
+                    <p className="font-semibold text-text-primary">本机 hasn-node</p>
+                    <p className="mt-1 text-xs text-text-secondary">完整设备</p>
                   </div>
-                  <div>
-                    <h3 className="mb-2 font-semibold text-text-primary">{e.title}</h3>
-                    <p className="text-base leading-relaxed text-text-secondary">{e.desc}</p>
+                  <Network aria-hidden="true" className="h-6 w-6 text-text-tertiary" />
+                  <div className="rounded-xl border border-star-purple/40 bg-star-purple/5 p-5 text-center">
+                    <Server aria-hidden="true" className="mx-auto mb-3 h-8 w-8 text-star-purple" />
+                    <p className="font-semibold text-text-primary">云端 hasn-node</p>
+                    <p className="mt-1 text-xs text-text-secondary">主人的另一台设备</p>
                   </div>
                 </div>
-              </ScrollReveal>
-            ))}
+              </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <div className="divide-y divide-divider border-y border-divider">
+                {[
+                  '运行完整 daemon、引擎管理和多设备协议，可安装引擎、调用应用并生成内容',
+                  'daemon 不直接暴露公网，外部访问只经过统一 edge',
+                  '使用独立设备身份，不把主人 Token 注入容器',
+                  '每台云端设备可以单独授权、单独吊销',
+                  '在线状态以真实 Presence 为准，不以容器运行制造假在线',
+                ].map((item) => (
+                  <div key={item} className="flex gap-4 py-5">
+                    <Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-star-purple" />
+                    <p className="text-base leading-7 text-text-secondary">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* ========== Section: Get Started · 三条路径 ========== */}
-      <section id="get-started" className="relative z-10 bg-space-panel/30 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
+      <section id="competition" className="relative z-10 bg-space-panel/35 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
         <div className="mx-auto max-w-6xl">
           <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">GET STARTED</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">三条参与路径</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                用户 · 开发者 · 集成方——各有明确入口。
-              </p>
-            </div>
+            <SectionHeading
+              label="竞争位置"
+              title="不重复制造执行器，而是上移到身份、责任和网络"
+              description="唤星不宣称本地文件、MCP、多 Agent、企业审计或私有化是独占能力。差异在于这些能力如何持续归属于一个有主人的数字员工，并进入跨主体关系。"
+            />
           </ScrollReveal>
-          <div className="grid gap-5 md:grid-cols-3">
-            {paths.map((p, i) => (
-              <ScrollReveal key={p.title} delay={i * 0.1}>
-                <div className="flex h-full flex-col rounded-xl border border-divider bg-space-panel p-6">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-space-float">
-                    {p.icon}
-                  </div>
-                  <h3 className="mb-2 font-semibold text-text-primary md:text-lg">{p.title}</h3>
-                  <p className="mb-6 flex-1 text-base leading-relaxed text-text-secondary">{p.desc}</p>
-                  {p.isRoute ? (
-                    <Link
-                      to={p.href}
-                      className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-star-purple to-star-blue px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110"
-                    >
-                      {p.cta}
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  ) : (
-                    <a
-                      href={p.href}
-                      className="inline-flex items-center gap-2 rounded-lg border border-divider bg-space-float px-5 py-2.5 text-sm font-semibold text-text-primary transition-all hover:border-border-hover"
-                    >
-                      {p.cta}
-                      <ArrowRight className="h-4 w-4" />
-                    </a>
-                  )}
-                </div>
-              </ScrollReveal>
+          <div className="overflow-hidden rounded-2xl border border-divider bg-space-panel">
+            {competitorRows.map(([name, strength, relation], index) => (
+              <div key={name} className={`grid gap-3 p-6 md:grid-cols-[220px_1fr_1fr] md:gap-8 ${index < competitorRows.length - 1 ? 'border-b border-divider' : ''} ${name === '唤星' ? 'bg-star-purple/5' : ''}`}>
+                <h3 className={`font-semibold ${name === '唤星' ? 'text-star-purple' : 'text-text-primary'}`}>{name}</h3>
+                <p className="text-sm leading-6 text-text-secondary">{strength}</p>
+                <p className="text-sm leading-6 text-text-secondary">{relation}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== Section: FAQ ========== */}
-      <section id="faq" className="relative z-10 px-4 py-16 sm:px-6 md:px-8 lg:px-12 md:py-24">
-        <div className="mx-auto max-w-3xl">
+      <section id="moat" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
           <ScrollReveal>
-            <div className="mb-10 text-center">
-              <div className="mb-2 text-sm font-semibold tracking-widest text-star-purple">FAQ</div>
-              <h2 className="mb-4 text-2xl font-bold text-text-primary md:text-3xl">技术常问</h2>
-              <p className="mx-auto max-w-2xl text-base text-text-secondary md:text-lg">
-                投资人 · 开发者 · 集成方最常问的八个问题。
-              </p>
-            </div>
+            <SectionHeading label="长期壁垒" title="护城河不是代码量，而是持续沉淀的身份、关系和工作资产" />
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <ol className="space-y-3">
+              {['架构差异', '用户持续使用', '跨主人协作密度', '身份、关系与工作资产', '第三方供给', '网络效应'].map((step, index) => (
+                <li key={step} className="flex items-center gap-4 rounded-xl border border-divider bg-space-panel px-5 py-4">
+                  <span className="text-sm font-semibold tabular-nums text-star-purple">0{index + 1}</span>
+                  <span className="font-medium text-text-primary">{step}</span>
+                  {index < 5 && <ArrowDown aria-hidden="true" className="ml-auto h-4 w-4 text-text-tertiary" />}
+                </li>
+              ))}
+            </ol>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section id="open-status" className="relative z-10 bg-space-panel/35 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-6xl">
+          <ScrollReveal>
+            <SectionHeading label="开放状态" title="开放，但不提前宣布成熟" description="协议、应用接入和 Runtime 扩展分别说明已经具备什么、正在建设什么。" />
+          </ScrollReveal>
+          <div className="grid gap-px overflow-hidden rounded-2xl border border-divider bg-divider md:grid-cols-3">
+            {[
+              { icon: Code2, title: '协议', body: 'HASN 0.3 已形成 Public Draft 和可校验 Schema，稳定标准仍需外部互操作验证。' },
+              { icon: Boxes, title: '应用接入', body: '第一方应用已验证统一契约与真实 HTTP 接缝；公开 SDK 和第三方生产接入正在建设。' },
+              { icon: Database, title: 'Runtime 接入', body: '不同 Agent 引擎通过 RuntimeAdapter 挂载到长期分身身份之下。' },
+            ].map((item) => {
+              const Icon = item.icon
+              return (
+                <article key={item.title} className="bg-space-panel p-7">
+                  <Icon aria-hidden="true" className="mb-6 h-7 w-7 text-star-purple" />
+                  <h3 className="mb-3 text-lg font-semibold text-text-primary">{item.title}</h3>
+                  <p className="text-base leading-7 text-text-secondary">{item.body}</p>
+                </article>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="tech-faq" className="relative z-10 px-4 py-24 sm:px-6 md:px-8 md:py-32 lg:px-12">
+        <div className="mx-auto max-w-4xl">
+          <ScrollReveal>
+            <SectionHeading center label="技术 FAQ" title="把边界说清楚，比把口号说满更重要" />
           </ScrollReveal>
           <div className="space-y-3">
-            {faqs.map((f, i) => (
-              <ScrollReveal key={f.q} delay={i * 0.05}>
-                <details className="group rounded-xl border border-divider bg-space-panel transition-all open:border-star-purple/40">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-base font-semibold text-text-primary">
-                    <span>{f.q}</span>
-                    <ShieldCheck className="h-4 w-4 shrink-0 text-star-purple transition-transform group-open:rotate-90" />
-                  </summary>
-                  <div className="border-t border-divider px-6 py-4 text-base leading-relaxed text-text-secondary">
-                    {f.a}
-                  </div>
-                </details>
-              </ScrollReveal>
+            {faqs.map(([question, answer]) => (
+              <details key={question} className="group rounded-xl border border-divider bg-space-panel open:border-star-purple/40">
+                <summary className="flex list-none items-center justify-between gap-4 px-6 py-5 font-semibold text-text-primary">
+                  {question}
+                  <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-star-purple transition-transform group-open:rotate-90" />
+                </summary>
+                <p className="border-t border-divider px-6 py-5 text-base leading-7 text-text-secondary">{answer}</p>
+              </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== CTA ========== */}
       <SectionCTA
-        title="拥有你自己的分身，加入唤星"
-        subtitle="从下载桌面端开始 · 5 分钟拥有第一个能干活的分身"
-        buttonText="免费下载"
+        title="一起建设数字员工网络的下一阶段"
+        subtitle="从一个真正属于用户的分身开始，让身份、应用、设备和协作关系在同一套稳定契约上持续运转。"
+        buttonText="下载桌面端"
         buttonHref="/download"
       />
-
-      {/* ========== 事实源链接（页尾小字） ========== */}
-      <section className="relative z-10 px-4 pb-16 sm:px-6 md:px-8">
-        <div className="mx-auto max-w-3xl text-center text-sm text-text-tertiary">
-          事实源：HASN 协议规范 · hasn-node 设计文档 · MCP 统一工具体系 · 本地优先架构 —— 详见我们的
-          <Workflow className="mx-1 inline h-4 w-4" />
-          技术白皮书（对外发布中）。
-        </div>
-      </section>
     </>
   )
 }
