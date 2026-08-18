@@ -7,8 +7,8 @@
 //                       登录了但非发布者本人 → 「无权查看」（后端 by-slug 返 404）；
 //   过期 / 撤销 / 不存在 → 诚实空态。
 // 制品在 `sandbox="allow-scripts"` 的跨域 opaque-origin iframe 内渲染（内容域 CSP 兜底）。
-import { Loader2, Lock, Maximize2, ShieldAlert, Sparkles } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Loader2, Lock, ShieldAlert, Sparkles } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import {
@@ -34,7 +34,6 @@ export default function PublishSharePage() {
   const [password, setPassword] = useState('')
   const [pwErr, setPwErr] = useState('')
   const [unlocking, setUnlocking] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   // private + 已登录：按 slug 换 owner 票 → 嵌内容；404 = 非本人 → 无权
   const resolvePrivate = useCallback(async (currentSlug: string) => {
@@ -125,32 +124,11 @@ export default function PublishSharePage() {
     }
   }
 
-  function requestFullscreen() {
-    iframeRef.current?.requestFullscreen?.()
-  }
-
-  // ---- 已就绪：全屏级查看器（顶栏 + 制品 iframe）----
+  // ---- 已就绪：全屏级查看器（制品 iframe 直铺整屏，无额外顶栏）----
   if (phase === 'ready' && contentUrl) {
     return (
       <div className="flex h-screen flex-col bg-white">
-        <header className="flex h-12 shrink-0 items-center justify-between border-b border-slate-200 px-4">
-          <div className="flex min-w-0 items-center gap-2">
-            <Sparkles className="h-4 w-4 shrink-0 text-blue-600" />
-            <span className="truncate text-sm font-medium text-slate-900">{meta?.title || '分享'}</span>
-          </div>
-          {meta?.allow_present && (
-            <button
-              type="button"
-              onClick={requestFullscreen}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm text-slate-600 hover:bg-slate-100"
-            >
-              <Maximize2 className="h-4 w-4" />
-              全屏
-            </button>
-          )}
-        </header>
         <iframe
-          ref={iframeRef}
           title={meta?.title || '分享内容'}
           src={contentUrl}
           sandbox="allow-scripts"
