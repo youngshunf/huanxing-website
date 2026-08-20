@@ -93,3 +93,20 @@ export function shareContentUrl(slug: string, ticket?: string): string {
   const base = `${CONTENT_ORIGIN}/s/${encodeURIComponent(slug)}/content`
   return ticket ? `${base}?vt=${encodeURIComponent(ticket)}` : base
 }
+
+/** 分享链接 fragment 里携带口令的参数名（与 hasn-node webui 复制侧的 `shareLinkWithPassword` 约定一致）。 */
+export const SHARE_PASSWORD_HASH_PARAM = 'pw'
+
+/**
+ * 从 URL fragment 读分享口令（`#pw=…`，可与其它 fragment 参数用 `&` 共存）。
+ *
+ * 选 fragment 而不是 query：fragment 不进 HTTP 请求——不落 nginx access log、
+ * 不随 Referer 外泄——是「链接带口令」唯一安全的信道；读取只发生在浏览器侧。
+ * 纯函数（hash 由调用方传入），便于单测。
+ */
+export function readSharePasswordFromHash(hash: string): string {
+  const raw = hash.replace(/^#/, '')
+  if (!raw) return ''
+  const value = new URLSearchParams(raw).get(SHARE_PASSWORD_HASH_PARAM)
+  return value?.trim() ?? ''
+}

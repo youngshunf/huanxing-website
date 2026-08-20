@@ -3,17 +3,20 @@
 // 四态 + 边界：
 //   public / unlisted → 直接嵌制品内容；
 //   password          → 输口令 → 解锁换票 → 嵌内容；
+//                       链接带 `#pw=` 时自动填入并解锁一次（fragment 不进 HTTP 请求、
+//                       不落 access log/Referer，是链接带口令唯一安全的信道）；
 //   private           → 需登录：未登录弹官网登录弹窗，登录后按 slug 换 owner 票 → 嵌内容；
 //                       登录了但非发布者本人 → 「无权查看」（后端 by-slug 返 404）；
 //   过期 / 撤销 / 不存在 → 诚实空态。
 // 制品在 `sandbox="allow-scripts"` 的跨域 opaque-origin iframe 内渲染（内容域 CSP 兜底）。
 import { Loader2, Lock, ShieldAlert, Sparkles } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 
 import {
   getShareMeta,
   issueViewTicketBySlug,
+  readSharePasswordFromHash,
   shareContentUrl,
   unlockShare,
   type ShareMeta,
@@ -24,6 +27,7 @@ type Phase = 'loading' | 'ready' | 'password' | 'need_login' | 'no_access' | 'ex
 
 export default function PublishSharePage() {
   const { slug } = useParams<{ slug: string }>()
+  const location = useLocation()
   const isLoggedIn = useAuthStore((s) => s.isLoggedIn)
   const setShowLoginModal = useAuthStore((s) => s.setShowLoginModal)
 
@@ -34,6 +38,8 @@ export default function PublishSharePage() {
   const [password, setPassword] = useState('')
   const [pwErr, setPwErr] = useState('')
   const [unlocking, setUnlocking] = useState(false)
+  // 链接口令只自动解锁一次（按 slug+口令记），失败停在口令页由用户改，绝不变相重试刷接口。
+  const autoUnlockKeyRef = useRef<string | null>(null)
 
   // private + 已登录：按 slug 换 owner 票 → 嵌内容；404 = 非本人 → 无权
   const resolvePrivate = useCallback(async (currentSlug: string) => {
@@ -109,19 +115,41 @@ export default function PublishSharePage() {
     }
   }, [meta?.title, phase])
 
-  async function handleUnlock() {
-    if (!slug || !password.trim()) return
-    setUnlocking(true)
-    setPwErr('')
-    try {
-      const ticket = await unlockShare(slug, password)
-      setContentUrl(shareContentUrl(slug, ticket.ticket))
-      setPhase('ready')
-    } catch (error) {
-      setPwErr(error instanceof Error ? error.message : '口令错误')
-    } finally {
-      setUnlocking(false)
-    }
+  const unlockWith = useCallback(
+    async (candidate: string, fromLink = false) => {
+      const pw = candidate.trim()
+      if (!slug || !pw) return
+      setUnlocking(true)
+      setPwErr('')
+      try {
+        const ticket = await unlockShare(slug, pw)
+        setContentUrl(shareContentUrl(slug, ticket.ticket))
+        setPhase('ready')
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : '口令错误'
+        // 链接自带口令失败要指明失败来源（不是用户刚输入的那个），同时保留服务端真实原因。
+        setPwErr(fromLink ? `链接自带口令解锁失败：${msg}` : msg)
+      } finally {
+        setUnlocking(false)
+      }
+    },
+    [slug],
+  )
+
+  // 链接带 `#pw=` 口令：进入口令页时自动填入并解锁一次；失败则停在口令页，用户可改后手动重试。
+  useEffect(() => {
+    if (phase !== 'password' || !slug) return
+    const pw = readSharePasswordFromHash(location.hash)
+    if (!pw) return
+    setPassword(pw)
+    const key = `${slug}::${pw}`
+    if (autoUnlockKeyRef.current === key) return
+    autoUnlockKeyRef.current = key
+    void unlockWith(pw, true)
+  }, [phase, slug, location.hash, unlockWith])
+
+  function handleUnlock() {
+    void unlockWith(password)
   }
 
   // ---- 已就绪：全屏级查看器（制品 iframe 直铺整屏，无额外顶栏）----
