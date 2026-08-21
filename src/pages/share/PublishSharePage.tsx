@@ -156,10 +156,16 @@ export default function PublishSharePage() {
   if (phase === 'ready' && contentUrl) {
     return (
       <div className="flex h-screen flex-col bg-white">
+        {/*
+          sandbox 与 /content 响应头 CSP 的 sandbox 取交集（更严格者生效）。这里给到最宽，
+          由内容域后端按「制品是否真落在独立 usercontent 域」决定实不实际放开 allow-same-origin：
+          同域时后端不给，制品照样是 opaque origin。权威判定在后端，这个属性只是不挡路。
+          制品需要 allow-same-origin 才能用 localStorage/IndexedDB（否则一律 SecurityError）。
+        */}
         <iframe
           title={meta?.title || '分享内容'}
           src={contentUrl}
-          sandbox="allow-scripts"
+          sandbox="allow-scripts allow-forms allow-same-origin"
           allow="fullscreen"
           allowFullScreen
           className="min-h-0 w-full flex-1 border-0"
